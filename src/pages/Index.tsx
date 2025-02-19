@@ -45,8 +45,8 @@ const Index = () => {
         description: "Logged in successfully",
       });
 
-      // Navigate to dashboard or home page
-      // navigate('/dashboard');
+      // Navigate to dashboard
+      navigate('/dashboard');
     } catch (error) {
       toast({
         variant: "destructive",
