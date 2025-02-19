@@ -1,13 +1,9 @@
-
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-
-// This should be configured based on environment
-const API_BASE_URL = "http://localhost:5050";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -39,7 +35,7 @@ const Signup = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+      const response = await fetch(`/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

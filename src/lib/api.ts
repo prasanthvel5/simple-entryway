@@ -1,10 +1,9 @@
 
-const API_BASE_URL = "http://localhost:5050";
-
+// Remove the hardcoded API_BASE_URL since we're using relative URLs now
 export const api = {
   get: async (endpoint: string) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const response = await fetch(endpoint, {
       headers: {
         'Authorization': token ? `Bearer ${token}` : '',
         'Content-Type': 'application/json',
@@ -21,7 +20,7 @@ export const api = {
 
   post: async (endpoint: string, data: any) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Authorization': token ? `Bearer ${token}` : '',
@@ -40,8 +39,3 @@ export const api = {
 
   // Add other methods (PUT, DELETE, etc.) as needed
 };
-
-// Usage example:
-// import { api } from '@/lib/api';
-// const data = await api.get('/some-endpoint');
-// const response = await api.post('/some-endpoint', { key: 'value' });
