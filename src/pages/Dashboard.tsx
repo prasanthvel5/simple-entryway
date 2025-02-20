@@ -9,11 +9,14 @@ import {
   Cloud,
   Users,
   User,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Dashboard = () => {
   const [activeMenu, setActiveMenu] = useState("dashboard");
+  const [isSecondLevelMenuCollapsed, setIsSecondLevelMenuCollapsed] = useState(false);
 
   const firstLevelMenuItems = [
     { id: "home", icon: LayoutDashboard, label: "Home" },
@@ -30,6 +33,9 @@ const Dashboard = () => {
     reports: ["Usage Reports", "Deployment Status", "Audit Logs"],
     user: ["Profile", "Settings", "Logout"],
   };
+
+  const currentSecondLevelItems = secondLevelMenuItems[activeMenu as keyof typeof secondLevelMenuItems] || [];
+  const showSecondLevelMenu = currentSecondLevelItems.length > 0 && !isSecondLevelMenuCollapsed;
 
   return (
     <div className="min-h-screen flex">
@@ -86,25 +92,47 @@ const Dashboard = () => {
 
         <div className="flex flex-1">
           {/* Second Level Menu */}
-          <div className="w-40 bg-[#202131] text-white">
-            <div className="p-4 border-b border-gray-700">
-              <h2 className="text-sm font-semibold">
-                {firstLevelMenuItems.find((item) => item.id === activeMenu)?.label}
-              </h2>
-            </div>
-            <nav className="pt-2">
-              {secondLevelMenuItems[activeMenu as keyof typeof secondLevelMenuItems]?.map(
-                (item) => (
-                  <button
-                    key={item}
-                    className="w-full text-left px-4 py-2 hover:bg-gray-700/50 transition-colors text-xs"
+          {currentSecondLevelItems.length > 0 && (
+            <div className={cn(
+              "bg-[#202131] text-white transition-all duration-300 flex",
+              showSecondLevelMenu ? "w-40" : "w-6"
+            )}>
+              {showSecondLevelMenu ? (
+                <>
+                  <div className="flex-1">
+                    <div className="p-4 border-b border-gray-700">
+                      <h2 className="text-sm font-semibold">
+                        {firstLevelMenuItems.find((item) => item.id === activeMenu)?.label}
+                      </h2>
+                    </div>
+                    <nav className="pt-2">
+                      {currentSecondLevelItems.map((item) => (
+                        <button
+                          key={item}
+                          className="w-full text-left px-4 py-2 hover:bg-gray-700/50 transition-colors text-xs"
+                        >
+                          {item}
+                        </button>
+                      ))}
+                    </nav>
+                  </div>
+                  <button 
+                    onClick={() => setIsSecondLevelMenuCollapsed(true)}
+                    className="px-1 py-2 hover:bg-gray-700/50 self-start mt-4"
                   >
-                    {item}
+                    <ChevronLeft className="w-4 h-4" />
                   </button>
-                )
+                </>
+              ) : (
+                <button 
+                  onClick={() => setIsSecondLevelMenuCollapsed(false)}
+                  className="w-6 hover:bg-gray-700/50 flex items-center justify-center"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
               )}
-            </nav>
-          </div>
+            </div>
+          )}
 
           {/* Main Content Area */}
           <main className="flex-1 bg-gray-100 p-6">
