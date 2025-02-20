@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import {
   LayoutDashboard,
@@ -37,7 +38,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen flex">
       {/* First Level Menu with Header */}
-      <div className="w-16 bg-[#222222] text-white flex flex-col">
+      <div className="w-16 bg-[#353640] text-white flex flex-col">
         <div className="p-4 border-b border-gray-700">
           <div className="flex justify-center">
             <Shield className="w-10 h-10 text-white" />
@@ -49,8 +50,8 @@ const Dashboard = () => {
               key={item.id}
               onClick={() => setActiveMenu(item.id)}
               className={cn(
-                "w-full flex flex-col items-center gap-1 px-2 py-3 hover:bg-gray-700/50 transition-colors",
-                activeMenu === item.id && "bg-gray-700/50"
+                "w-full flex flex-col items-center gap-1 px-2 py-3 hover:bg-[#202131]/50 transition-colors",
+                activeMenu === item.id && "bg-[#202131]"
               )}
             >
               <item.icon 
@@ -74,9 +75,9 @@ const Dashboard = () => {
 
       <div className="flex-1 flex flex-col">
         {/* Top Bar */}
-        <header className="h-12 bg-[#222222] text-white flex items-center justify-between px-6">
+        <header className="h-12 bg-[#353640] text-white flex items-center justify-between px-6">
           <h1 className="text-xl font-semibold">
-            Getting start by configuring Intune Settings
+            Patch Tune
           </h1>
           <div className="flex items-center gap-4">
             <button className="w-8 h-8 rounded-full bg-gray-700" />
@@ -86,7 +87,7 @@ const Dashboard = () => {
 
         <div className="flex flex-1">
           {/* Second Level Menu */}
-          <div className="w-40 bg-[#333333] text-white">
+          <div className="w-40 bg-[#202131] text-white">
             <div className="p-4 border-b border-gray-700">
               <h2 className="text-sm font-semibold">
                 {firstLevelMenuItems.find((item) => item.id === activeMenu)?.label}
@@ -108,6 +109,9 @@ const Dashboard = () => {
 
           {/* Main Content Area */}
           <main className="flex-1 bg-gray-100 p-6">
+            <h2 className="text-xl font-semibold mb-6 text-gray-800">
+              Getting start by configuring Intune Settings
+            </h2>
             <div className="flex gap-6">
               <div className="flex-1 bg-white rounded-lg p-6 shadow-sm">
                 <button className="bg-gray-200 rounded-md px-6 py-3">
