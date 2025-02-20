@@ -6,17 +6,19 @@ import {
   Package,
   Send,
   FileBarChart,
-  Cloud,
-  Users,
   User,
   ChevronLeft,
   ChevronRight,
+  Bell,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Dashboard = () => {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [isSecondLevelMenuCollapsed, setIsSecondLevelMenuCollapsed] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   const firstLevelMenuItems = [
     { id: "home", icon: LayoutDashboard, label: "Home" },
@@ -85,8 +87,22 @@ const Dashboard = () => {
             Patch Tune
           </h1>
           <div className="flex items-center gap-4">
-            <button className="w-8 h-8 rounded-full bg-gray-700" />
-            <button className="w-8 h-8 rounded-full bg-gray-700" />
+            <button className="hover:bg-gray-700/50 p-1.5 rounded-lg transition-colors">
+              <Bell className="w-5 h-5" />
+            </button>
+            <button className="hover:bg-gray-700/50 p-1.5 rounded-lg transition-colors">
+              <User className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={() => setIsDarkTheme(!isDarkTheme)}
+              className="hover:bg-gray-700/50 p-1.5 rounded-lg transition-colors"
+            >
+              {isDarkTheme ? (
+                <Sun className="w-5 h-5" />
+              ) : (
+                <Moon className="w-5 h-5" />
+              )}
+            </button>
           </div>
         </header>
 
@@ -135,13 +151,22 @@ const Dashboard = () => {
           )}
 
           {/* Main Content Area */}
-          <main className="flex-1 bg-gray-100 p-6">
-            <h2 className="text-xl font-semibold mb-6 text-gray-800">
+          <main className={cn(
+            "flex-1 p-6 transition-colors",
+            isDarkTheme ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-800"
+          )}>
+            <h2 className="text-xl font-semibold mb-6">
               Getting start by configuring Intune Settings
             </h2>
             <div className="flex gap-6">
-              <div className="flex-1 bg-white rounded-lg p-6 shadow-sm">
-                <button className="bg-gray-200 rounded-md px-6 py-3">
+              <div className={cn(
+                "flex-1 rounded-lg p-6 shadow-sm",
+                isDarkTheme ? "bg-gray-800" : "bg-white"
+              )}>
+                <button className={cn(
+                  "rounded-md px-6 py-3",
+                  isDarkTheme ? "bg-gray-700 text-white" : "bg-gray-200 text-gray-800"
+                )}>
                   Sign in with Microsoft to Grant API Permissions
                 </button>
                 <div className="mt-4">
@@ -151,42 +176,75 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="flex-1 bg-white rounded-lg p-6 shadow-sm">
+              <div className={cn(
+                "flex-1 rounded-lg p-6 shadow-sm",
+                isDarkTheme ? "bg-gray-800" : "bg-white"
+              )}>
                 <div className="space-y-4">
-                  <p className="text-center text-sm text-gray-600">
+                  <p className={cn(
+                    "text-center text-sm",
+                    isDarkTheme ? "text-gray-300" : "text-gray-600"
+                  )}>
                     Connect with Intune using API keys.
                     <br />
                     Follow the steps to generate keys
                   </p>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
+                      <label className={cn(
+                        "block text-sm font-medium",
+                        isDarkTheme ? "text-gray-200" : "text-gray-700"
+                      )}>
                         Application ID
                       </label>
                       <input
                         type="text"
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                        className={cn(
+                          "mt-1 block w-full rounded-md border shadow-sm",
+                          isDarkTheme 
+                            ? "bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500" 
+                            : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                        )}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
+                      <label className={cn(
+                        "block text-sm font-medium",
+                        isDarkTheme ? "text-gray-200" : "text-gray-700"
+                      )}>
                         Directory ID
                       </label>
                       <input
                         type="text"
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                        className={cn(
+                          "mt-1 block w-full rounded-md border shadow-sm",
+                          isDarkTheme 
+                            ? "bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500" 
+                            : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                        )}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
+                      <label className={cn(
+                        "block text-sm font-medium",
+                        isDarkTheme ? "text-gray-200" : "text-gray-700"
+                      )}>
                         Client Secret
                       </label>
                       <input
                         type="password"
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary"
+                        className={cn(
+                          "mt-1 block w-full rounded-md border shadow-sm",
+                          isDarkTheme 
+                            ? "bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500" 
+                            : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                        )}
                       />
                     </div>
-                    <button className="w-full bg-gray-200 rounded-md px-6 py-2">
+                    <button className={cn(
+                      "w-full rounded-md px-6 py-2",
+                      isDarkTheme ? "bg-gray-700 text-white" : "bg-gray-200 text-gray-800"
+                    )}>
                       Save
                     </button>
                   </div>
