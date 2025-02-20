@@ -16,22 +16,18 @@ const Dashboard = () => {
   const [activeMenu, setActiveMenu] = useState("dashboard");
 
   const firstLevelMenuItems = [
-    { id: "dashboard", icon: LayoutDashboard, label: "Dashboard" },
-    { id: "products", icon: Package, label: "Products Catalog" },
-    { id: "publish", icon: Send, label: "Publish Tasks" },
+    { id: "home", icon: LayoutDashboard, label: "Home" },
+    { id: "sccm", icon: Package, label: "SCCM" },
+    { id: "intune", icon: Send, label: "Intune" },
     { id: "reports", icon: FileBarChart, label: "Reports" },
-    { id: "intune", icon: Cloud, label: "Intune Connection" },
-    { id: "users", icon: Users, label: "Users" },
     { id: "user", icon: User, label: "User" },
   ];
 
   const secondLevelMenuItems = {
-    dashboard: [],
-    products: ["All Products", "Categories", "Publishers"],
-    publish: ["Pending Tasks", "Completed Tasks", "Failed Tasks"],
+    home: [],
+    sccm: ["Updates Catalog", "Application Catalog", "Published Task","Connection"],
+    intune: ["Updates Catalog", "Application Catalog", "Published Task","Connection"],
     reports: ["Usage Reports", "Deployment Status", "Audit Logs"],
-    intune: ["Connection Settings", "API Configuration", "Sync Status"],
-    users: ["All Users", "Roles", "Permissions"],
     user: ["Profile", "Settings", "Logout"],
   };
 
