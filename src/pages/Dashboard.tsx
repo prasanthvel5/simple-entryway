@@ -37,10 +37,9 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen flex">
       {/* First Level Menu */}
-      <div className="w-20 lg:w-64 bg-[#222222] text-white flex flex-col">
+      <div className="w-20 bg-[#222222] text-white flex flex-col">
         <div className="p-4 border-b border-gray-700">
-          <h1 className="text-xl font-bold hidden lg:block">Patch Tune</h1>
-          <div className="lg:hidden flex justify-center">
+          <div className="flex justify-center">
             <img
               src="/lovable-uploads/374ee1d3-82a0-4ffc-aac8-fadb978b14bd.png"
               alt="Logo"
@@ -54,19 +53,19 @@ const Dashboard = () => {
               key={item.id}
               onClick={() => setActiveMenu(item.id)}
               className={cn(
-                "w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-700/50 transition-colors",
+                "w-full flex flex-col items-center gap-1 px-2 py-3 hover:bg-gray-700/50 transition-colors",
                 activeMenu === item.id && "bg-gray-700/50"
               )}
             >
               <item.icon className="w-6 h-6" />
-              <span className="hidden lg:inline-block">{item.label}</span>
+              <span className="text-xs text-center leading-tight">{item.label}</span>
             </button>
           ))}
         </nav>
       </div>
 
       {/* Second Level Menu */}
-      <div className="w-48 bg-[#333333] text-white">
+      <div className="w-40 bg-[#333333] text-white">
         <div className="p-4 border-b border-gray-700">
           <h2 className="text-sm font-semibold">
             {firstLevelMenuItems.find((item) => item.id === activeMenu)?.label}
@@ -86,21 +85,20 @@ const Dashboard = () => {
         </nav>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 bg-gray-100">
+      <div className="flex-1 flex flex-col">
         {/* Top Bar */}
-        <header className="h-16 bg-white border-b flex items-center justify-between px-6">
+        <header className="h-16 bg-[#222222] text-white flex items-center justify-between px-6">
           <h1 className="text-xl font-semibold">
             Getting start by configuring Intune Settings
           </h1>
           <div className="flex items-center gap-4">
-            <button className="w-8 h-8 rounded-full bg-gray-200" />
-            <button className="w-8 h-8 rounded-full bg-gray-200" />
+            <button className="w-8 h-8 rounded-full bg-gray-700" />
+            <button className="w-8 h-8 rounded-full bg-gray-700" />
           </div>
         </header>
 
         {/* Main Content Area */}
-        <main className="p-6">
+        <main className="flex-1 bg-gray-100 p-6">
           <div className="flex gap-6">
             <div className="flex-1 bg-white rounded-lg p-6 shadow-sm">
               <button className="bg-gray-200 rounded-md px-6 py-3">
