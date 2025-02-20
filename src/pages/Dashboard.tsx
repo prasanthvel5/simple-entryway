@@ -38,7 +38,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen flex">
       {/* First Level Menu with Header */}
-      <div className="w-16 bg-[#353640] text-white flex flex-col">
+      <div className="w-16 bg-[#353640] text-white flex flex-col shadow-[4px_0px_8px_0px_rgba(0,0,0,0.15)]">
         <div className="p-4 border-b border-gray-700">
           <div className="flex justify-center">
             <Shield className="w-10 h-10 text-white" />
@@ -50,13 +50,16 @@ const Dashboard = () => {
               key={item.id}
               onClick={() => setActiveMenu(item.id)}
               className={cn(
-                "w-full flex flex-col items-center gap-1 px-2 py-3 hover:bg-[#202131]/50 transition-colors",
+                "w-full flex flex-col items-center gap-1 px-2 py-3 hover:bg-[#202131]/50 transition-colors relative",
                 activeMenu === item.id && "bg-[#202131]"
               )}
             >
+              {activeMenu === item.id && (
+                <div className="absolute left-0 top-0 w-1 h-full bg-[#1EAEDB]" />
+              )}
               <item.icon 
                 className={cn(
-                  "w-6 h-6 transition-colors",
+                  "w-5 h-5 transition-colors",
                   activeMenu === item.id ? "text-[#1EAEDB]" : "text-white"
                 )} 
               />
@@ -98,7 +101,7 @@ const Dashboard = () => {
                 (item) => (
                   <button
                     key={item}
-                    className="w-full text-left px-4 py-2 hover:bg-gray-700/50 transition-colors"
+                    className="w-full text-left px-4 py-2 hover:bg-gray-700/50 transition-colors text-xs"
                   >
                     {item}
                   </button>
