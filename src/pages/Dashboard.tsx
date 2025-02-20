@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import {
+  LayoutDashboard,
   Shield,
   Package,
   Send,
@@ -15,8 +16,8 @@ const Dashboard = () => {
   const [activeMenu, setActiveMenu] = useState("dashboard");
 
   const firstLevelMenuItems = [
-    { id: "dashboard", icon: Shield, label: "Dashboard" },
-    { id: "products", icon: Package, label: "Products Catalog" },
+    { id: "dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    { id: "products", icon: Shield, label: "Products Catalog" },
     { id: "publish", icon: Send, label: "Publish Tasks" },
     { id: "reports", icon: FileBarChart, label: "Reports" },
     { id: "intune", icon: Cloud, label: "Intune Connection" },
@@ -37,7 +38,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen flex">
       {/* First Level Menu with Header */}
-      <div className="w-16 bg-[#222222] text-white flex flex-col">
+      <div className="w-16 bg-[#222222] text-white flex flex-col rounded-tr-lg rounded-br-lg">
         <div className="p-4 border-b border-gray-700">
           <div className="flex justify-center">
             <img
@@ -78,7 +79,7 @@ const Dashboard = () => {
 
       <div className="flex-1 flex flex-col">
         {/* Top Bar */}
-        <header className="h-12 bg-[#222222] text-white flex items-center justify-between px-6 rounded-bl-lg">
+        <header className="h-12 bg-[#222222] text-white flex items-center justify-between px-6 rounded-tl-lg rounded-tr-lg">
           <h1 className="text-xl font-semibold">
             Getting start by configuring Intune Settings
           </h1>
