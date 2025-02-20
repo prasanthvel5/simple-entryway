@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import {
-  LayoutDashboard,
+  Shield,
   Package,
   Send,
   FileBarChart,
@@ -15,7 +15,7 @@ const Dashboard = () => {
   const [activeMenu, setActiveMenu] = useState("dashboard");
 
   const firstLevelMenuItems = [
-    { id: "dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    { id: "dashboard", icon: Shield, label: "Dashboard" },
     { id: "products", icon: Package, label: "Products Catalog" },
     { id: "publish", icon: Send, label: "Publish Tasks" },
     { id: "reports", icon: FileBarChart, label: "Reports" },
@@ -37,7 +37,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen flex">
       {/* First Level Menu with Header */}
-      <div className="w-20 bg-[#222222] text-white flex flex-col">
+      <div className="w-16 bg-[#222222] text-white flex flex-col">
         <div className="p-4 border-b border-gray-700">
           <div className="flex justify-center">
             <img
@@ -57,8 +57,20 @@ const Dashboard = () => {
                 activeMenu === item.id && "bg-gray-700/50"
               )}
             >
-              <item.icon className="w-6 h-6" />
-              <span className="text-xs text-center leading-tight">{item.label}</span>
+              <item.icon 
+                className={cn(
+                  "w-6 h-6 transition-colors",
+                  activeMenu === item.id ? "text-[#1EAEDB]" : "text-white"
+                )} 
+              />
+              <span 
+                className={cn(
+                  "text-xs text-center leading-tight transition-colors",
+                  activeMenu === item.id ? "text-[#1EAEDB]" : "text-white"
+                )}
+              >
+                {item.label}
+              </span>
             </button>
           ))}
         </nav>
@@ -66,7 +78,7 @@ const Dashboard = () => {
 
       <div className="flex-1 flex flex-col">
         {/* Top Bar */}
-        <header className="h-12 bg-[#222222] text-white flex items-center justify-between px-6">
+        <header className="h-12 bg-[#222222] text-white flex items-center justify-between px-6 rounded-bl-lg">
           <h1 className="text-xl font-semibold">
             Getting start by configuring Intune Settings
           </h1>
