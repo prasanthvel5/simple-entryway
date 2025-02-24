@@ -14,7 +14,7 @@ export const SecondLevelMenu = ({ items, title, isCollapsed, onCollapse }: Secon
 
   return (
     <div className={cn(
-      "bg-[#202131] text-white transition-all duration-300 flex",
+      "bg-[#202131] text-white transition-all duration-300 flex rounded-tl-2xl",
       showContent ? "w-40" : "w-6"
     )}>
       {showContent ? (
@@ -44,7 +44,7 @@ export const SecondLevelMenu = ({ items, title, isCollapsed, onCollapse }: Secon
       ) : (
         <button 
           onClick={() => onCollapse(false)}
-          className="w-6 hover:bg-gray-700/50 flex items-center justify-center"
+          className="w-6 hover:bg-gray-700/50 flex items-center justify-center rounded-tl-2xl"
         >
           <ChevronRight className="w-4 h-4" />
         </button>
