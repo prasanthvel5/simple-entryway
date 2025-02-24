@@ -8,101 +8,110 @@ interface MainContentProps {
 export const MainContent = ({ isDarkTheme }: MainContentProps) => {
   return (
     <main className={cn(
-      "flex-1 p-6 transition-colors rounded-tl-2xl",
-      isDarkTheme ? "bg-gray-900 text-white" : "bg-[#353640] text-gray-800"
+      "flex-1 p-6 transition-colors rounded-tl-2xl relative",
+      isDarkTheme ? "bg-gray-900 text-white" : "bg-[#353640] text-white"
     )}>
-      <h2 className="text-xl font-semibold mb-6">
-        Getting start by configuring Intune Settings
-      </h2>
-      <div className="flex gap-6">
-        <div className={cn(
-          "flex-1 rounded-lg p-6 shadow-sm",
-          isDarkTheme ? "bg-gray-800" : "bg-white"
+      <div className={cn(
+        "absolute inset-0 rounded-tl-2xl",
+        isDarkTheme ? "bg-gray-900" : "bg-gray-100"
+      )} />
+      <div className="relative z-10">
+        <h2 className={cn(
+          "text-xl font-semibold mb-6",
+          isDarkTheme ? "text-white" : "text-gray-800"
         )}>
-          <button className={cn(
-            "rounded-md px-6 py-3",
-            isDarkTheme ? "bg-gray-700 text-white" : "bg-gray-200 text-gray-800"
+          Getting start by configuring Intune Settings
+        </h2>
+        <div className="flex gap-6">
+          <div className={cn(
+            "flex-1 rounded-lg p-6 shadow-sm",
+            isDarkTheme ? "bg-gray-800" : "bg-white"
           )}>
-            Sign in with Microsoft to Grant API Permissions
-          </button>
-          <div className="mt-4">
-            <a href="#" className="text-blue-600 hover:underline">
-              List of required permissions
-            </a>
-          </div>
-        </div>
-
-        <div className={cn(
-          "flex-1 rounded-lg p-6 shadow-sm",
-          isDarkTheme ? "bg-gray-800" : "bg-white"
-        )}>
-          <div className="space-y-4">
-            <p className={cn(
-              "text-center text-sm",
-              isDarkTheme ? "text-gray-300" : "text-gray-600"
+            <button className={cn(
+              "rounded-md px-6 py-3",
+              isDarkTheme ? "bg-gray-700 text-white" : "bg-gray-200 text-gray-800"
             )}>
-              Connect with Intune using API keys.
-              <br />
-              Follow the steps to generate keys
-            </p>
+              Sign in with Microsoft to Grant API Permissions
+            </button>
+            <div className="mt-4">
+              <a href="#" className="text-blue-600 hover:underline">
+                List of required permissions
+              </a>
+            </div>
+          </div>
+
+          <div className={cn(
+            "flex-1 rounded-lg p-6 shadow-sm",
+            isDarkTheme ? "bg-gray-800" : "bg-white"
+          )}>
             <div className="space-y-4">
-              <div>
-                <label className={cn(
-                  "block text-sm font-medium",
-                  isDarkTheme ? "text-gray-200" : "text-gray-700"
-                )}>
-                  Application ID
-                </label>
-                <input
-                  type="text"
-                  className={cn(
-                    "mt-1 block w-full rounded-md border shadow-sm",
-                    isDarkTheme 
-                      ? "bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500" 
-                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                  )}
-                />
-              </div>
-              <div>
-                <label className={cn(
-                  "block text-sm font-medium",
-                  isDarkTheme ? "text-gray-200" : "text-gray-700"
-                )}>
-                  Directory ID
-                </label>
-                <input
-                  type="text"
-                  className={cn(
-                    "mt-1 block w-full rounded-md border shadow-sm",
-                    isDarkTheme 
-                      ? "bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500" 
-                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                  )}
-                />
-              </div>
-              <div>
-                <label className={cn(
-                  "block text-sm font-medium",
-                  isDarkTheme ? "text-gray-200" : "text-gray-700"
-                )}>
-                  Client Secret
-                </label>
-                <input
-                  type="password"
-                  className={cn(
-                    "mt-1 block w-full rounded-md border shadow-sm",
-                    isDarkTheme 
-                      ? "bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500" 
-                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                  )}
-                />
-              </div>
-              <button className={cn(
-                "w-full rounded-md px-6 py-2",
-                isDarkTheme ? "bg-gray-700 text-white" : "bg-gray-200 text-gray-800"
+              <p className={cn(
+                "text-center text-sm",
+                isDarkTheme ? "text-gray-300" : "text-gray-600"
               )}>
-                Save
-              </button>
+                Connect with Intune using API keys.
+                <br />
+                Follow the steps to generate keys
+              </p>
+              <div className="space-y-4">
+                <div>
+                  <label className={cn(
+                    "block text-sm font-medium",
+                    isDarkTheme ? "text-gray-200" : "text-gray-700"
+                  )}>
+                    Application ID
+                  </label>
+                  <input
+                    type="text"
+                    className={cn(
+                      "mt-1 block w-full rounded-md border shadow-sm",
+                      isDarkTheme 
+                        ? "bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500" 
+                        : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    )}
+                  />
+                </div>
+                <div>
+                  <label className={cn(
+                    "block text-sm font-medium",
+                    isDarkTheme ? "text-gray-200" : "text-gray-700"
+                  )}>
+                    Directory ID
+                  </label>
+                  <input
+                    type="text"
+                    className={cn(
+                      "mt-1 block w-full rounded-md border shadow-sm",
+                      isDarkTheme 
+                        ? "bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500" 
+                        : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    )}
+                  />
+                </div>
+                <div>
+                  <label className={cn(
+                    "block text-sm font-medium",
+                    isDarkTheme ? "text-gray-200" : "text-gray-700"
+                  )}>
+                    Client Secret
+                  </label>
+                  <input
+                    type="password"
+                    className={cn(
+                      "mt-1 block w-full rounded-md border shadow-sm",
+                      isDarkTheme 
+                        ? "bg-gray-700 border-gray-600 text-white focus:border-blue-500 focus:ring-blue-500" 
+                        : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    )}
+                  />
+                </div>
+                <button className={cn(
+                  "w-full rounded-md px-6 py-2",
+                  isDarkTheme ? "bg-gray-700 text-white" : "bg-gray-200 text-gray-800"
+                )}>
+                  Save
+                </button>
+              </div>
             </div>
           </div>
         </div>
