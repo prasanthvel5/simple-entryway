@@ -8,8 +8,8 @@ interface MainContentProps {
 export const MainContent = ({ isDarkTheme }: MainContentProps) => {
   return (
     <main className={cn(
-      "flex-1 p-6 transition-colors rounded-tr-2xl",
-      isDarkTheme ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-800"
+      "flex-1 p-6 transition-colors rounded-tl-2xl",
+      isDarkTheme ? "bg-gray-900 text-white" : "bg-[#353640] text-gray-800"
     )}>
       <h2 className="text-xl font-semibold mb-6">
         Getting start by configuring Intune Settings
