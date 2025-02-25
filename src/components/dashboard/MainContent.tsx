@@ -1,11 +1,122 @@
 
 import { cn } from "@/lib/utils";
+import { Check } from "lucide-react";
 
 interface MainContentProps {
   isDarkTheme: boolean;
+  activeMenu: string;
+  activeSecondLevel: string;
 }
 
-export const MainContent = ({ isDarkTheme }: MainContentProps) => {
+export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: MainContentProps) => {
+  if (activeMenu === "intune" && activeSecondLevel === "Updates Catalog") {
+    return (
+      <main className={cn(
+        "flex-1 p-6 transition-colors rounded-tl-2xl relative",
+        isDarkTheme ? "bg-gray-900 text-white" : "bg-[#353640] text-white"
+      )}>
+        <div className={cn(
+          "absolute inset-0 rounded-tl-2xl",
+          isDarkTheme ? "bg-gray-900" : "bg-gray-100"
+        )} />
+        <div className="relative z-10">
+          <div className="flex gap-4 mb-6">
+            <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
+              Create Publish Task
+            </button>
+            <div className="flex items-center gap-8 bg-blue-100/10 px-6 py-2 rounded-md flex-1">
+              <div>
+                <span className="text-4xl text-blue-400">1050</span>
+                <p className="text-sm text-gray-500">Total Applications</p>
+              </div>
+              <div>
+                <span className="text-4xl text-blue-600">75</span>
+                <p className="text-sm text-gray-500">Installed</p>
+              </div>
+              <div>
+                <span className="text-4xl text-green-500">24</span>
+                <p className="text-sm text-gray-500">Update Published</p>
+              </div>
+              <div>
+                <span className="text-4xl text-orange-500">51</span>
+                <p className="text-sm text-gray-500">Installed but not published</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="px-4 py-3 text-left">
+                    <input type="checkbox" className="rounded" />
+                  </th>
+                  <th className="px-4 py-3 text-left text-gray-600">Application Name</th>
+                  <th className="px-4 py-3 text-left text-gray-600">Vendor</th>
+                  <th className="px-4 py-3 text-left text-gray-600">Latest Version</th>
+                  <th className="px-4 py-3 text-left text-gray-600">Release date</th>
+                  <th className="px-4 py-3 text-left text-gray-600">Category</th>
+                  <th className="px-4 py-3 text-left text-gray-600">Inventory Status</th>
+                  <th className="px-4 py-3 text-left text-gray-600">Publish Status</th>
+                  <th className="px-4 py-3 text-left text-gray-600">Publish Task</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b">
+                  <td className="px-4 py-3">
+                    <input type="checkbox" checked className="rounded" />
+                  </td>
+                  <td className="px-4 py-3 text-gray-800">
+                    <div className="flex items-center gap-2">
+                      <img src="/chrome-icon.png" alt="" className="w-6 h-6" />
+                      Google Chrome
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-gray-800">Google</td>
+                  <td className="px-4 py-3 text-gray-800">102.25.3</td>
+                  <td className="px-4 py-3 text-gray-800">Apr 30, 2024</td>
+                  <td className="px-4 py-3">
+                    <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                      Browser
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-gray-800">Installed</td>
+                  <td className="px-4 py-3">
+                    <span className="text-green-600 flex items-center gap-1">
+                      <Check className="w-4 h-4" />
+                      Updates Published
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <a href="#" className="text-blue-500 hover:underline">Task 2</a>
+                      <a href="#" className="text-blue-500 hover:underline">Chrome publish</a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div className="px-4 py-3 border-t flex items-center justify-between text-sm text-gray-600">
+              <div>1-20 of 85 items</div>
+              <div className="flex items-center gap-2">
+                <button className="px-2 py-1 border rounded" disabled>&lt;</button>
+                <button className="px-2 py-1 border rounded bg-blue-50">1</button>
+                <button className="px-2 py-1 border rounded">2</button>
+                <button className="px-2 py-1 border rounded">3</button>
+                <button className="px-2 py-1 border rounded">4</button>
+                <button className="px-2 py-1 border rounded">5</button>
+                <button className="px-2 py-1 border rounded">&gt;</button>
+                <select className="border rounded px-2 py-1">
+                  <option>20 / page</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className={cn(
       "flex-1 p-6 transition-colors rounded-tl-2xl relative",

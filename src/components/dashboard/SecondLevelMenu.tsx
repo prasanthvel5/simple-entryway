@@ -7,9 +7,18 @@ interface SecondLevelMenuProps {
   title: string;
   isCollapsed: boolean;
   onCollapse: (collapsed: boolean) => void;
+  activeItem?: string;
+  onItemSelect?: (item: string) => void;
 }
 
-export const SecondLevelMenu = ({ items, title, isCollapsed, onCollapse }: SecondLevelMenuProps) => {
+export const SecondLevelMenu = ({ 
+  items, 
+  title, 
+  isCollapsed, 
+  onCollapse,
+  activeItem,
+  onItemSelect 
+}: SecondLevelMenuProps) => {
   const showContent = !isCollapsed;
 
   return (
@@ -27,7 +36,11 @@ export const SecondLevelMenu = ({ items, title, isCollapsed, onCollapse }: Secon
               {items.map((item) => (
                 <button
                   key={item}
-                  className="w-full text-left px-4 py-2 hover:bg-gray-700/50 transition-colors text-xs"
+                  onClick={() => onItemSelect?.(item)}
+                  className={cn(
+                    "w-full text-left px-4 py-2 hover:bg-gray-700/50 transition-colors text-xs",
+                    activeItem === item && "bg-gray-700/50"
+                  )}
                 >
                   {item}
                 </button>
