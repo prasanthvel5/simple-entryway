@@ -26,7 +26,10 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
             </button>
             
             <div className="grid grid-cols-4 gap-4">
-              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+              <div className={cn(
+                "bg-white/5 backdrop-blur-sm rounded-lg p-4",
+                isDarkTheme ? "border border-white/10" : "border border-gray-200"
+              )}>
                 <div className="flex items-center gap-2 mb-1">
                   <div className="bg-blue-500/20 p-1 rounded">
                     <div className="grid grid-cols-2 gap-0.5">
@@ -40,19 +43,28 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                 </div>
                 <p className="text-sm text-gray-400">Total Applications</p>
               </div>
-              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+              <div className={cn(
+                "bg-white/5 backdrop-blur-sm rounded-lg p-4",
+                isDarkTheme ? "border border-white/10" : "border border-gray-200"
+              )}>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-4xl font-semibold text-blue-600">75</span>
                 </div>
                 <p className="text-sm text-gray-400">Installed</p>
               </div>
-              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+              <div className={cn(
+                "bg-white/5 backdrop-blur-sm rounded-lg p-4",
+                isDarkTheme ? "border border-white/10" : "border border-gray-200"
+              )}>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-4xl font-semibold text-green-500">24</span>
                 </div>
                 <p className="text-sm text-gray-400">Update Published</p>
               </div>
-              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+              <div className={cn(
+                "bg-white/5 backdrop-blur-sm rounded-lg p-4",
+                isDarkTheme ? "border border-white/10" : "border border-gray-200"
+              )}>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-4xl font-semibold text-orange-500">51</span>
                 </div>
