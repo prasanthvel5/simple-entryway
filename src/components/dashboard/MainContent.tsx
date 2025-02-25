@@ -1,4 +1,3 @@
-
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 
@@ -20,31 +19,32 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
           isDarkTheme ? "bg-gray-900" : "bg-gray-100"
         )} />
         <div className="relative z-10">
-          <div className="flex gap-4 mb-6">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
+          <div className="space-y-6">
+            <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-md text-sm font-medium transition-colors">
               Create Publish Task
             </button>
-            <div className="flex items-center gap-8 bg-blue-100/10 px-6 py-2 rounded-md flex-1">
-              <div>
-                <span className="text-4xl text-blue-400">1050</span>
-                <p className="text-sm text-gray-500">Total Applications</p>
+            
+            <div className="grid grid-cols-4 gap-4">
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                <span className="text-4xl font-semibold text-blue-400">1050</span>
+                <p className="text-sm text-gray-400 mt-1">Total Applications</p>
               </div>
-              <div>
-                <span className="text-4xl text-blue-600">75</span>
-                <p className="text-sm text-gray-500">Installed</p>
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                <span className="text-4xl font-semibold text-blue-600">75</span>
+                <p className="text-sm text-gray-400 mt-1">Installed</p>
               </div>
-              <div>
-                <span className="text-4xl text-green-500">24</span>
-                <p className="text-sm text-gray-500">Update Published</p>
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                <span className="text-4xl font-semibold text-green-500">24</span>
+                <p className="text-sm text-gray-400 mt-1">Update Published</p>
               </div>
-              <div>
-                <span className="text-4xl text-orange-500">51</span>
-                <p className="text-sm text-gray-500">Installed but not published</p>
+              <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                <span className="text-4xl font-semibold text-orange-500">51</span>
+                <p className="text-sm text-gray-400 mt-1">Installed but not published</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow">
+          <div className="mt-6 bg-white rounded-lg shadow">
             <table className="w-full">
               <thead>
                 <tr className="border-b">
