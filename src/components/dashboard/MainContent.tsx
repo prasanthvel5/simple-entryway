@@ -27,48 +27,48 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
             
             <div className="grid grid-cols-4 gap-4">
               <div className={cn(
-                "bg-white/5 backdrop-blur-sm rounded-lg p-4",
+                "bg-white/5 backdrop-blur-sm rounded-lg p-3",
                 isDarkTheme ? "border border-white/10" : "border border-gray-200"
               )}>
-                <div className="flex items-center gap-2 mb-1">
+                <div className="flex items-center gap-2">
                   <div className="bg-blue-500/20 p-1 rounded">
                     <div className="grid grid-cols-2 gap-0.5">
-                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-sm"></div>
-                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-sm"></div>
-                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-sm"></div>
-                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-sm"></div>
+                      <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
+                      <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
+                      <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
+                      <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
                     </div>
                   </div>
-                  <span className="text-4xl font-semibold text-blue-400">1050</span>
+                  <span className="text-2xl font-semibold text-blue-400">1050</span>
                 </div>
-                <p className="text-sm text-gray-400">Total Applications</p>
+                <p className="text-xs text-gray-400 mt-1">Total Applications</p>
               </div>
               <div className={cn(
-                "bg-white/5 backdrop-blur-sm rounded-lg p-4",
+                "bg-white/5 backdrop-blur-sm rounded-lg p-3",
                 isDarkTheme ? "border border-white/10" : "border border-gray-200"
               )}>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-4xl font-semibold text-blue-600">75</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-semibold text-blue-600">75</span>
                 </div>
-                <p className="text-sm text-gray-400">Installed</p>
+                <p className="text-xs text-gray-400 mt-1">Installed</p>
               </div>
               <div className={cn(
-                "bg-white/5 backdrop-blur-sm rounded-lg p-4",
+                "bg-white/5 backdrop-blur-sm rounded-lg p-3",
                 isDarkTheme ? "border border-white/10" : "border border-gray-200"
               )}>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-4xl font-semibold text-green-500">24</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-semibold text-green-500">24</span>
                 </div>
-                <p className="text-sm text-gray-400">Update Published</p>
+                <p className="text-xs text-gray-400 mt-1">Update Published</p>
               </div>
               <div className={cn(
-                "bg-white/5 backdrop-blur-sm rounded-lg p-4",
+                "bg-white/5 backdrop-blur-sm rounded-lg p-3",
                 isDarkTheme ? "border border-white/10" : "border border-gray-200"
               )}>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-4xl font-semibold text-orange-500">51</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-semibold text-orange-500">51</span>
                 </div>
-                <p className="text-sm text-gray-400">Installed but not published</p>
+                <p className="text-xs text-gray-400 mt-1">Installed but not published</p>
               </div>
             </div>
           </div>
