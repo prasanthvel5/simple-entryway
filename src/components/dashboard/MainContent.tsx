@@ -30,112 +30,180 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                 "bg-white/5 backdrop-blur-sm rounded-lg p-3",
                 isDarkTheme ? "border border-white/10" : "border border-gray-200"
               )}>
-                <div className="flex items-center gap-2">
-                  <div className="bg-blue-500/20 p-1 rounded">
-                    <div className="grid grid-cols-2 gap-0.5">
-                      <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
-                      <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
-                      <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
-                      <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-blue-500/20 p-1 rounded">
+                      <div className="grid grid-cols-2 gap-0.5">
+                        <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
+                        <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
+                        <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
+                        <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
+                      </div>
                     </div>
+                    <span className="text-2xl font-semibold text-blue-400">1050</span>
                   </div>
-                  <span className="text-2xl font-semibold text-blue-400">1050</span>
+                  <p className="text-xs text-gray-400">Total Applications</p>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Total Applications</p>
               </div>
               <div className={cn(
                 "bg-white/5 backdrop-blur-sm rounded-lg p-3",
                 isDarkTheme ? "border border-white/10" : "border border-gray-200"
               )}>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between">
                   <span className="text-2xl font-semibold text-blue-600">75</span>
+                  <p className="text-xs text-gray-400">Installed</p>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Installed</p>
               </div>
               <div className={cn(
                 "bg-white/5 backdrop-blur-sm rounded-lg p-3",
                 isDarkTheme ? "border border-white/10" : "border border-gray-200"
               )}>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between">
                   <span className="text-2xl font-semibold text-green-500">24</span>
+                  <p className="text-xs text-gray-400">Update Published</p>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Update Published</p>
               </div>
               <div className={cn(
                 "bg-white/5 backdrop-blur-sm rounded-lg p-3",
                 isDarkTheme ? "border border-white/10" : "border border-gray-200"
               )}>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between">
                   <span className="text-2xl font-semibold text-orange-500">51</span>
+                  <p className="text-xs text-gray-400">Installed but not published</p>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Installed but not published</p>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 bg-white rounded-lg shadow">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b">
-                  <th className="px-4 py-3 text-left">
-                    <input type="checkbox" className="rounded" />
-                  </th>
-                  <th className="px-4 py-3 text-left text-gray-600">Application Name</th>
-                  <th className="px-4 py-3 text-left text-gray-600">Vendor</th>
-                  <th className="px-4 py-3 text-left text-gray-600">Latest Version</th>
-                  <th className="px-4 py-3 text-left text-gray-600">Release date</th>
-                  <th className="px-4 py-3 text-left text-gray-600">Category</th>
-                  <th className="px-4 py-3 text-left text-gray-600">Inventory Status</th>
-                  <th className="px-4 py-3 text-left text-gray-600">Publish Status</th>
-                  <th className="px-4 py-3 text-left text-gray-600">Publish Task</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b">
-                  <td className="px-4 py-3">
-                    <input type="checkbox" checked className="rounded" />
-                  </td>
-                  <td className="px-4 py-3 text-gray-800">
-                    <div className="flex items-center gap-2">
-                      <img src="/chrome-icon.png" alt="" className="w-6 h-6" />
-                      Google Chrome
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-gray-800">Google</td>
-                  <td className="px-4 py-3 text-gray-800">102.25.3</td>
-                  <td className="px-4 py-3 text-gray-800">Apr 30, 2024</td>
-                  <td className="px-4 py-3">
-                    <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                      Browser
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-gray-800">Installed</td>
-                  <td className="px-4 py-3">
-                    <span className="text-green-600 flex items-center gap-1">
-                      <Check className="w-4 h-4" />
-                      Updates Published
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <a href="#" className="text-blue-500 hover:underline">Task 2</a>
-                      <a href="#" className="text-blue-500 hover:underline">Chrome publish</a>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div className="px-4 py-3 border-t flex items-center justify-between text-sm text-gray-600">
+          <div className={cn(
+            "mt-6 rounded-lg shadow overflow-hidden",
+            isDarkTheme ? "bg-gray-800" : "bg-white"
+          )}>
+            <div className="overflow-x-auto">
+              <div className="overflow-y-auto max-h-[600px]">
+                <table className="w-full">
+                  <thead className={cn(
+                    "sticky top-0 z-10",
+                    isDarkTheme ? "bg-gray-700" : "bg-gray-100"
+                  )}>
+                    <tr className="border-b">
+                      <th className="px-4 py-3 text-left whitespace-nowrap">
+                        <input type="checkbox" className="rounded" />
+                      </th>
+                      <th className={cn(
+                        "px-4 py-3 text-left whitespace-nowrap font-medium resize-x overflow-hidden",
+                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                      )}>Application Name</th>
+                      <th className={cn(
+                        "px-4 py-3 text-left whitespace-nowrap font-medium resize-x overflow-hidden",
+                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                      )}>Vendor</th>
+                      <th className={cn(
+                        "px-4 py-3 text-left whitespace-nowrap font-medium resize-x overflow-hidden",
+                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                      )}>Latest Version</th>
+                      <th className={cn(
+                        "px-4 py-3 text-left whitespace-nowrap font-medium resize-x overflow-hidden",
+                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                      )}>Release date</th>
+                      <th className={cn(
+                        "px-4 py-3 text-left whitespace-nowrap font-medium",
+                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                      )}>Category</th>
+                      <th className={cn(
+                        "px-4 py-3 text-left whitespace-nowrap font-medium",
+                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                      )}>Inventory Status</th>
+                      <th className={cn(
+                        "px-4 py-3 text-left whitespace-nowrap font-medium",
+                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                      )}>Publish Status</th>
+                      <th className={cn(
+                        "px-4 py-3 text-left whitespace-nowrap font-medium",
+                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                      )}>Publish Task</th>
+                    </tr>
+                  </thead>
+                  <tbody className={isDarkTheme ? "text-gray-300" : "text-gray-800"}>
+                    {[...Array(11)].map((_, index) => (
+                      <tr key={index} className={cn(
+                        "border-b",
+                        isDarkTheme ? "border-gray-700" : "border-gray-200"
+                      )}>
+                        <td className="px-4 py-3">
+                          <input type="checkbox" checked={index === 0} className="rounded" />
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <div className="flex items-center gap-2">
+                            <img src="/chrome-icon.png" alt="" className="w-6 h-6" />
+                            Google Chrome
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">Google</td>
+                        <td className="px-4 py-3 whitespace-nowrap">102.25.{index + 1}</td>
+                        <td className="px-4 py-3 whitespace-nowrap">Apr {index + 1}, 2024</td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                            Browser
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">Installed</td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <span className="text-green-600 flex items-center gap-1">
+                            <Check className="w-4 h-4" />
+                            Updates Published
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <div className="flex items-center gap-2">
+                            <a href="#" className="text-blue-500 hover:underline">Task {index + 1}</a>
+                            <a href="#" className="text-blue-500 hover:underline">Chrome publish</a>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className={cn(
+              "px-4 py-3 border-t flex items-center justify-between text-sm",
+              isDarkTheme ? "border-gray-700 text-gray-300" : "text-gray-600"
+            )}>
               <div>1-20 of 85 items</div>
               <div className="flex items-center gap-2">
-                <button className="px-2 py-1 border rounded" disabled>&lt;</button>
-                <button className="px-2 py-1 border rounded bg-blue-50">1</button>
-                <button className="px-2 py-1 border rounded">2</button>
-                <button className="px-2 py-1 border rounded">3</button>
-                <button className="px-2 py-1 border rounded">4</button>
-                <button className="px-2 py-1 border rounded">5</button>
-                <button className="px-2 py-1 border rounded">&gt;</button>
-                <select className="border rounded px-2 py-1">
+                <button className={cn(
+                  "px-2 py-1 border rounded",
+                  isDarkTheme ? "border-gray-600" : ""
+                )} disabled>&lt;</button>
+                <button className={cn(
+                  "px-2 py-1 border rounded",
+                  isDarkTheme ? "bg-blue-900" : "bg-blue-50"
+                )}>1</button>
+                <button className={cn(
+                  "px-2 py-1 border rounded",
+                  isDarkTheme ? "border-gray-600" : ""
+                )}>2</button>
+                <button className={cn(
+                  "px-2 py-1 border rounded",
+                  isDarkTheme ? "border-gray-600" : ""
+                )}>3</button>
+                <button className={cn(
+                  "px-2 py-1 border rounded",
+                  isDarkTheme ? "border-gray-600" : ""
+                )}>4</button>
+                <button className={cn(
+                  "px-2 py-1 border rounded",
+                  isDarkTheme ? "border-gray-600" : ""
+                )}>5</button>
+                <button className={cn(
+                  "px-2 py-1 border rounded",
+                  isDarkTheme ? "border-gray-600" : ""
+                )}>&gt;</button>
+                <select className={cn(
+                  "border rounded px-2 py-1",
+                  isDarkTheme ? "bg-gray-800 border-gray-600" : ""
+                )}>
                   <option>20 / page</option>
                 </select>
               </div>
