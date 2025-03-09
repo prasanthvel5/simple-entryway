@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+import { ApplicationDetailsDialog, ApplicationData } from "./ApplicationDetailsDialog";
 
 interface MainContentProps {
   isDarkTheme: boolean;
@@ -34,6 +35,8 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
   const [filters, setFilters] = useState<FilterCriteria[]>([]);
   const [filterInput, setFilterInput] = useState<FilterCriteria>({ field: "applicationName", value: "" });
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [selectedApplication, setSelectedApplication] = useState<ApplicationData | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const addFilter = () => {
     if (filterInput.value.trim()) {
@@ -82,6 +85,11 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
     } else {
       setSelectedRows([...selectedRows, index]);
     }
+  };
+
+  const handleRowClick = (application: ApplicationData) => {
+    setSelectedApplication(application);
+    setDialogOpen(true);
   };
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -479,18 +487,27 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                   </thead>
                   <tbody className={isDarkTheme ? "text-gray-300" : "text-gray-800"}>
                     {filteredData.map((item, index) => (
-                      <tr key={index} className={cn(
-                        selectedRows.includes(index) 
-                          ? isDarkTheme ? "bg-blue-900/20" : "bg-blue-50" 
-                          : "",
-                        isDarkTheme ? "hover:bg-gray-750" : "hover:bg-gray-50"
-                      )}>
-                        <td className="px-4 py-3">
+                      <tr key={index} 
+                        className={cn(
+                          selectedRows.includes(index) 
+                            ? isDarkTheme ? "bg-blue-900/20" : "bg-blue-50" 
+                            : "",
+                          isDarkTheme ? "hover:bg-gray-750" : "hover:bg-gray-50",
+                          "cursor-pointer"
+                        )}
+                        onClick={() => handleRowClick(item)}
+                      >
+                        <td className="px-4 py-3" onClick={(e) => {
+                          e.stopPropagation();
+                        }}>
                           <input 
                             type="checkbox" 
                             className="rounded" 
                             checked={selectedRows.includes(index)}
-                            onChange={() => handleRowSelect(index)}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              handleRowSelect(index);
+                            }}
                           />
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap">
@@ -522,8 +539,20 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap">
                           <div className="flex items-center gap-2">
-                            <a href="#" className="text-blue-500 hover:underline">{item.publishTask}</a>
-                            <a href="#" className="text-blue-500 hover:underline">Chrome publish</a>
+                            <a 
+                              href="#" 
+                              className="text-blue-500 hover:underline"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              {item.publishTask}
+                            </a>
+                            <a 
+                              href="#" 
+                              className="text-blue-500 hover:underline"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              Chrome publish
+                            </a>
                           </div>
                         </td>
                       </tr>
@@ -575,6 +604,13 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
               </div>
             </div>
           </div>
+
+          <ApplicationDetailsDialog 
+            application={selectedApplication}
+            open={dialogOpen}
+            onOpenChange={setDialogOpen}
+            isDarkTheme={isDarkTheme}
+          />
         </div>
       </main>
     );
