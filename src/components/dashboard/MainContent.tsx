@@ -1,5 +1,6 @@
+
 import { cn } from "@/lib/utils";
-import { Check, Filter, Search } from "lucide-react";
+import { Check, Filter, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -65,11 +66,11 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
     return (
       <main className={cn(
         "flex-1 p-6 transition-colors relative",
-        isDarkTheme ? "bg-gray-900 text-white" : "bg-[#353640] text-white"
+        isDarkTheme ? "bg-gray-900 text-white" : "bg-[#f5f5f7] text-gray-800"
       )}>
         <div className={cn(
           "absolute inset-0",
-          isDarkTheme ? "bg-gray-900" : "bg-gray-100"
+          isDarkTheme ? "bg-gray-900" : "bg-[#f5f5f7]"
         )} />
         <div className="relative z-10">
           <div className="space-y-6">
@@ -79,51 +80,66 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
             
             <div className="grid grid-cols-4 gap-4">
               <div className={cn(
-                "bg-white/10 rounded-lg p-3 shadow-sm",
-                isDarkTheme ? "border border-white/20" : "border border-gray-300 bg-white"
+                "rounded-lg p-4 shadow-sm",
+                isDarkTheme ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"
               )}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="bg-blue-500/20 p-1 rounded">
+                    <div className="bg-blue-500/20 p-1.5 rounded">
                       <div className="grid grid-cols-2 gap-0.5">
-                        <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
-                        <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
-                        <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
-                        <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
+                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-sm"></div>
+                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-sm"></div>
+                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-sm"></div>
+                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-sm"></div>
                       </div>
                     </div>
                     <div className="flex items-center">
-                      <span className="text-xl font-semibold text-blue-400">1050</span>
+                      <span className="text-xl font-semibold text-blue-500">1050</span>
                       <p className="ml-2 text-sm font-medium" style={{ color: isDarkTheme ? "#f3f4f6" : "#4a5568" }}>Total Applications</p>
                     </div>
                   </div>
                 </div>
               </div>
               <div className={cn(
-                "bg-white/10 rounded-lg p-3 shadow-sm",
-                isDarkTheme ? "border border-white/20" : "border border-gray-300 bg-white"
+                "rounded-lg p-4 shadow-sm",
+                isDarkTheme ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"
               )}>
-                <div className="flex items-center">
-                  <span className="text-xl font-semibold text-blue-600">75</span>
-                  <p className="ml-2 text-sm font-medium" style={{ color: isDarkTheme ? "#f3f4f6" : "#4a5568" }}>Installed</p>
+                <div className="flex items-center gap-2">
+                  <div className="bg-blue-500/20 p-1.5 rounded">
+                    <div className="w-4 h-4 bg-blue-500 rounded-sm"></div>
+                  </div>
+                  <div>
+                    <span className="text-xl font-semibold text-blue-500">75</span>
+                    <p className="text-sm font-medium" style={{ color: isDarkTheme ? "#f3f4f6" : "#4a5568" }}>Installed</p>
+                  </div>
                 </div>
               </div>
               <div className={cn(
-                "bg-white/10 rounded-lg p-3 shadow-sm",
-                isDarkTheme ? "border border-white/20" : "border border-gray-300 bg-white"
+                "rounded-lg p-4 shadow-sm",
+                isDarkTheme ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"
               )}>
-                <div className="flex items-center">
-                  <span className="text-xl font-semibold text-green-500">24</span>
-                  <p className="ml-2 text-sm font-medium" style={{ color: isDarkTheme ? "#f3f4f6" : "#4a5568" }}>Update Published</p>
+                <div className="flex items-center gap-2">
+                  <div className="bg-green-500/20 p-1.5 rounded">
+                    <div className="w-4 h-4 bg-green-500 rounded-sm"></div>
+                  </div>
+                  <div>
+                    <span className="text-xl font-semibold text-green-500">24</span>
+                    <p className="text-sm font-medium" style={{ color: isDarkTheme ? "#f3f4f6" : "#4a5568" }}>Update Published</p>
+                  </div>
                 </div>
               </div>
               <div className={cn(
-                "bg-white/10 rounded-lg p-3 shadow-sm",
-                isDarkTheme ? "border border-white/20" : "border border-gray-300 bg-white"
+                "rounded-lg p-4 shadow-sm",
+                isDarkTheme ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"
               )}>
-                <div className="flex items-center">
-                  <span className="text-xl font-semibold text-orange-500">51</span>
-                  <p className="ml-2 text-sm font-medium" style={{ color: isDarkTheme ? "#f3f4f6" : "#4a5568" }}>Installed but not published</p>
+                <div className="flex items-center gap-2">
+                  <div className="bg-orange-500/20 p-1.5 rounded">
+                    <div className="w-4 h-4 bg-orange-500 rounded-sm"></div>
+                  </div>
+                  <div>
+                    <span className="text-xl font-semibold text-orange-500">51</span>
+                    <p className="text-sm font-medium" style={{ color: isDarkTheme ? "#f3f4f6" : "#4a5568" }}>Installed but not published</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -131,7 +147,7 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
 
           <div className={cn(
             "mt-6 rounded-lg shadow-sm overflow-hidden border",
-            isDarkTheme ? "border-gray-700" : "border-gray-300"
+            isDarkTheme ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
           )}>
             <div className="p-3 flex justify-between items-center">
               <h2 className={cn(
@@ -140,24 +156,12 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
               )}>
                 Applications
               </h2>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={toggleFilters}
-                className={cn(
-                  "flex items-center gap-1",
-                  showFilters && "bg-blue-50 text-blue-600"
-                )}
-              >
-                <Filter className="h-4 w-4" />
-                Filter
-              </Button>
             </div>
 
             {showFilters && (
               <div className={cn(
                 "px-3 py-2 border-t",
-                isDarkTheme ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"
+                isDarkTheme ? "bg-gray-700 border-gray-600" : "bg-gray-50 border-gray-200"
               )}>
                 <div className="flex gap-2 mb-2 flex-wrap">
                   {filters.map((filter, idx) => (
@@ -165,15 +169,18 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                       key={idx} 
                       className={cn(
                         "flex items-center gap-1 px-2 py-1 rounded text-xs",
-                        isDarkTheme ? "bg-gray-700" : "bg-blue-50"
+                        isDarkTheme ? "bg-gray-600 text-gray-100" : "bg-blue-100 text-blue-800"
                       )}
                     >
-                      <span>{filter.field}: {filter.value}</span>
+                      <span className="font-medium">{filter.field}:</span> {filter.value}
                       <button 
-                        className="ml-1 text-gray-500 hover:text-gray-700"
+                        className={cn(
+                          "ml-1 hover:text-red-500",
+                          isDarkTheme ? "text-gray-300" : "text-gray-600"
+                        )}
                         onClick={() => removeFilter(idx)}
                       >
-                        ×
+                        <X className="h-3 w-3" />
                       </button>
                     </div>
                   ))}
@@ -185,7 +192,7 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                     onChange={(e) => setFilterInput({...filterInput, field: e.target.value})}
                     className={cn(
                       "text-sm rounded border px-2 py-1",
-                      isDarkTheme ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
+                      isDarkTheme ? "bg-gray-600 border-gray-500 text-white" : "bg-white border-gray-300 text-gray-800"
                     )}
                   >
                     <option value="applicationName">Application Name</option>
@@ -200,128 +207,227 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                     value={filterInput.value}
                     onChange={(e) => setFilterInput({...filterInput, value: e.target.value})}
                     placeholder="Filter value..." 
-                    className="text-sm"
+                    className={cn(
+                      "text-sm",
+                      isDarkTheme ? "bg-gray-600 border-gray-500 text-white" : "border-gray-300"
+                    )}
                   />
-                  <Button variant="outline" size="sm" onClick={addFilter}>Add</Button>
+                  <Button 
+                    variant="filter" 
+                    size="xs" 
+                    onClick={addFilter}
+                    className="flex items-center gap-1"
+                  >
+                    Add Filter
+                  </Button>
                 </div>
               </div>
             )}
 
             <div className="overflow-auto" style={{ maxWidth: "100%" }}>
-              <div className="overflow-y-auto max-h-[600px] relative" style={{ scrollbarWidth: 'thin' }}>
+              <div className="overflow-y-auto max-h-[600px] relative hide-scrollbar">
                 <style>
                   {`
-                  /* Custom scrollbar styles */
-                  .overflow-y-auto::-webkit-scrollbar {
-                    width: 8px;
-                    height: 8px;
-                    background: transparent;
+                  /* Hide scrollbar by default */
+                  .hide-scrollbar::-webkit-scrollbar {
+                    width: 6px;
+                    height: 6px;
+                    opacity: 0;
+                    transition: opacity 0.3s;
                   }
-                  .overflow-y-auto::-webkit-scrollbar-thumb {
-                    background: #d1d5db;
+                  .hide-scrollbar:hover::-webkit-scrollbar {
+                    opacity: 1;
+                  }
+                  .hide-scrollbar::-webkit-scrollbar-thumb {
+                    background: ${isDarkTheme ? '#4b5563' : '#cbd5e0'};
                     border-radius: 20px;
                   }
-                  .overflow-y-auto:hover::-webkit-scrollbar-thumb {
-                    background: #9ca3af;
-                  }
-                  .overflow-y-auto.dark::-webkit-scrollbar-thumb {
-                    background: #4b5563;
-                  }
-                  .overflow-y-auto.dark:hover::-webkit-scrollbar-thumb {
-                    background: #6b7280;
+                  .hide-scrollbar:hover::-webkit-scrollbar-thumb {
+                    background: ${isDarkTheme ? '#6b7280' : '#a0aec0'};
                   }
                   `}
                 </style>
                 <table className="w-full">
                   <thead className={cn(
-                    "sticky top-0 z-10",
-                    isDarkTheme ? "bg-gray-800" : "bg-gray-100"
+                    "sticky top-0 z-10 border-b",
+                    isDarkTheme ? "bg-gray-700 border-gray-600" : "bg-gray-100 border-gray-300"
                   )}>
-                    <tr className={isDarkTheme ? "border-b border-gray-700" : "border-b border-gray-300"}>
+                    <tr>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap relative group",
-                        isDarkTheme ? "text-gray-200" : "text-gray-700"
+                        "px-4 py-3 text-left whitespace-nowrap border-r relative",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>
-                        <div className="flex items-center">
+                        <div className="flex items-center justify-between">
                           <input type="checkbox" className="rounded" readOnly />
-                          <div className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize group-hover:bg-blue-500"></div>
                         </div>
                       </th>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap font-medium relative group",
-                        isDarkTheme ? "text-gray-200" : "text-gray-700"
+                        "px-4 py-3 text-left whitespace-nowrap font-medium border-r relative",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>
-                        <div className="flex items-center">
-                          Application Name
-                          <div className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize group-hover:bg-blue-500"></div>
+                        <div className="flex items-center justify-between">
+                          <span>Application Name</span>
+                          <Button 
+                            variant="ghost" 
+                            size="xs" 
+                            onClick={() => {
+                              setFilterInput({field: "applicationName", value: ""});
+                              toggleFilters();
+                            }}
+                            className={cn(
+                              "p-1 h-6 w-6",
+                              isDarkTheme ? "text-gray-300 hover:bg-gray-600" : "text-gray-600 hover:bg-gray-200"
+                            )}
+                          >
+                            <Filter className="h-3 w-3" />
+                          </Button>
                         </div>
                       </th>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap font-medium relative group",
-                        isDarkTheme ? "text-gray-200" : "text-gray-700"
+                        "px-4 py-3 text-left whitespace-nowrap font-medium border-r relative",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>
-                        <div className="flex items-center">
-                          Vendor
-                          <div className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize group-hover:bg-blue-500"></div>
+                        <div className="flex items-center justify-between">
+                          <span>Vendor</span>
+                          <Button 
+                            variant="ghost" 
+                            size="xs" 
+                            onClick={() => {
+                              setFilterInput({field: "vendor", value: ""});
+                              toggleFilters();
+                            }}
+                            className={cn(
+                              "p-1 h-6 w-6",
+                              isDarkTheme ? "text-gray-300 hover:bg-gray-600" : "text-gray-600 hover:bg-gray-200"
+                            )}
+                          >
+                            <Filter className="h-3 w-3" />
+                          </Button>
                         </div>
                       </th>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap font-medium relative group",
-                        isDarkTheme ? "text-gray-200" : "text-gray-700"
+                        "px-4 py-3 text-left whitespace-nowrap font-medium border-r relative",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>
-                        <div className="flex items-center">
-                          Latest Version
-                          <div className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize group-hover:bg-blue-500"></div>
+                        <div className="flex items-center justify-between">
+                          <span>Latest Version</span>
+                          <Button 
+                            variant="ghost" 
+                            size="xs" 
+                            onClick={() => {
+                              setFilterInput({field: "version", value: ""});
+                              toggleFilters();
+                            }}
+                            className={cn(
+                              "p-1 h-6 w-6",
+                              isDarkTheme ? "text-gray-300 hover:bg-gray-600" : "text-gray-600 hover:bg-gray-200"
+                            )}
+                          >
+                            <Filter className="h-3 w-3" />
+                          </Button>
                         </div>
                       </th>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap font-medium relative group",
-                        isDarkTheme ? "text-gray-200" : "text-gray-700"
+                        "px-4 py-3 text-left whitespace-nowrap font-medium border-r relative",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>
-                        <div className="flex items-center">
-                          Release date
-                          <div className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize group-hover:bg-blue-500"></div>
+                        <div className="flex items-center justify-between">
+                          <span>Release date</span>
+                          <Button 
+                            variant="ghost" 
+                            size="xs" 
+                            onClick={() => {
+                              setFilterInput({field: "releaseDate", value: ""});
+                              toggleFilters();
+                            }}
+                            className={cn(
+                              "p-1 h-6 w-6",
+                              isDarkTheme ? "text-gray-300 hover:bg-gray-600" : "text-gray-600 hover:bg-gray-200"
+                            )}
+                          >
+                            <Filter className="h-3 w-3" />
+                          </Button>
                         </div>
                       </th>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap font-medium relative group",
-                        isDarkTheme ? "text-gray-200" : "text-gray-700"
+                        "px-4 py-3 text-left whitespace-nowrap font-medium border-r relative",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>
-                        <div className="flex items-center">
-                          Category
-                          <div className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize group-hover:bg-blue-500"></div>
+                        <div className="flex items-center justify-between">
+                          <span>Category</span>
+                          <Button 
+                            variant="ghost" 
+                            size="xs" 
+                            onClick={() => {
+                              setFilterInput({field: "category", value: ""});
+                              toggleFilters();
+                            }}
+                            className={cn(
+                              "p-1 h-6 w-6",
+                              isDarkTheme ? "text-gray-300 hover:bg-gray-600" : "text-gray-600 hover:bg-gray-200"
+                            )}
+                          >
+                            <Filter className="h-3 w-3" />
+                          </Button>
                         </div>
                       </th>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap font-medium relative group",
-                        isDarkTheme ? "text-gray-200" : "text-gray-700"
+                        "px-4 py-3 text-left whitespace-nowrap font-medium border-r relative",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>
-                        <div className="flex items-center">
-                          Inventory Status
-                          <div className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize group-hover:bg-blue-500"></div>
+                        <div className="flex items-center justify-between">
+                          <span>Inventory Status</span>
+                          <Button 
+                            variant="ghost" 
+                            size="xs" 
+                            onClick={() => {
+                              setFilterInput({field: "inventoryStatus", value: ""});
+                              toggleFilters();
+                            }}
+                            className={cn(
+                              "p-1 h-6 w-6",
+                              isDarkTheme ? "text-gray-300 hover:bg-gray-600" : "text-gray-600 hover:bg-gray-200"
+                            )}
+                          >
+                            <Filter className="h-3 w-3" />
+                          </Button>
                         </div>
                       </th>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap font-medium relative group",
-                        isDarkTheme ? "text-gray-200" : "text-gray-700"
+                        "px-4 py-3 text-left whitespace-nowrap font-medium border-r relative",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>
-                        <div className="flex items-center">
-                          Publish Status
-                          <div className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize group-hover:bg-blue-500"></div>
+                        <div className="flex items-center justify-between">
+                          <span>Publish Status</span>
+                          <Button 
+                            variant="ghost" 
+                            size="xs" 
+                            onClick={() => {
+                              setFilterInput({field: "publishStatus", value: ""});
+                              toggleFilters();
+                            }}
+                            className={cn(
+                              "p-1 h-6 w-6",
+                              isDarkTheme ? "text-gray-300 hover:bg-gray-600" : "text-gray-600 hover:bg-gray-200"
+                            )}
+                          >
+                            <Filter className="h-3 w-3" />
+                          </Button>
                         </div>
                       </th>
                       <th className={cn(
                         "px-4 py-3 text-left whitespace-nowrap font-medium",
                         isDarkTheme ? "text-gray-200" : "text-gray-700"
                       )}>
-                        Publish Task
+                        <span>Publish Task</span>
                       </th>
                     </tr>
                   </thead>
                   <tbody className={isDarkTheme ? "text-gray-300" : "text-gray-800"}>
                     {filteredData.map((item, index) => (
                       <tr key={index} className={cn(
-                        isDarkTheme ? "hover:bg-gray-800/50" : "hover:bg-gray-100"
+                        "border-b",
+                        isDarkTheme ? "border-gray-700 hover:bg-gray-750" : "border-gray-100 hover:bg-gray-50"
                       )}>
                         <td className="px-4 py-3">
                           <input type="checkbox" readOnly className="rounded" />
@@ -367,41 +473,41 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
             </div>
             <div className={cn(
               "px-4 py-3 border-t flex items-center justify-between text-sm",
-              isDarkTheme ? "border-gray-700 text-gray-300" : "text-gray-600"
+              isDarkTheme ? "border-gray-700 text-gray-300" : "border-gray-200 text-gray-600"
             )}>
               <div>1-30 of 85 items</div>
               <div className="flex items-center gap-2">
                 <button className={cn(
                   "px-2 py-1 border rounded",
-                  isDarkTheme ? "border-gray-600" : ""
+                  isDarkTheme ? "border-gray-600" : "border-gray-300"
                 )} disabled>&lt;</button>
                 <button className={cn(
                   "px-2 py-1 border rounded",
-                  isDarkTheme ? "bg-blue-900" : "bg-blue-50"
+                  isDarkTheme ? "bg-blue-600 text-white" : "bg-blue-600 text-white"
                 )}>1</button>
                 <button className={cn(
                   "px-2 py-1 border rounded",
-                  isDarkTheme ? "border-gray-600" : ""
+                  isDarkTheme ? "border-gray-600" : "border-gray-300"
                 )}>2</button>
                 <button className={cn(
                   "px-2 py-1 border rounded",
-                  isDarkTheme ? "border-gray-600" : ""
+                  isDarkTheme ? "border-gray-600" : "border-gray-300"
                 )}>3</button>
                 <button className={cn(
                   "px-2 py-1 border rounded",
-                  isDarkTheme ? "border-gray-600" : ""
+                  isDarkTheme ? "border-gray-600" : "border-gray-300"
                 )}>4</button>
                 <button className={cn(
                   "px-2 py-1 border rounded",
-                  isDarkTheme ? "border-gray-600" : ""
+                  isDarkTheme ? "border-gray-600" : "border-gray-300"
                 )}>5</button>
                 <button className={cn(
                   "px-2 py-1 border rounded",
-                  isDarkTheme ? "border-gray-600" : ""
+                  isDarkTheme ? "border-gray-600" : "border-gray-300"
                 )}>&gt;</button>
                 <select className={cn(
                   "border rounded px-2 py-1",
-                  isDarkTheme ? "bg-gray-800 border-gray-600" : ""
+                  isDarkTheme ? "bg-gray-800 border-gray-600" : "bg-white border-gray-300"
                 )}>
                   <option>20 / page</option>
                 </select>
