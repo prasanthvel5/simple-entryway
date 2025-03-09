@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -7,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { X, Check, Upload } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 export interface ApplicationCustomizationData {
   applicationName: string;
@@ -57,7 +60,7 @@ export const CustomizeApplicationDialog = ({
       <DialogContent 
         className={cn(
           "p-0 border rounded-lg",
-          "max-w-3xl w-full h-[700px]",
+          "w-full max-w-[90vw] md:max-w-3xl h-[90vh] md:h-[700px]",
           "overflow-hidden flex flex-col",
           "mx-auto",
           isDarkTheme ? "bg-gray-800 text-white" : "bg-white text-gray-800"
@@ -123,7 +126,7 @@ export const CustomizeApplicationDialog = ({
             <div className="flex-1 overflow-auto" style={{ height: "calc(100% - 60px)" }}>
               <TabsContent value="appInfo" className="h-[500px] overflow-y-auto p-6">
                 <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium mb-1">Name</label>
                       <Input 
@@ -176,31 +179,37 @@ export const CustomizeApplicationDialog = ({
 
                   <div>
                     <label className="block text-sm font-medium mb-1">Show this as featured app in company portal</label>
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center">
-                        <input 
-                          type="radio" 
+                    <RadioGroup 
+                      defaultValue={isFeatured ? "yes" : "no"} 
+                      onValueChange={(val) => setIsFeatured(val === "yes")}
+                      className="flex items-center gap-4"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem 
+                          value="yes" 
                           id="featuredYes" 
-                          checked={isFeatured} 
-                          onChange={() => setIsFeatured(true)}
-                          className="mr-2" 
+                          className={cn(
+                            "text-blue-500 border-blue-500",
+                            "data-[state=checked]:bg-blue-500 data-[state=checked]:text-white"
+                          )}
                         />
-                        <label htmlFor="featuredYes">Yes</label>
+                        <Label htmlFor="featuredYes">Yes</Label>
                       </div>
-                      <div className="flex items-center">
-                        <input 
-                          type="radio" 
-                          id="featuredNo" 
-                          checked={!isFeatured} 
-                          onChange={() => setIsFeatured(false)}
-                          className="mr-2" 
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem 
+                          value="no" 
+                          id="featuredNo"
+                          className={cn(
+                            "text-blue-500 border-blue-500",
+                            "data-[state=checked]:bg-blue-500 data-[state=checked]:text-white"
+                          )}
                         />
-                        <label htmlFor="featuredNo">No</label>
+                        <Label htmlFor="featuredNo">No</Label>
                       </div>
-                    </div>
+                    </RadioGroup>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium mb-1">Information URL</label>
                       <Input 
@@ -217,7 +226,7 @@ export const CustomizeApplicationDialog = ({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium mb-1">Developer</label>
                       <Input 
@@ -259,77 +268,79 @@ export const CustomizeApplicationDialog = ({
                   <div>
                     <h3 className="text-lg font-medium mb-4">Program Settings</h3>
                     <div className="space-y-4 ml-2">
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Installation Program:</label>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                        <label className="block text-sm font-medium md:w-1/3">Installation Program:</label>
                         <Input 
                           placeholder="setup.exe"
                           className={cn(
-                            "w-2/3",
+                            "w-full md:w-2/3 mt-1 md:mt-0",
                             isDarkTheme ? "bg-gray-700 border-gray-600" : ""
                           )}
                         />
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                        <label className="block text-sm font-medium md:w-1/3">
                           Installation Switches:
                         </label>
                         <Input 
                           placeholder="/silent"
                           className={cn(
-                            "w-2/3",
+                            "w-full md:w-2/3 mt-1 md:mt-0",
                             isDarkTheme ? "bg-gray-700 border-gray-600" : ""
                           )}
                         />
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Uninstall Program:</label>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                        <label className="block text-sm font-medium md:w-1/3">Uninstall Program:</label>
                         <Input 
                           placeholder="uninstall.exe"
                           className={cn(
-                            "w-2/3",
+                            "w-full md:w-2/3 mt-1 md:mt-0",
                             isDarkTheme ? "bg-gray-700 border-gray-600" : ""
                           )}
                         />
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                        <label className="block text-sm font-medium md:w-1/3">
                           Uninstall Switches:
                         </label>
                         <Input 
                           placeholder="/silent"
                           className={cn(
-                            "w-2/3",
+                            "w-full md:w-2/3 mt-1 md:mt-0",
                             isDarkTheme ? "bg-gray-700 border-gray-600" : ""
                           )}
                         />
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Detection Method:</label>
-                        <Select defaultValue="msi">
-                          <SelectTrigger 
-                            className={cn(
-                              "w-2/3",
-                              isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                            )}
-                          >
-                            <SelectValue placeholder="Select method" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="msi">MSI Product Code</SelectItem>
-                            <SelectItem value="registry">Registry Key</SelectItem>
-                            <SelectItem value="file">File Detection</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                        <label className="block text-sm font-medium md:w-1/3">Detection Method:</label>
+                        <div className="w-full md:w-2/3 mt-1 md:mt-0">
+                          <Select defaultValue="msi">
+                            <SelectTrigger 
+                              className={cn(
+                                "w-full",
+                                isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                              )}
+                            >
+                              <SelectValue placeholder="Select method" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="msi">MSI Product Code</SelectItem>
+                              <SelectItem value="registry">Registry Key</SelectItem>
+                              <SelectItem value="file">File Detection</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Return Codes:</label>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                        <label className="block text-sm font-medium md:w-1/3">Return Codes:</label>
                         <div className={cn(
-                          "flex items-center gap-2 w-2/3",
+                          "flex flex-wrap items-center gap-2 w-full md:w-2/3 mt-1 md:mt-0",
                           isDarkTheme ? "text-gray-300" : "text-gray-600"
                         )}>
                           <span className="text-xs">0: Success</span>
@@ -339,24 +350,26 @@ export const CustomizeApplicationDialog = ({
                         </div>
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Device restart behavior:</label>
-                        <Select defaultValue="determine">
-                          <SelectTrigger 
-                            className={cn(
-                              "w-2/3",
-                              isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                            )}
-                          >
-                            <SelectValue placeholder="Select behavior" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="determine">Determine behavior based on return codes</SelectItem>
-                            <SelectItem value="force">Force restart</SelectItem>
-                            <SelectItem value="suppress">Suppress restart</SelectItem>
-                            <SelectItem value="basedOnExitCode">Based on exit code</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                        <label className="block text-sm font-medium md:w-1/3">Device restart behavior:</label>
+                        <div className="w-full md:w-2/3 mt-1 md:mt-0">
+                          <Select defaultValue="determine">
+                            <SelectTrigger 
+                              className={cn(
+                                "w-full",
+                                isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                              )}
+                            >
+                              <SelectValue placeholder="Select behavior" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="determine">Determine behavior based on return codes</SelectItem>
+                              <SelectItem value="force">Force restart</SelectItem>
+                              <SelectItem value="suppress">Suppress restart</SelectItem>
+                              <SelectItem value="basedOnExitCode">Based on exit code</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -368,88 +381,109 @@ export const CustomizeApplicationDialog = ({
                   <div>
                     <h3 className="text-lg font-medium mb-4">Post-Installation Actions</h3>
                     <div className="space-y-4 ml-2">
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Remove Desktop Shortcuts:</label>
-                        <div className="flex items-center w-2/3 justify-end">
-                          <input 
-                            type="checkbox" 
-                            id="removeDesktop" 
-                            checked={removeDesktopIcon} 
-                            onChange={() => setRemoveDesktopIcon(!removeDesktopIcon)}
-                            className="mr-2" 
-                          />
-                          <label htmlFor="removeDesktop">Enable</label>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-center">
+                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/2">Remove Desktop Shortcuts:</label>
+                        <div className="flex items-center justify-end w-full md:w-1/2">
+                          <div className="flex items-center space-x-2">
+                            <input 
+                              type="checkbox" 
+                              id="removeDesktop" 
+                              checked={removeDesktopIcon} 
+                              onChange={() => setRemoveDesktopIcon(!removeDesktopIcon)}
+                              className={cn(
+                                "rounded border text-blue-500 focus:ring-blue-500",
+                                isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                              )}
+                            />
+                            <label htmlFor="removeDesktop">Enable</label>
+                          </div>
                         </div>
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Remove Start Menu Shortcuts:</label>
-                        <div className="flex items-center w-2/3 justify-end">
-                          <input 
-                            type="checkbox" 
-                            id="removeStartMenu" 
-                            checked={removeStartMenuIcon} 
-                            onChange={() => setRemoveStartMenuIcon(!removeStartMenuIcon)}
-                            className="mr-2" 
-                          />
-                          <label htmlFor="removeStartMenu">Enable</label>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-center">
+                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/2">Remove Start Menu Shortcuts:</label>
+                        <div className="flex items-center justify-end w-full md:w-1/2">
+                          <div className="flex items-center space-x-2">
+                            <input 
+                              type="checkbox" 
+                              id="removeStartMenu" 
+                              checked={removeStartMenuIcon} 
+                              onChange={() => setRemoveStartMenuIcon(!removeStartMenuIcon)}
+                              className={cn(
+                                "rounded border text-blue-500 focus:ring-blue-500",
+                                isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                              )}
+                            />
+                            <label htmlFor="removeStartMenu">Enable</label>
+                          </div>
                         </div>
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Disable Automatic Updates:</label>
-                        <div className="flex items-center w-2/3 justify-end">
-                          <input 
-                            type="checkbox" 
-                            id="disableUpdates" 
-                            checked={disableUpdates} 
-                            onChange={() => setDisableUpdates(!disableUpdates)}
-                            className="mr-2" 
-                          />
-                          <label htmlFor="disableUpdates">Enable</label>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-center">
+                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/2">Disable Automatic Updates:</label>
+                        <div className="flex items-center justify-end w-full md:w-1/2">
+                          <div className="flex items-center space-x-2">
+                            <input 
+                              type="checkbox" 
+                              id="disableUpdates" 
+                              checked={disableUpdates} 
+                              onChange={() => setDisableUpdates(!disableUpdates)}
+                              className={cn(
+                                "rounded border text-blue-500 focus:ring-blue-500",
+                                isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                              )}
+                            />
+                            <label htmlFor="disableUpdates">Enable</label>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Default File Associations:</label>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className={cn(
-                            "w-2/3",
-                            isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                          )}
-                        >
-                          Configure Associations
-                        </Button>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-center">
+                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/2">Default File Associations:</label>
+                        <div className="w-full md:w-1/2 flex justify-end">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className={cn(
+                              "w-full md:w-auto",
+                              isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                            )}
+                          >
+                            Configure Associations
+                          </Button>
+                        </div>
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Registry Modifications:</label>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className={cn(
-                            "w-2/3",
-                            isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                          )}
-                        >
-                          Configure Registry Keys
-                        </Button>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-center">
+                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/2">Registry Modifications:</label>
+                        <div className="w-full md:w-1/2 flex justify-end">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className={cn(
+                              "w-full md:w-auto",
+                              isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                            )}
+                          >
+                            Configure Registry Keys
+                          </Button>
+                        </div>
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Create Custom Shortcuts:</label>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className={cn(
-                            "w-2/3",
-                            isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                          )}
-                        >
-                          Configure Shortcuts
-                        </Button>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-center">
+                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/2">Create Custom Shortcuts:</label>
+                        <div className="w-full md:w-1/2 flex justify-end">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className={cn(
+                              "w-full md:w-auto",
+                              isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                            )}
+                          >
+                            Configure Shortcuts
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -461,13 +495,13 @@ export const CustomizeApplicationDialog = ({
                   <div>
                     <h3 className="text-lg font-medium mb-4">Pre-Installation Script</h3>
                     <div className="space-y-4 ml-2">
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Script File:</label>
-                        <div className="flex items-center w-2/3 justify-end">
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/3">Script File:</label>
+                        <div className="flex items-center w-full md:w-2/3 justify-end flex-col md:flex-row gap-2">
                           <Select defaultValue="powershell">
                             <SelectTrigger 
                               className={cn(
-                                "w-48 mr-2",
+                                "w-full md:w-48",
                                 isDarkTheme ? "bg-gray-700 border-gray-600" : ""
                               )}
                             >
@@ -486,61 +520,71 @@ export const CustomizeApplicationDialog = ({
                         </div>
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Script Content:</label>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/3">Script Content:</label>
                         <Textarea 
                           className={cn(
-                            "w-2/3 h-24 font-mono text-xs",
+                            "w-full md:w-2/3 h-24 font-mono text-xs",
                             isDarkTheme ? "bg-gray-700 border-gray-600" : ""
                           )}
                           placeholder="# Enter PowerShell script here"
                         />
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Run Context:</label>
-                        <Select defaultValue="system">
-                          <SelectTrigger 
-                            className={cn(
-                              "w-2/3",
-                              isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                            )}
-                          >
-                            <SelectValue placeholder="Select context" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="system">System (SYSTEM)</SelectItem>
-                            <SelectItem value="user">Current User</SelectItem>
-                            <SelectItem value="admin">Administrator</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/3">Run Context:</label>
+                        <div className="w-full md:w-2/3">
+                          <Select defaultValue="system">
+                            <SelectTrigger 
+                              className={cn(
+                                "w-full",
+                                isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                              )}
+                            >
+                              <SelectValue placeholder="Select context" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="system">System (SYSTEM)</SelectItem>
+                              <SelectItem value="user">Current User</SelectItem>
+                              <SelectItem value="admin">Administrator</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-center">
+                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/3">
                           Continue on script failure:
                         </label>
-                        <div className="flex items-center gap-4 w-2/3 justify-end">
-                          <div className="flex items-center">
-                            <input 
-                              type="radio" 
-                              id="proceedPreScriptYes" 
-                              checked={proceedPreScript} 
-                              onChange={() => setProceedPreScript(true)}
-                              className="mr-2" 
-                            />
-                            <label htmlFor="proceedPreScriptYes">Yes</label>
-                          </div>
-                          <div className="flex items-center">
-                            <input 
-                              type="radio" 
-                              id="proceedPreScriptNo" 
-                              checked={!proceedPreScript} 
-                              onChange={() => setProceedPreScript(false)}
-                              className="mr-2" 
-                            />
-                            <label htmlFor="proceedPreScriptNo">No</label>
-                          </div>
+                        <div className="flex items-center w-full md:w-2/3 md:justify-start">
+                          <RadioGroup 
+                            defaultValue={proceedPreScript ? "yes" : "no"} 
+                            onValueChange={(val) => setProceedPreScript(val === "yes")}
+                            className="flex items-center gap-4"
+                          >
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem 
+                                value="yes" 
+                                id="proceedPreScriptYes" 
+                                className={cn(
+                                  "text-blue-500 border-blue-500",
+                                  "data-[state=checked]:bg-blue-500 data-[state=checked]:text-white"
+                                )}
+                              />
+                              <Label htmlFor="proceedPreScriptYes">Yes</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem 
+                                value="no" 
+                                id="proceedPreScriptNo"
+                                className={cn(
+                                  "text-blue-500 border-blue-500",
+                                  "data-[state=checked]:bg-blue-500 data-[state=checked]:text-white"
+                                )}
+                              />
+                              <Label htmlFor="proceedPreScriptNo">No</Label>
+                            </div>
+                          </RadioGroup>
                         </div>
                       </div>
                     </div>
@@ -549,13 +593,13 @@ export const CustomizeApplicationDialog = ({
                   <div>
                     <h3 className="text-lg font-medium mb-4">Post-Installation Script</h3>
                     <div className="space-y-4 ml-2">
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Script File:</label>
-                        <div className="flex items-center w-2/3 justify-end">
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/3">Script File:</label>
+                        <div className="flex items-center w-full md:w-2/3 justify-end flex-col md:flex-row gap-2">
                           <Select defaultValue="powershell">
                             <SelectTrigger 
                               className={cn(
-                                "w-48 mr-2",
+                                "w-full md:w-48",
                                 isDarkTheme ? "bg-gray-700 border-gray-600" : ""
                               )}
                             >
@@ -574,61 +618,71 @@ export const CustomizeApplicationDialog = ({
                         </div>
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Script Content:</label>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/3">Script Content:</label>
                         <Textarea 
                           className={cn(
-                            "w-2/3 h-24 font-mono text-xs",
+                            "w-full md:w-2/3 h-24 font-mono text-xs",
                             isDarkTheme ? "bg-gray-700 border-gray-600" : ""
                           )}
                           placeholder="# Enter PowerShell script here"
                         />
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">Run Context:</label>
-                        <Select defaultValue="system">
-                          <SelectTrigger 
-                            className={cn(
-                              "w-2/3",
-                              isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                            )}
-                          >
-                            <SelectValue placeholder="Select context" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="system">System (SYSTEM)</SelectItem>
-                            <SelectItem value="user">Current User</SelectItem>
-                            <SelectItem value="admin">Administrator</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/3">Run Context:</label>
+                        <div className="w-full md:w-2/3">
+                          <Select defaultValue="system">
+                            <SelectTrigger 
+                              className={cn(
+                                "w-full",
+                                isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                              )}
+                            >
+                              <SelectValue placeholder="Select context" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="system">System (SYSTEM)</SelectItem>
+                              <SelectItem value="user">Current User</SelectItem>
+                              <SelectItem value="admin">Administrator</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                       
-                      <div className="flex items-center justify-between">
-                        <label className="block text-sm font-medium">
+                      <div className="flex items-center justify-between flex-col md:flex-row md:items-center">
+                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/3">
                           Continue on script failure:
                         </label>
-                        <div className="flex items-center gap-4 w-2/3 justify-end">
-                          <div className="flex items-center">
-                            <input 
-                              type="radio" 
-                              id="proceedPostScriptYes" 
-                              checked={proceedPostScript} 
-                              onChange={() => setProceedPostScript(true)}
-                              className="mr-2" 
-                            />
-                            <label htmlFor="proceedPostScriptYes">Yes</label>
-                          </div>
-                          <div className="flex items-center">
-                            <input 
-                              type="radio" 
-                              id="proceedPostScriptNo" 
-                              checked={!proceedPostScript} 
-                              onChange={() => setProceedPostScript(false)}
-                              className="mr-2" 
-                            />
-                            <label htmlFor="proceedPostScriptNo">No</label>
-                          </div>
+                        <div className="flex items-center w-full md:w-2/3 md:justify-start">
+                          <RadioGroup 
+                            defaultValue={proceedPostScript ? "yes" : "no"} 
+                            onValueChange={(val) => setProceedPostScript(val === "yes")}
+                            className="flex items-center gap-4"
+                          >
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem 
+                                value="yes" 
+                                id="proceedPostScriptYes" 
+                                className={cn(
+                                  "text-blue-500 border-blue-500",
+                                  "data-[state=checked]:bg-blue-500 data-[state=checked]:text-white"
+                                )}
+                              />
+                              <Label htmlFor="proceedPostScriptYes">Yes</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem 
+                                value="no" 
+                                id="proceedPostScriptNo"
+                                className={cn(
+                                  "text-blue-500 border-blue-500",
+                                  "data-[state=checked]:bg-blue-500 data-[state=checked]:text-white"
+                                )}
+                              />
+                              <Label htmlFor="proceedPostScriptNo">No</Label>
+                            </div>
+                          </RadioGroup>
                         </div>
                       </div>
                     </div>
@@ -639,13 +693,33 @@ export const CustomizeApplicationDialog = ({
           </Tabs>
         </div>
 
-        <div className="bg-inherit px-6 py-6 border-t mt-auto">
+        <div className="bg-inherit px-6 py-4 border-t mt-auto sticky bottom-0 z-10 shadow-md">
           <div className="flex justify-center space-x-4">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
+            <Button 
+              variant="outline" 
+              onClick={() => onOpenChange(false)}
+              className={cn(
+                "min-w-[100px]",
+                isDarkTheme ? "hover:bg-gray-700" : "hover:bg-gray-100"
+              )}
+            >
               Cancel
             </Button>
-            <Button variant="outline">Reset to default</Button>
-            <Button className="bg-blue-500 hover:bg-blue-600">
+            <Button 
+              variant="outline"
+              className={cn(
+                "min-w-[100px]",
+                isDarkTheme ? "hover:bg-gray-700" : "hover:bg-gray-100"
+              )}
+            >
+              Reset to default
+            </Button>
+            <Button 
+              className={cn(
+                "bg-blue-500 hover:bg-blue-600 min-w-[100px]",
+                "text-white font-medium"
+              )}
+            >
               Save
             </Button>
           </div>
