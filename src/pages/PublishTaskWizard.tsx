@@ -1,11 +1,13 @@
+
 import { useState, useEffect } from "react";
 import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { ArrowLeft, ArrowRight, Check, Plus, Search, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Plus, Search, Settings, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
+import { CustomizeApplicationDialog } from "@/components/dashboard/CustomizeApplicationDialog";
 
 type WizardStep = "selectApplications" | "assignmentSettings" | "installationSettings" | "publishSettings" | "review";
 
@@ -35,6 +37,8 @@ const PublishTaskWizard = () => {
   const [taskName, setTaskName] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [showAddApplicationsDialog, setShowAddApplicationsDialog] = useState(false);
+  const [customizeApp, setCustomizeApp] = useState<Application | null>(null);
+  const [showCustomizeDialog, setShowCustomizeDialog] = useState(false);
   
   useEffect(() => {
     if (location.state?.selectedApplications) {
@@ -76,6 +80,11 @@ const PublishTaskWizard = () => {
     const newApplications = [...applications];
     newApplications.splice(index, 1);
     setApplications(newApplications);
+  };
+
+  const handleCustomizeApplication = (app: Application) => {
+    setCustomizeApp(app);
+    setShowCustomizeDialog(true);
   };
 
   const availableApplications: Application[] = [
@@ -274,14 +283,25 @@ const PublishTaskWizard = () => {
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <Button 
-                              variant="ghost" 
-                              size="xs"
-                              onClick={() => handleRemoveApplication(index)}
-                              className="text-red-500 hover:text-red-700"
-                            >
-                              <X className="h-4 w-4" />
-                            </Button>
+                            <div className="flex items-center gap-2">
+                              <Button 
+                                variant="ghost" 
+                                size="xs"
+                                onClick={() => handleCustomizeApplication(app)}
+                                className="text-blue-500 hover:text-blue-700 flex items-center gap-1"
+                              >
+                                <Settings className="h-4 w-4" />
+                                Customize
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="xs"
+                                onClick={() => handleRemoveApplication(index)}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </td>
                         </tr>
                       ))
@@ -703,6 +723,13 @@ const PublishTaskWizard = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      <CustomizeApplicationDialog
+        application={customizeApp}
+        open={showCustomizeDialog}
+        onOpenChange={setShowCustomizeDialog}
+        isDarkTheme={isDarkTheme}
+      />
     </div>
   );
 };
