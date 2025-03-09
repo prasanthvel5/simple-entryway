@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
-import { CustomizeApplicationDialog } from "@/components/dashboard/CustomizeApplicationDialog";
+import { CustomizeApplicationDialog, ApplicationCustomizationData } from "@/components/dashboard/CustomizeApplicationDialog";
 
 type WizardStep = "selectApplications" | "assignmentSettings" | "installationSettings" | "publishSettings" | "review";
 
@@ -20,6 +20,15 @@ interface Application {
   inventoryStatus: string;
   publishStatus: string;
   publishTask: string;
+  // Additional fields to match ApplicationCustomizationData
+  description?: string;
+  publisher?: string;
+  informationUrl?: string;
+  privacyUrl?: string;
+  developer?: string;
+  owner?: string;
+  notes?: string;
+  featured?: boolean;
 }
 
 type DashboardContext = {
@@ -83,7 +92,14 @@ const PublishTaskWizard = () => {
   };
 
   const handleCustomizeApplication = (app: Application) => {
-    setCustomizeApp(app);
+    // Convert the app to ApplicationCustomizationData format
+    const customizeAppData: ApplicationCustomizationData = {
+      ...app,
+      category: app.category ? [app.category] : [], // Convert string to string array
+      publisher: app.vendor, // Map vendor to publisher
+    };
+    
+    setCustomizeApp(customizeAppData);
     setShowCustomizeDialog(true);
   };
 
