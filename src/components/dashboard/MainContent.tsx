@@ -1,4 +1,3 @@
-
 import { cn } from "@/lib/utils";
 import { Check, Filter, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -210,7 +209,8 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
 
             <div className="overflow-auto" style={{ maxWidth: "100%" }}>
               <div className="overflow-y-auto max-h-[600px] relative" style={{ scrollbarWidth: 'thin' }}>
-                <style jsx global>{`
+                <style>
+                  {`
                   /* Custom scrollbar styles */
                   .overflow-y-auto::-webkit-scrollbar {
                     width: 8px;
@@ -230,7 +230,8 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                   .overflow-y-auto.dark:hover::-webkit-scrollbar-thumb {
                     background: #6b7280;
                   }
-                `}</style>
+                  `}
+                </style>
                 <table className="w-full">
                   <thead className={cn(
                     "sticky top-0 z-10",
@@ -242,7 +243,7 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                         isDarkTheme ? "text-gray-200" : "text-gray-700"
                       )}>
                         <div className="flex items-center">
-                          <input type="checkbox" className="rounded" />
+                          <input type="checkbox" className="rounded" readOnly />
                           <div className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize group-hover:bg-blue-500"></div>
                         </div>
                       </th>
@@ -323,7 +324,7 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                         isDarkTheme ? "hover:bg-gray-800/50" : "hover:bg-gray-100"
                       )}>
                         <td className="px-4 py-3">
-                          <input type="checkbox" checked={index === 0} className="rounded" />
+                          <input type="checkbox" readOnly className="rounded" />
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap">
                           <div className="flex items-center gap-2">
@@ -414,11 +415,11 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
 
   return (
     <main className={cn(
-      "flex-1 p-6 transition-colors rounded-tl-2xl relative",
+      "flex-1 p-6 transition-colors relative",
       isDarkTheme ? "bg-gray-900 text-white" : "bg-[#353640] text-white"
     )}>
       <div className={cn(
-        "absolute inset-0 rounded-tl-2xl",
+        "absolute inset-0",
         isDarkTheme ? "bg-gray-900" : "bg-gray-100"
       )} />
       <div className="relative z-10">
