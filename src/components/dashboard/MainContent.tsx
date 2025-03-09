@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface MainContentProps {
   isDarkTheme: boolean;
@@ -91,9 +92,13 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
     }
   };
 
-  const openPublishTaskWizard = () => {
+  const handleCreatePublishTask = () => {
     if (selectedRows.length === 0) {
-      alert("Please select at least one application to create a publish task.");
+      toast({
+        title: "No applications selected",
+        description: "Please select at least one application to create a publish task.",
+        variant: "destructive",
+      });
       return;
     }
     
@@ -118,7 +123,7 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
           <div className="space-y-6">
             <button 
               className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-md text-sm font-medium transition-colors"
-              onClick={openPublishTaskWizard}
+              onClick={handleCreatePublishTask}
             >
               Create Publish Task
             </button>

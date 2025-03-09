@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Package,
@@ -15,10 +15,20 @@ import { SecondLevelMenu } from "@/components/dashboard/SecondLevelMenu";
 import { MainContent } from "@/components/dashboard/MainContent";
 
 const Dashboard = () => {
-  const [activeMenu, setActiveMenu] = useState("home"); // Changed default to "home"
+  const [activeMenu, setActiveMenu] = useState("home");
   const [isSecondLevelMenuCollapsed, setIsSecondLevelMenuCollapsed] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [activeSecondLevel, setActiveSecondLevel] = useState<string>("");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Set active menu based on URL path
+  useEffect(() => {
+    if (location.pathname.includes('publish-task-wizard')) {
+      setActiveMenu("intune");
+      setActiveSecondLevel("Published Task");
+    }
+  }, [location.pathname]);
 
   const firstLevelMenuItems = [
     { id: "home", icon: LayoutDashboard, label: "Home" },
@@ -41,6 +51,13 @@ const Dashboard = () => {
 
   const handleSecondLevelSelect = (item: string) => {
     setActiveSecondLevel(item);
+    
+    // When "Published Task" is selected from Intune menu, navigate to the publish-task-wizard
+    if (activeMenu === "intune" && item === "Published Task") {
+      if (!location.pathname.includes('publish-task-wizard')) {
+        navigate('/dashboard/publish-task-wizard');
+      }
+    }
   };
 
   return (
@@ -72,8 +89,8 @@ const Dashboard = () => {
             />
           )}
           
-          {/* Use Outlet for nested routes or MainContent for regular dashboard */}
-          {window.location.pathname.includes('publish-task-wizard') ? (
+          {/* Always use Outlet for nested routes */}
+          {location.pathname.includes('publish-task-wizard') ? (
             <Outlet context={{ isDarkTheme, activeMenu, activeSecondLevel }} />
           ) : (
             <MainContent 

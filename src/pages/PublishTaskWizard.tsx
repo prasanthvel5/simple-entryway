@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, ArrowRight, Check, Plus, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { toast } from "@/components/ui/use-toast";
 
 type WizardStep = "selectApplications" | "assignmentSettings" | "installationSettings" | "publishSettings" | "review";
 
@@ -30,11 +31,21 @@ const PublishTaskWizard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [currentStep, setCurrentStep] = useState<WizardStep>("selectApplications");
-  const [applications, setApplications] = useState<Application[]>(location.state?.selectedApplications || []);
+  const [applications, setApplications] = useState<Application[]>([]);
   const [taskName, setTaskName] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [showAddApplicationsDialog, setShowAddApplicationsDialog] = useState(false);
   
+  useEffect(() => {
+    if (location.state?.selectedApplications) {
+      setApplications(location.state.selectedApplications);
+      toast({
+        title: "Applications loaded",
+        description: `${location.state.selectedApplications.length} applications have been added to the task.`,
+      });
+    }
+  }, [location.state]);
+
   const steps = [
     { id: "selectApplications", label: "Select Applications" },
     { id: "assignmentSettings", label: "Assignment Settings" },
@@ -67,7 +78,6 @@ const PublishTaskWizard = () => {
     setApplications(newApplications);
   };
 
-  // Sample applications for "Add Applications" functionality
   const availableApplications: Application[] = [
     {
       applicationName: "Microsoft Office",
@@ -160,11 +170,9 @@ const PublishTaskWizard = () => {
             </div>
           </div>
           
-          {/* Wizard Progress Bar */}
           <div className="flex items-center justify-between mb-8">
             {steps.map((step, index) => (
               <div key={step.id} className="flex-1 flex flex-col items-center relative">
-                {/* Connector line */}
                 {index > 0 && (
                   <div className={cn(
                     "absolute h-1 top-4 -left-1/2 right-1/2",
@@ -174,7 +182,6 @@ const PublishTaskWizard = () => {
                   )} />
                 )}
                 
-                {/* Step circle */}
                 <div className={cn(
                   "w-8 h-8 rounded-full flex items-center justify-center z-10 mb-1 font-medium",
                   currentStep === step.id 
@@ -188,7 +195,6 @@ const PublishTaskWizard = () => {
                     : index + 1}
                 </div>
                 
-                {/* Step label */}
                 <span className={cn(
                   "text-sm text-center",
                   currentStep === step.id 
@@ -602,7 +608,6 @@ const PublishTaskWizard = () => {
           ) : (
             <Button 
               onClick={() => {
-                // Handle save functionality
                 navigate('/dashboard');
               }}
               className="flex items-center gap-1 bg-green-500 hover:bg-green-600"
@@ -614,7 +619,6 @@ const PublishTaskWizard = () => {
         </div>
       </div>
 
-      {/* Add Applications Dialog */}
       <Dialog open={showAddApplicationsDialog} onOpenChange={setShowAddApplicationsDialog}>
         <DialogContent className={cn(
           "max-w-2xl p-6",
