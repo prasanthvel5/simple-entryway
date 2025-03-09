@@ -46,7 +46,7 @@ const PublishTaskWizard = () => {
   const [taskName, setTaskName] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [showAddApplicationsDialog, setShowAddApplicationsDialog] = useState(false);
-  const [customizeApp, setCustomizeApp] = useState<Application | null>(null);
+  const [customizeApp, setCustomizeApp] = useState<ApplicationCustomizationData | null>(null);
   const [showCustomizeDialog, setShowCustomizeDialog] = useState(false);
   
   useEffect(() => {
@@ -94,9 +94,17 @@ const PublishTaskWizard = () => {
   const handleCustomizeApplication = (app: Application) => {
     // Convert the app to ApplicationCustomizationData format
     const customizeAppData: ApplicationCustomizationData = {
-      ...app,
+      applicationName: app.applicationName,
+      version: app.version,
+      description: app.description || "",
       category: app.category ? [app.category] : [], // Convert string to string array
       publisher: app.vendor, // Map vendor to publisher
+      informationUrl: app.informationUrl || "",
+      privacyUrl: app.privacyUrl || "",
+      developer: app.developer || "",
+      owner: app.owner || "",
+      notes: app.notes || "",
+      featured: app.featured || false
     };
     
     setCustomizeApp(customizeAppData);
