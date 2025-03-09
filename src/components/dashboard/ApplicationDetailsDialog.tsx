@@ -61,7 +61,8 @@ export const ApplicationDetailsDialog = ({ application, open, onOpenChange, isDa
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className={cn(
         "p-0 max-w-5xl border-0 overflow-hidden rounded-t-none rounded-b-xl",
-        "fixed bottom-0 translate-y-0 left-[50%] translate-x-[-50%] w-[95%]", // Fixed positioning
+        "fixed bottom-0 translate-y-0 left-[50%] translate-x-[-50%] w-[95%]",
+        "animate-slide-up", // Added animation class
         isDarkTheme ? "bg-gray-800 text-white" : "bg-white text-gray-800"
       )}>
         <DialogHeader className="sr-only">
@@ -191,3 +192,4 @@ export const ApplicationDetailsDialog = ({ application, open, onOpenChange, isDa
     </Dialog>
   );
 };
+
