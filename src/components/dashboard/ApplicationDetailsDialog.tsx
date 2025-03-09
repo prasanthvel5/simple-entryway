@@ -66,10 +66,10 @@ export const ApplicationDetailsDialog = ({ application, open, onOpenChange, isDa
           "h-[30vh]", // Increased by 20% from 25vh to 30vh
           "left-0 right-0", // Ensure it takes the full width
           "transform transition-all duration-300 ease-out",
-          isDarkTheme ? "bg-gray-800 text-white" : "bg-white text-gray-800",
           // Dynamically adjust width based on the second level menu
           document.querySelector('[data-state="open"]') ? "ml-[240px]" : "ml-[72px]" // 72px is the width of the first level menu when second level is collapsed
         )}
+        hideCloseButton={false}
       >
         <DialogHeader className="sr-only">
           <DialogTitle>{mergedData.applicationName} Details</DialogTitle>
@@ -79,11 +79,6 @@ export const ApplicationDetailsDialog = ({ application, open, onOpenChange, isDa
         </DialogHeader>
         
         <div className="relative w-full">
-          <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
-            <X className="h-4 w-4" />
-            <span className="sr-only">Close</span>
-          </DialogClose>
-
           <div className="p-6">
             <div className="flex items-start gap-6">
               <div className="flex-shrink-0">
@@ -113,11 +108,11 @@ export const ApplicationDetailsDialog = ({ application, open, onOpenChange, isDa
                           <div className="flex gap-2">
                             {mergedData.category === "Browser" ? (
                               <>
-                                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Productivity</span>
-                                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Browser</span>
+                                <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 rounded-full text-xs">Productivity</span>
+                                <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 rounded-full text-xs">Browser</span>
                               </>
                             ) : (
-                              <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">{mergedData.category}</span>
+                              <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 rounded-full text-xs">{mergedData.category}</span>
                             )}
                           </div>
                         </div>
@@ -172,11 +167,11 @@ export const ApplicationDetailsDialog = ({ application, open, onOpenChange, isDa
                         <div className="text-sm text-gray-500 dark:text-gray-400">Publish Status :</div>
                         <div className="text-sm font-medium">
                           {mergedData.publishStatus === 'Updates Published' ? (
-                            <span className="text-green-600">Updates Published</span>
+                            <span className="text-green-600 dark:text-green-400">Updates Published</span>
                           ) : mergedData.publishStatus === 'Pending' ? (
-                            <span className="text-orange-500">Pending</span>
+                            <span className="text-orange-500 dark:text-orange-400">Pending</span>
                           ) : (
-                            <span className="text-gray-500">Not Published</span>
+                            <span className="text-gray-500 dark:text-gray-400">Not Published</span>
                           )}
                         </div>
 
