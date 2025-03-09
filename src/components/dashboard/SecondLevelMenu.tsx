@@ -23,7 +23,7 @@ export const SecondLevelMenu = ({
 
   return (
     <div className={cn(
-      "bg-[#202131] text-white transition-all duration-300 flex rounded-tl-2xl",
+      "bg-[#202131] text-white transition-all duration-300 flex",
       showContent ? "w-40" : "w-6"
     )}>
       {showContent ? (
@@ -57,11 +57,11 @@ export const SecondLevelMenu = ({
       ) : (
         <button 
           onClick={() => onCollapse(false)}
-          className="w-6 hover:bg-gray-700/50 flex items-center justify-center rounded-tl-2xl"
+          className="w-6 hover:bg-gray-700/50 flex items-center justify-center"
         >
           <ChevronRight className="w-4 h-4" />
         </button>
       )}
     </div>
   );
-};
+}

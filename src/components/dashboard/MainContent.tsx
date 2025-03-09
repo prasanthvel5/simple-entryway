@@ -1,7 +1,7 @@
 
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
-import chromeLogo from './resources/2chrome.png';
+import chromeLogo from '../dashboard/resources/2chrome.png';
 
 interface MainContentProps {
   isDarkTheme: boolean;
@@ -13,11 +13,11 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
   if (activeMenu === "intune" && activeSecondLevel === "Updates Catalog") {
     return (
       <main className={cn(
-        "flex-1 p-6 transition-colors rounded-tl-2xl relative",
+        "flex-1 p-6 transition-colors relative",
         isDarkTheme ? "bg-gray-900 text-white" : "bg-[#353640] text-white"
       )}>
         <div className={cn(
-          "absolute inset-0 rounded-tl-2xl",
+          "absolute inset-0",
           isDarkTheme ? "bg-gray-900" : "bg-gray-100"
         )} />
         <div className="relative z-10">
@@ -28,128 +28,149 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
             
             <div className="grid grid-cols-4 gap-4">
               <div className={cn(
-                "bg-white/5 backdrop-blur-sm rounded-lg p-3",
-                isDarkTheme ? "border border-white/10" : "border border-gray-200"
+                "bg-white/10 rounded-lg p-4 shadow-md",
+                isDarkTheme ? "border border-white/20" : "border border-gray-300"
               )}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="bg-blue-500/20 p-1 rounded">
+                    <div className="bg-blue-500/20 p-1.5 rounded">
                       <div className="grid grid-cols-2 gap-0.5">
-                        <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
-                        <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
-                        <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
-                        <div className="w-1 h-1 bg-blue-400 rounded-sm"></div>
+                        <div className="w-1.5 h-1.5 bg-blue-400 rounded-sm"></div>
+                        <div className="w-1.5 h-1.5 bg-blue-400 rounded-sm"></div>
+                        <div className="w-1.5 h-1.5 bg-blue-400 rounded-sm"></div>
+                        <div className="w-1.5 h-1.5 bg-blue-400 rounded-sm"></div>
                       </div>
                     </div>
-                    <span className="text-2xl font-semibold text-blue-400">1050</span>
+                    <span className="text-xl font-semibold text-blue-400">1050</span>
                   </div>
-                  <p className="text-xs text-gray-400">Total Applications</p>
+                  <p className="text-sm text-gray-300">Total Applications</p>
                 </div>
               </div>
               <div className={cn(
-                "bg-white/5 backdrop-blur-sm rounded-lg p-3",
-                isDarkTheme ? "border border-white/10" : "border border-gray-200"
+                "bg-white/10 rounded-lg p-4 shadow-md",
+                isDarkTheme ? "border border-white/20" : "border border-gray-300"
               )}>
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl font-semibold text-blue-600">75</span>
-                  <p className="text-xs text-gray-400">Installed</p>
+                  <span className="text-xl font-semibold text-blue-600">75</span>
+                  <p className="text-sm text-gray-300">Installed</p>
                 </div>
               </div>
               <div className={cn(
-                "bg-white/5 backdrop-blur-sm rounded-lg p-3",
-                isDarkTheme ? "border border-white/10" : "border border-gray-200"
+                "bg-white/10 rounded-lg p-4 shadow-md",
+                isDarkTheme ? "border border-white/20" : "border border-gray-300"
               )}>
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl font-semibold text-green-500">24</span>
-                  <p className="text-xs text-gray-400">Update Published</p>
+                  <span className="text-xl font-semibold text-green-500">24</span>
+                  <p className="text-sm text-gray-300">Update Published</p>
                 </div>
               </div>
               <div className={cn(
-                "bg-white/5 backdrop-blur-sm rounded-lg p-3",
-                isDarkTheme ? "border border-white/10" : "border border-gray-200"
+                "bg-white/10 rounded-lg p-4 shadow-md",
+                isDarkTheme ? "border border-white/20" : "border border-gray-300"
               )}>
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl font-semibold text-orange-500">51</span>
-                  <p className="text-xs text-gray-400">Installed but not published</p>
+                  <span className="text-xl font-semibold text-orange-500">51</span>
+                  <p className="text-sm text-gray-300">Installed but not published</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div className={cn(
-            "mt-6 rounded-lg shadow overflow-hidden",
-            isDarkTheme ? "bg-gray-800" : "bg-white"
+            "mt-6 rounded-lg shadow overflow-hidden border",
+            isDarkTheme ? "border-gray-700" : "border-gray-300"
           )}>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto" style={{ maxWidth: "100%" }}>
               <div className="overflow-y-auto max-h-[600px]">
                 <table className="w-full">
                   <thead className={cn(
                     "sticky top-0 z-10",
-                    isDarkTheme ? "bg-gray-700" : "bg-gray-100"
+                    isDarkTheme ? "bg-gray-800" : "bg-gray-200"
                   )}>
-                    <tr className="border-b">
+                    <tr className={isDarkTheme ? "border-b border-gray-700" : "border-b border-gray-300"}>
                       <th className="px-4 py-3 text-left whitespace-nowrap">
                         <input type="checkbox" className="rounded" />
                       </th>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap font-medium resize-x overflow-hidden",
-                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                        "px-4 py-3 text-left whitespace-nowrap font-medium border-r",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>Application Name</th>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap font-medium resize-x overflow-hidden",
-                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                        "px-4 py-3 text-left whitespace-nowrap font-medium border-r",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>Vendor</th>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap font-medium resize-x overflow-hidden",
-                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                        "px-4 py-3 text-left whitespace-nowrap font-medium border-r",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>Latest Version</th>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap font-medium resize-x overflow-hidden",
-                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                        "px-4 py-3 text-left whitespace-nowrap font-medium border-r",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>Release date</th>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap font-medium",
-                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                        "px-4 py-3 text-left whitespace-nowrap font-medium border-r",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>Category</th>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap font-medium",
-                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                        "px-4 py-3 text-left whitespace-nowrap font-medium border-r",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>Inventory Status</th>
                       <th className={cn(
-                        "px-4 py-3 text-left whitespace-nowrap font-medium",
-                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                        "px-4 py-3 text-left whitespace-nowrap font-medium border-r",
+                        isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>Publish Status</th>
                       <th className={cn(
                         "px-4 py-3 text-left whitespace-nowrap font-medium",
-                        isDarkTheme ? "text-gray-200" : "text-gray-600"
+                        isDarkTheme ? "text-gray-200" : "text-gray-700"
                       )}>Publish Task</th>
                     </tr>
                   </thead>
                   <tbody className={isDarkTheme ? "text-gray-300" : "text-gray-800"}>
-                    {[...Array(11)].map((_, index) => (
+                    {[...Array(20)].map((_, index) => (
                       <tr key={index} className={cn(
                         "border-b",
-                        isDarkTheme ? "border-gray-700" : "border-gray-200"
+                        isDarkTheme ? "border-gray-700 hover:bg-gray-800/50" : "border-gray-200 hover:bg-gray-100"
                       )}>
                         <td className="px-4 py-3">
                           <input type="checkbox" checked={index === 0} className="rounded" />
                         </td>
-                        <td className="px-4 py-3 whitespace-nowrap">
+                        <td className={cn(
+                          "px-4 py-3 whitespace-nowrap border-r",
+                          isDarkTheme ? "border-gray-600" : "border-gray-300"
+                        )}>
                           <div className="flex items-center gap-2">
-                            <img src="{chromeLogo}" alt="" className="w-6 h-6" />
+                            <img src={chromeLogo} alt="" className="w-6 h-6" />
                             Google Chrome
                           </div>
                         </td>
-                        <td className="px-4 py-3 whitespace-nowrap">Google</td>
-                        <td className="px-4 py-3 whitespace-nowrap">102.25.{index + 1}</td>
-                        <td className="px-4 py-3 whitespace-nowrap">Apr {index + 1}, 2024</td>
-                        <td className="px-4 py-3 whitespace-nowrap">
+                        <td className={cn(
+                          "px-4 py-3 whitespace-nowrap border-r",
+                          isDarkTheme ? "border-gray-600" : "border-gray-300"
+                        )}>Google</td>
+                        <td className={cn(
+                          "px-4 py-3 whitespace-nowrap border-r",
+                          isDarkTheme ? "border-gray-600" : "border-gray-300"
+                        )}>102.25.{index + 1}</td>
+                        <td className={cn(
+                          "px-4 py-3 whitespace-nowrap border-r",
+                          isDarkTheme ? "border-gray-600" : "border-gray-300"
+                        )}>Apr {index + 1}, 2024</td>
+                        <td className={cn(
+                          "px-4 py-3 whitespace-nowrap border-r",
+                          isDarkTheme ? "border-gray-600" : "border-gray-300"
+                        )}>
                           <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
                             Browser
                           </span>
                         </td>
-                        <td className="px-4 py-3 whitespace-nowrap">Installed</td>
-                        <td className="px-4 py-3 whitespace-nowrap">
+                        <td className={cn(
+                          "px-4 py-3 whitespace-nowrap border-r",
+                          isDarkTheme ? "border-gray-600" : "border-gray-300"
+                        )}>Installed</td>
+                        <td className={cn(
+                          "px-4 py-3 whitespace-nowrap border-r",
+                          isDarkTheme ? "border-gray-600" : "border-gray-300"
+                        )}>
                           <span className="text-green-600 flex items-center gap-1">
                             <Check className="w-4 h-4" />
                             Updates Published
