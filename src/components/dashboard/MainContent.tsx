@@ -97,10 +97,9 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
       return;
     }
     
-    navigate('/dashboard/publish-task-wizard', { 
+    navigate('publish-task-wizard', { 
       state: { 
-        selectedApplications: selectedRows.map(index => filteredData[index]),
-        isDarkTheme 
+        selectedApplications: selectedRows.map(index => filteredData[index])
       }
     });
   };
