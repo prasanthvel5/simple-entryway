@@ -1,10 +1,9 @@
-
 import { useState } from "react";
+import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, ArrowRight, Check, Plus, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useNavigate, useLocation } from "react-router-dom";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 type WizardStep = "selectApplications" | "assignmentSettings" | "installationSettings" | "publishSettings" | "review";
@@ -20,7 +19,14 @@ interface Application {
   publishTask: string;
 }
 
+type DashboardContext = {
+  isDarkTheme: boolean;
+  activeMenu: string;
+  activeSecondLevel: string;
+};
+
 const PublishTaskWizard = () => {
+  const { isDarkTheme } = useOutletContext<DashboardContext>();
   const navigate = useNavigate();
   const location = useLocation();
   const [currentStep, setCurrentStep] = useState<WizardStep>("selectApplications");
@@ -28,7 +34,6 @@ const PublishTaskWizard = () => {
   const [taskName, setTaskName] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [showAddApplicationsDialog, setShowAddApplicationsDialog] = useState(false);
-  const isDarkTheme = location.state?.isDarkTheme || false;
   
   const steps = [
     { id: "selectApplications", label: "Select Applications" },
@@ -53,7 +58,7 @@ const PublishTaskWizard = () => {
   };
 
   const handleCancel = () => {
-    navigate(-1);
+    navigate('/dashboard');
   };
 
   const handleRemoveApplication = (index: number) => {
@@ -110,10 +115,10 @@ const PublishTaskWizard = () => {
 
   return (
     <div className={cn(
-      "min-h-screen",
+      "flex-1 overflow-auto",
       isDarkTheme ? "bg-gray-900 text-white" : "bg-[#f5f5f7] text-gray-800"
     )}>
-      <div className="container mx-auto py-6 px-4">
+      <div className="py-6 px-6">
         <div className="mb-6">
           <div className="flex items-center mb-2">
             <span className="text-sm text-gray-500">Intune / Publish Tasks / Create Task</span>

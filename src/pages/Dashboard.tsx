@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { Outlet } from "react-router-dom";
 import {
   LayoutDashboard,
   Package,
@@ -70,11 +71,17 @@ const Dashboard = () => {
               onItemSelect={handleSecondLevelSelect}
             />
           )}
-          <MainContent 
-            isDarkTheme={isDarkTheme} 
-            activeMenu={activeMenu}
-            activeSecondLevel={activeSecondLevel}
-          />
+          
+          {/* Use Outlet for nested routes or MainContent for regular dashboard */}
+          {window.location.pathname.includes('publish-task-wizard') ? (
+            <Outlet context={{ isDarkTheme, activeMenu, activeSecondLevel }} />
+          ) : (
+            <MainContent 
+              isDarkTheme={isDarkTheme} 
+              activeMenu={activeMenu}
+              activeSecondLevel={activeSecondLevel}
+            />
+          )}
         </div>
       </div>
     </div>

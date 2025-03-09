@@ -21,8 +21,9 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/publish-task-wizard" element={<PublishTaskWizard />} />
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route path="publish-task-wizard" element={<PublishTaskWizard />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
