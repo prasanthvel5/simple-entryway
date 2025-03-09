@@ -1,7 +1,6 @@
 
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
-import chromeLogo from './resources/2chrome.png';
 
 interface MainContentProps {
   isDarkTheme: boolean;
@@ -136,7 +135,7 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap">
                           <div className="flex items-center gap-2">
-                            <img src="{chromeLogo}" alt="" className="w-6 h-6" />
+                            <img src="./src/resources/2chrome.png" alt="" className="w-6 h-6" />
                             Google Chrome
                           </div>
                         </td>
