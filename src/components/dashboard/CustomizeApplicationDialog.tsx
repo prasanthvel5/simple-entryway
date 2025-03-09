@@ -6,7 +6,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { X, Check } from "lucide-react";
+import { X, Check, Upload } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export interface ApplicationCustomizationData {
   applicationName: string;
@@ -38,6 +39,18 @@ export const CustomizeApplicationDialog = ({
   const [activeTab, setActiveTab] = useState("appInfo");
   const [isFeatured, setIsFeatured] = useState(application?.featured || false);
   
+  // Program Settings state
+  const [allowUninstall, setAllowUninstall] = useState(true);
+  
+  // Post Install Settings state
+  const [disableUpdates, setDisableUpdates] = useState(true);
+  const [removeDesktopIcon, setRemoveDesktopIcon] = useState(true);
+  const [removeStartMenuIcon, setRemoveStartMenuIcon] = useState(true);
+  
+  // Pre & Post Script Settings
+  const [proceedPreScript, setProceedPreScript] = useState(true);
+  const [proceedPostScript, setProceedPostScript] = useState(true);
+  
   if (!application) return null;
 
   return (
@@ -45,8 +58,8 @@ export const CustomizeApplicationDialog = ({
       <DialogContent 
         className={cn(
           "p-0 border rounded-lg",
-          "max-w-3xl w-full h-[650px]", // Fixed height to prevent size changes
-          "overflow-hidden flex flex-col", // Use flexbox to organize content
+          "max-w-3xl w-full h-[650px]", // Fixed height 
+          "overflow-hidden flex flex-col", // Use flexbox
           "mx-auto",
           isDarkTheme ? "bg-gray-800 text-white" : "bg-white text-gray-800"
         )}
@@ -243,85 +256,278 @@ export const CustomizeApplicationDialog = ({
               </TabsContent>
 
               <TabsContent value="programSettings" className="h-[460px] overflow-y-auto p-6">
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Installation Command</label>
+                    <label className="block text-sm font-medium mb-1">Install Command</label>
                     <Input 
-                      placeholder="setup.exe /silent"
+                      placeholder="chrome.exe"
                       className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
                     />
                   </div>
+                  
                   <div>
-                    <label className="block text-sm font-medium mb-1">Uninstallation Command</label>
+                    <label className="block text-sm font-medium mb-1">Uninstall Command</label>
                     <Input 
-                      placeholder="uninstall.exe /silent"
+                      placeholder="unistall.exe /silent"
                       className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
                     />
                   </div>
+                  
                   <div>
-                    <label className="block text-sm font-medium mb-1">Installation Behavior</label>
-                    <div className="space-y-2">
+                    <label className="block text-sm font-medium mb-1">Installation time required (mins)</label>
+                    <Input 
+                      type="number"
+                      placeholder="25"
+                      className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Allow available uninstall</label>
+                    <div className="flex items-center gap-6">
                       <div className="flex items-center">
-                        <input type="radio" name="installBehavior" id="system" className="mr-2" defaultChecked />
-                        <label htmlFor="system">System context (recommended)</label>
+                        <input 
+                          type="radio" 
+                          id="allowUninstallYes" 
+                          checked={allowUninstall} 
+                          onChange={() => setAllowUninstall(true)}
+                          className="mr-2" 
+                        />
+                        <label htmlFor="allowUninstallYes">Yes</label>
                       </div>
                       <div className="flex items-center">
-                        <input type="radio" name="installBehavior" id="user" className="mr-2" />
-                        <label htmlFor="user">User context</label>
+                        <input 
+                          type="radio" 
+                          id="allowUninstallNo" 
+                          checked={!allowUninstall} 
+                          onChange={() => setAllowUninstall(false)}
+                          className="mr-2" 
+                        />
+                        <label htmlFor="allowUninstallNo">No</label>
                       </div>
                     </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Device restart behavior</label>
+                    <Select defaultValue="determine">
+                      <SelectTrigger 
+                        className={cn(
+                          "w-full",
+                          isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                        )}
+                      >
+                        <SelectValue placeholder="Select behavior" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="determine">Determine behavior based on return codes</SelectItem>
+                        <SelectItem value="force">Force restart</SelectItem>
+                        <SelectItem value="suppress">Suppress restart</SelectItem>
+                        <SelectItem value="basedOnExitCode">Based on exit code</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="postInstall" className="h-[460px] overflow-y-auto p-6">
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Detection Method</label>
-                    <div className="space-y-2">
+                    <label className="block text-sm font-medium mb-1">Disable automatic updates</label>
+                    <div className="flex items-center gap-6">
                       <div className="flex items-center">
-                        <input type="radio" name="detectionMethod" id="registry" className="mr-2" defaultChecked />
-                        <label htmlFor="registry">Registry key exists</label>
+                        <input 
+                          type="radio" 
+                          id="disableUpdatesYes" 
+                          checked={disableUpdates} 
+                          onChange={() => setDisableUpdates(true)}
+                          className="mr-2" 
+                        />
+                        <label htmlFor="disableUpdatesYes">Yes</label>
                       </div>
                       <div className="flex items-center">
-                        <input type="radio" name="detectionMethod" id="file" className="mr-2" />
-                        <label htmlFor="file">File exists</label>
+                        <input 
+                          type="radio" 
+                          id="disableUpdatesNo" 
+                          checked={!disableUpdates} 
+                          onChange={() => setDisableUpdates(false)}
+                          className="mr-2" 
+                        />
+                        <label htmlFor="disableUpdatesNo">No</label>
                       </div>
                     </div>
                   </div>
+                  
                   <div>
-                    <label className="block text-sm font-medium mb-1">Registry Path</label>
-                    <Input 
-                      placeholder="HKLM\\SOFTWARE\\Google\\Chrome"
-                      className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
-                    />
+                    <label className="block text-sm font-medium mb-1">Remove desktop shortcut icon</label>
+                    <div className="flex items-center gap-6">
+                      <div className="flex items-center">
+                        <input 
+                          type="radio" 
+                          id="removeDesktopIconYes" 
+                          checked={removeDesktopIcon} 
+                          onChange={() => setRemoveDesktopIcon(true)}
+                          className="mr-2" 
+                        />
+                        <label htmlFor="removeDesktopIconYes">Yes</label>
+                      </div>
+                      <div className="flex items-center">
+                        <input 
+                          type="radio" 
+                          id="removeDesktopIconNo" 
+                          checked={!removeDesktopIcon} 
+                          onChange={() => setRemoveDesktopIcon(false)}
+                          className="mr-2" 
+                        />
+                        <label htmlFor="removeDesktopIconNo">No</label>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Remove startmenu shortcut icon</label>
+                    <div className="flex items-center gap-6">
+                      <div className="flex items-center">
+                        <input 
+                          type="radio" 
+                          id="removeStartMenuIconYes" 
+                          checked={removeStartMenuIcon} 
+                          onChange={() => setRemoveStartMenuIcon(true)}
+                          className="mr-2" 
+                        />
+                        <label htmlFor="removeStartMenuIconYes">Yes</label>
+                      </div>
+                      <div className="flex items-center">
+                        <input 
+                          type="radio" 
+                          id="removeStartMenuIconNo" 
+                          checked={!removeStartMenuIcon} 
+                          onChange={() => setRemoveStartMenuIcon(false)}
+                          className="mr-2" 
+                        />
+                        <label htmlFor="removeStartMenuIconNo">No</label>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-end mt-6">
+                    <Button className="bg-gray-100 hover:bg-gray-200 text-gray-800 mr-4">
+                      Apply to all selected Applications
+                    </Button>
                   </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="scripts" className="h-[460px] overflow-y-auto p-6">
-                <div className="space-y-4">
+                <div className="space-y-8">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Pre-Installation Script</label>
-                    <Textarea 
-                      placeholder="# Add your PowerShell script here"
-                      rows={5}
-                      className={cn(
-                        "font-mono text-sm",
-                        isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                      )}
-                    />
+                    <h3 className="text-lg font-medium mb-4">Pre Script Settings</h3>
+                    <div className="space-y-4 ml-2">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-sm font-medium">Select Script :</label>
+                        <div className="flex items-center">
+                          <div className="border rounded px-3 py-1.5 mr-2 bg-white text-black">
+                            command.bat
+                          </div>
+                          <Button variant="outline" size="sm" className="flex items-center">
+                            <Upload size={14} className="mr-1" />
+                            Click to Upload
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <label className="block text-sm font-medium">
+                          Proceed installation irrespective of script status :
+                        </label>
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center">
+                            <input 
+                              type="radio" 
+                              id="proceedPreScriptYes" 
+                              checked={proceedPreScript} 
+                              onChange={() => setProceedPreScript(true)}
+                              className="mr-2" 
+                            />
+                            <label htmlFor="proceedPreScriptYes">Yes</label>
+                          </div>
+                          <div className="flex items-center">
+                            <input 
+                              type="radio" 
+                              id="proceedPreScriptNo" 
+                              checked={!proceedPreScript} 
+                              onChange={() => setProceedPreScript(false)}
+                              className="mr-2" 
+                            />
+                            <label htmlFor="proceedPreScriptNo">No</label>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <label className="block text-sm font-medium">Specify success return code:</label>
+                        <Input 
+                          type="number"
+                          defaultValue="0"
+                          className="w-24 text-center"
+                        />
+                      </div>
+                    </div>
                   </div>
+                  
                   <div>
-                    <label className="block text-sm font-medium mb-1">Post-Installation Script</label>
-                    <Textarea 
-                      placeholder="# Add your PowerShell script here"
-                      rows={5}
-                      className={cn(
-                        "font-mono text-sm",
-                        isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                      )}
-                    />
+                    <h3 className="text-lg font-medium mb-4">Post Script Settings</h3>
+                    <div className="space-y-4 ml-2">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-sm font-medium">Select Script :</label>
+                        <div className="flex items-center">
+                          <div className="border rounded px-3 py-1.5 mr-2 bg-white text-black">
+                            command.bat
+                          </div>
+                          <Button variant="outline" size="sm" className="flex items-center">
+                            <Upload size={14} className="mr-1" />
+                            Click to Upload
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <label className="block text-sm font-medium">
+                          Proceed installation irrespective of script status :
+                        </label>
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center">
+                            <input 
+                              type="radio" 
+                              id="proceedPostScriptYes" 
+                              checked={proceedPostScript} 
+                              onChange={() => setProceedPostScript(true)}
+                              className="mr-2" 
+                            />
+                            <label htmlFor="proceedPostScriptYes">Yes</label>
+                          </div>
+                          <div className="flex items-center">
+                            <input 
+                              type="radio" 
+                              id="proceedPostScriptNo" 
+                              checked={!proceedPostScript} 
+                              onChange={() => setProceedPostScript(false)}
+                              className="mr-2" 
+                            />
+                            <label htmlFor="proceedPostScriptNo">No</label>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <label className="block text-sm font-medium">Specify success return code:</label>
+                        <Input 
+                          type="number"
+                          defaultValue="0"
+                          className="w-24 text-center"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </TabsContent>
