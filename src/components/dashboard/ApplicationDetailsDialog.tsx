@@ -60,8 +60,8 @@ export const ApplicationDetailsDialog = ({ application, open, onOpenChange, isDa
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className={cn(
-        "p-0 overflow-hidden border-0 rounded-t-lg rounded-b-none max-w-none",
-        "fixed bottom-0 left-0 right-0 w-full",
+        "p-0 overflow-auto border-0 rounded-t-lg rounded-b-none max-w-none",
+        "fixed bottom-0 left-0 right-0 w-full h-[50vh]",
         "transform transition-transform duration-300 ease-out",
         "data-[state=open]:translate-y-0 data-[state=closed]:translate-y-full",
         isDarkTheme ? "bg-gray-800 text-white" : "bg-white text-gray-800"
