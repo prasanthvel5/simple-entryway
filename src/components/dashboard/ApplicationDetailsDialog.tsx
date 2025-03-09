@@ -5,7 +5,10 @@ import { cn } from "@/lib/utils";
 import { 
   Dialog, 
   DialogContent,
-  DialogClose
+  DialogClose,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription
 } from "@/components/ui/dialog";
 
 interface ApplicationDetailsProps {
@@ -58,9 +61,16 @@ export const ApplicationDetailsDialog = ({ application, open, onOpenChange, isDa
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className={cn(
         "p-0 max-w-5xl border-0 overflow-hidden rounded-t-none rounded-b-xl",
-        "fixed bottom-0 top-auto translate-y-0 left-0 right-0 w-full",
+        "fixed bottom-0 translate-y-0 left-[50%] translate-x-[-50%] w-[95%]", // Fixed positioning
         isDarkTheme ? "bg-gray-800 text-white" : "bg-white text-gray-800"
       )}>
+        <DialogHeader className="sr-only">
+          <DialogTitle>{mergedData.applicationName} Details</DialogTitle>
+          <DialogDescription>
+            Detailed information about {mergedData.applicationName} application
+          </DialogDescription>
+        </DialogHeader>
+        
         <div className="relative w-full">
           <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
             <X className="h-4 w-4" />
