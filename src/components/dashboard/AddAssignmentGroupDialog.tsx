@@ -1,4 +1,3 @@
-
 import React from "react";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
@@ -248,7 +247,7 @@ export const AddAssignmentGroupDialog: React.FC<AddAssignmentGroupDialogProps> =
           <Button 
             variant="outline" 
             onClick={() => onOpenChange(false)}
-            className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
+            className={isDarkTheme ? "bg-gray-700 border-gray-600 text-white hover:text-white hover:bg-gray-600" : ""}
           >
             Cancel
           </Button>
