@@ -18,17 +18,6 @@ interface FilterCriteria {
   value: string;
 }
 
-interface ApplicationData {
-  applicationName: string;
-  vendor: string;
-  version: string;
-  releaseDate: string;
-  category: string;
-  inventoryStatus: string;
-  publishStatus: string;
-  publishTask: string;
-}
-
 export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: MainContentProps) => {
   const navigate = useNavigate();
   const [showFilters, setShowFilters] = useState(false);
