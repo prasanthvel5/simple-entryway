@@ -1,9 +1,10 @@
 
 import { cn } from "@/lib/utils";
-import { Check, Filter, Search, X } from "lucide-react";
+import { Check, Filter, Plus, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { PublishTaskWizard } from "@/components/wizard/PublishTaskWizard";
 
 interface MainContentProps {
   isDarkTheme: boolean;
@@ -16,10 +17,23 @@ interface FilterCriteria {
   value: string;
 }
 
+interface ApplicationData {
+  applicationName: string;
+  vendor: string;
+  version: string;
+  releaseDate: string;
+  category: string;
+  inventoryStatus: string;
+  publishStatus: string;
+  publishTask: string;
+}
+
 export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: MainContentProps) => {
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<FilterCriteria[]>([]);
   const [filterInput, setFilterInput] = useState<FilterCriteria>({ field: "applicationName", value: "" });
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [showWizard, setShowWizard] = useState(false);
 
   const addFilter = () => {
     if (filterInput.value.trim()) {
@@ -61,6 +75,34 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
   }));
 
   const filteredData = filterData(tableData);
+
+  const handleRowSelect = (index: number) => {
+    if (selectedRows.includes(index)) {
+      setSelectedRows(selectedRows.filter(i => i !== index));
+    } else {
+      setSelectedRows([...selectedRows, index]);
+    }
+  };
+
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedRows(filteredData.map((_, index) => index));
+    } else {
+      setSelectedRows([]);
+    }
+  };
+
+  const openPublishTaskWizard = () => {
+    if (selectedRows.length === 0) {
+      alert("Please select at least one application to create a publish task.");
+      return;
+    }
+    setShowWizard(true);
+  };
+
+  const getSelectedApplications = (): ApplicationData[] => {
+    return selectedRows.map(index => filteredData[index]);
+  };
   
   if (activeMenu === "intune" && activeSecondLevel === "Updates Catalog") {
     return (
@@ -74,7 +116,10 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
         )} />
         <div className="relative z-10">
           <div className="space-y-6">
-            <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-md text-sm font-medium transition-colors">
+            <button 
+              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2.5 rounded-md text-sm font-medium transition-colors"
+              onClick={openPublishTaskWizard}
+            >
               Create Publish Task
             </button>
             
@@ -95,7 +140,7 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                     </div>
                     <div className="flex items-center">
                       <span className="text-xl font-semibold text-blue-500">1050</span>
-                      <p className="ml-2 text-sm font-medium" style={{ color: isDarkTheme ? "#f3f4f6" : "#4a5568" }}>Total Applications</p>
+                      <p className="ml-2 text-sm font-medium text-gray-600 dark:text-gray-300">Total Applications</p>
                     </div>
                   </div>
                 </div>
@@ -110,7 +155,7 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                   </div>
                   <div>
                     <span className="text-xl font-semibold text-blue-500">75</span>
-                    <p className="text-sm font-medium" style={{ color: isDarkTheme ? "#f3f4f6" : "#4a5568" }}>Installed</p>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Installed</p>
                   </div>
                 </div>
               </div>
@@ -124,7 +169,7 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                   </div>
                   <div>
                     <span className="text-xl font-semibold text-green-500">24</span>
-                    <p className="text-sm font-medium" style={{ color: isDarkTheme ? "#f3f4f6" : "#4a5568" }}>Update Published</p>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Update Published</p>
                   </div>
                 </div>
               </div>
@@ -138,7 +183,7 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                   </div>
                   <div>
                     <span className="text-xl font-semibold text-orange-500">51</span>
-                    <p className="text-sm font-medium" style={{ color: isDarkTheme ? "#f3f4f6" : "#4a5568" }}>Installed but not published</p>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Installed but not published</p>
                   </div>
                 </div>
               </div>
@@ -228,7 +273,6 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
               <div className="overflow-y-auto max-h-[600px] relative hide-scrollbar">
                 <style>
                   {`
-                  /* Hide scrollbar by default */
                   .hide-scrollbar::-webkit-scrollbar {
                     width: 6px;
                     height: 6px;
@@ -258,7 +302,12 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                         isDarkTheme ? "text-gray-200 border-gray-600" : "text-gray-700 border-gray-300"
                       )}>
                         <div className="flex items-center justify-between">
-                          <input type="checkbox" className="rounded" readOnly />
+                          <input 
+                            type="checkbox" 
+                            className="rounded" 
+                            onChange={handleSelectAll}
+                            checked={selectedRows.length > 0 && selectedRows.length === filteredData.length}
+                          />
                         </div>
                       </th>
                       <th className={cn(
@@ -426,11 +475,18 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
                   <tbody className={isDarkTheme ? "text-gray-300" : "text-gray-800"}>
                     {filteredData.map((item, index) => (
                       <tr key={index} className={cn(
-                        "border-b",
-                        isDarkTheme ? "border-gray-700 hover:bg-gray-750" : "border-gray-100 hover:bg-gray-50"
+                        selectedRows.includes(index) 
+                          ? isDarkTheme ? "bg-blue-900/20" : "bg-blue-50" 
+                          : "",
+                        isDarkTheme ? "hover:bg-gray-750" : "hover:bg-gray-50"
                       )}>
                         <td className="px-4 py-3">
-                          <input type="checkbox" readOnly className="rounded" />
+                          <input 
+                            type="checkbox" 
+                            className="rounded" 
+                            checked={selectedRows.includes(index)}
+                            onChange={() => handleRowSelect(index)}
+                          />
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap">
                           <div className="flex items-center gap-2">
@@ -515,6 +571,14 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
             </div>
           </div>
         </div>
+
+        {showWizard && (
+          <PublishTaskWizard 
+            isDarkTheme={isDarkTheme} 
+            selectedApplications={getSelectedApplications()}
+            onClose={() => setShowWizard(false)}
+          />
+        )}
       </main>
     );
   }
