@@ -4,7 +4,8 @@ import { cn } from "@/lib/utils";
 import { ArrowLeft, ArrowRight, Check, Plus, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 type WizardStep = "selectApplications" | "assignmentSettings" | "installationSettings" | "publishSettings" | "review";
 
@@ -19,18 +20,15 @@ interface Application {
   publishTask: string;
 }
 
-interface PublishTaskWizardProps {
-  isDarkTheme: boolean;
-  selectedApplications: Application[];
-  onClose: () => void;
-}
-
-export const PublishTaskWizard = ({ isDarkTheme, selectedApplications, onClose }: PublishTaskWizardProps) => {
+const PublishTaskWizard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [currentStep, setCurrentStep] = useState<WizardStep>("selectApplications");
-  const [applications, setApplications] = useState<Application[]>(selectedApplications);
+  const [applications, setApplications] = useState<Application[]>(location.state?.selectedApplications || []);
   const [taskName, setTaskName] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [showAddApplicationsDialog, setShowAddApplicationsDialog] = useState(false);
+  const isDarkTheme = location.state?.isDarkTheme || false;
   
   const steps = [
     { id: "selectApplications", label: "Select Applications" },
@@ -52,6 +50,10 @@ export const PublishTaskWizard = ({ isDarkTheme, selectedApplications, onClose }
     if (currentIndex > 0) {
       setCurrentStep(steps[currentIndex - 1].id as WizardStep);
     }
+  };
+
+  const handleCancel = () => {
+    navigate(-1);
   };
 
   const handleRemoveApplication = (index: number) => {
@@ -103,16 +105,15 @@ export const PublishTaskWizard = ({ isDarkTheme, selectedApplications, onClose }
     if (!applications.some(a => a.applicationName === app.applicationName)) {
       setApplications([...applications, app]);
     }
+    setShowAddApplicationsDialog(false);
   };
 
   return (
     <div className={cn(
-      "fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50",
+      "min-h-screen",
+      isDarkTheme ? "bg-gray-900 text-white" : "bg-[#f5f5f7] text-gray-800"
     )}>
-      <div className={cn(
-        "w-4/5 max-w-6xl rounded-lg shadow-lg p-6",
-        isDarkTheme ? "bg-gray-800 text-white" : "bg-white text-gray-800"
-      )}>
+      <div className="container mx-auto py-6 px-4">
         <div className="mb-6">
           <div className="flex items-center mb-2">
             <span className="text-sm text-gray-500">Intune / Publish Tasks / Create Task</span>
@@ -154,33 +155,44 @@ export const PublishTaskWizard = ({ isDarkTheme, selectedApplications, onClose }
             </div>
           </div>
           
-          <div className="flex justify-between border-b pb-2 mb-6">
+          {/* Wizard Progress Bar */}
+          <div className="flex items-center justify-between mb-8">
             {steps.map((step, index) => (
-              <div 
-                key={step.id} 
-                className="flex items-center"
-              >
+              <div key={step.id} className="flex-1 flex flex-col items-center relative">
+                {/* Connector line */}
+                {index > 0 && (
+                  <div className={cn(
+                    "absolute h-1 top-4 -left-1/2 right-1/2",
+                    index <= steps.findIndex(s => s.id === currentStep) 
+                      ? "bg-green-500" 
+                      : "bg-gray-300"
+                  )} />
+                )}
+                
+                {/* Step circle */}
                 <div className={cn(
-                  "flex items-center justify-center w-6 h-6 rounded-full mr-2 text-sm font-medium",
+                  "w-8 h-8 rounded-full flex items-center justify-center z-10 mb-1 font-medium",
                   currentStep === step.id 
                     ? "bg-blue-500 text-white" 
                     : index < steps.findIndex(s => s.id === currentStep)
                       ? "bg-green-500 text-white"
-                      : isDarkTheme 
-                        ? "bg-gray-600 text-gray-300" 
-                        : "bg-gray-200 text-gray-700"
+                      : "bg-gray-300 text-gray-700"
                 )}>
                   {index < steps.findIndex(s => s.id === currentStep) 
-                    ? <Check className="h-3 w-3" /> 
+                    ? <Check className="h-4 w-4" /> 
                     : index + 1}
                 </div>
+                
+                {/* Step label */}
                 <span className={cn(
-                  "text-sm font-medium",
+                  "text-sm text-center",
                   currentStep === step.id 
-                    ? "text-blue-500" 
-                    : isDarkTheme 
-                      ? "text-gray-400" 
-                      : "text-gray-600"
+                    ? "text-blue-500 font-medium" 
+                    : index < steps.findIndex(s => s.id === currentStep)
+                      ? "text-green-500" 
+                      : isDarkTheme 
+                        ? "text-gray-400" 
+                        : "text-gray-600"
                 )}>
                   {step.label}
                 </span>
@@ -189,7 +201,7 @@ export const PublishTaskWizard = ({ isDarkTheme, selectedApplications, onClose }
           </div>
         </div>
 
-        <div className="mb-6">
+        <div className="mb-10">
           {currentStep === "selectApplications" && (
             <div className="space-y-4">
               <div className="flex justify-between mb-4">
@@ -197,6 +209,7 @@ export const PublishTaskWizard = ({ isDarkTheme, selectedApplications, onClose }
                 <Button 
                   size="sm"
                   className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600"
+                  onClick={() => setShowAddApplicationsDialog(true)}
                 >
                   <Plus className="h-4 w-4" />
                   Add Applications
@@ -270,79 +283,6 @@ export const PublishTaskWizard = ({ isDarkTheme, selectedApplications, onClose }
                     )}
                   </tbody>
                 </table>
-              </div>
-
-              <div className={cn(
-                "p-4 mt-4 rounded-lg border",
-                isDarkTheme ? "border-gray-700 bg-gray-750" : "border-gray-200 bg-gray-50"
-              )}>
-                <h4 className="font-medium mb-2">Add More Applications</h4>
-                <div className="flex gap-2 mb-4">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input 
-                      type="text"
-                      placeholder="Search applications..."
-                      className="pl-10"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className={cn(
-                  "overflow-hidden rounded-lg border", 
-                  isDarkTheme ? "border-gray-700" : "border-gray-200"
-                )}>
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className={cn(
-                      isDarkTheme ? "bg-gray-700" : "bg-gray-100"
-                    )}>
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                          Application Name
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                          Vendor
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                          Version
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className={cn(
-                      "divide-y",
-                      isDarkTheme ? "divide-gray-700 bg-gray-800" : "divide-gray-200 bg-white"
-                    )}>
-                      {filteredApplications.map((app, index) => (
-                        <tr key={index} className={isDarkTheme ? "hover:bg-gray-750" : "hover:bg-gray-50"}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center gap-2">
-                              <img src="/src/resources/2chrome.png" alt="" className="w-6 h-6" />
-                              {app.applicationName}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">{app.vendor}</td>
-                          <td className="px-6 py-4 whitespace-nowrap">{app.version}</td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <Button 
-                              variant="ghost" 
-                              size="xs"
-                              onClick={() => handleAddApplication(app)}
-                              className="text-blue-500 hover:text-blue-700"
-                            >
-                              <Plus className="h-4 w-4" />
-                              Add
-                            </Button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
               </div>
             </div>
           )}
@@ -623,54 +563,139 @@ export const PublishTaskWizard = ({ isDarkTheme, selectedApplications, onClose }
           )}
         </div>
 
-        <div className="flex justify-between mt-6">
-          <div>
+        <div className="flex justify-center mt-6 space-x-2">
+          <Button 
+            variant="outline" 
+            onClick={handleCancel}
+            className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
+          >
+            Cancel
+          </Button>
+          
+          {currentStep !== "selectApplications" && (
             <Button 
               variant="outline" 
-              onClick={onClose}
-              className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
+              onClick={handleBack}
+              className={cn(
+                "flex items-center gap-1",
+                isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+              )}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Previous
+            </Button>
+          )}
+          
+          {currentStep !== "review" ? (
+            <Button 
+              onClick={handleNext}
+              className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600"
+            >
+              Next
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button 
+              onClick={() => {
+                // Handle save functionality
+                navigate('/dashboard');
+              }}
+              className="flex items-center gap-1 bg-green-500 hover:bg-green-600"
+            >
+              Create Task
+              <Check className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* Add Applications Dialog */}
+      <Dialog open={showAddApplicationsDialog} onOpenChange={setShowAddApplicationsDialog}>
+        <DialogContent className={cn(
+          "max-w-2xl p-6",
+          isDarkTheme ? "bg-gray-800 text-white" : "bg-white"
+        )}>
+          <h2 className="text-xl font-semibold mb-4">Add Applications</h2>
+          
+          <div className="flex gap-2 mb-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input 
+                type="text"
+                placeholder="Search applications..."
+                className="pl-10"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className={cn(
+            "overflow-hidden rounded-lg border mb-4", 
+            isDarkTheme ? "border-gray-700" : "border-gray-200"
+          )}>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className={cn(
+                isDarkTheme ? "bg-gray-700" : "bg-gray-100"
+              )}>
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Application Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Vendor
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Version
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className={cn(
+                "divide-y",
+                isDarkTheme ? "divide-gray-700 bg-gray-800" : "divide-gray-200 bg-white"
+              )}>
+                {filteredApplications.map((app, index) => (
+                  <tr key={index} className={isDarkTheme ? "hover:bg-gray-750" : "hover:bg-gray-50"}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <img src="/src/resources/2chrome.png" alt="" className="w-6 h-6" />
+                        {app.applicationName}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">{app.vendor}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{app.version}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <Button 
+                        variant="ghost" 
+                        size="xs"
+                        onClick={() => handleAddApplication(app)}
+                        className="text-blue-500 hover:text-blue-700"
+                      >
+                        <Plus className="h-4 w-4" />
+                        Add
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="flex justify-end">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowAddApplicationsDialog(false)}
             >
               Cancel
             </Button>
           </div>
-          <div className="space-x-2">
-            {currentStep !== "selectApplications" && (
-              <Button 
-                variant="outline" 
-                onClick={handleBack}
-                className={cn(
-                  "flex items-center gap-1",
-                  isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                )}
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Previous
-              </Button>
-            )}
-            
-            {currentStep !== "review" ? (
-              <Button 
-                onClick={handleNext}
-                className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600"
-              >
-                Next
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            ) : (
-              <Button 
-                onClick={() => {
-                  // Handle save functionality
-                  onClose();
-                }}
-                className="flex items-center gap-1 bg-green-500 hover:bg-green-600"
-              >
-                Create Task
-                <Check className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
-        </div>
-      </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
+
+export default PublishTaskWizard;

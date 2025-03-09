@@ -1,10 +1,9 @@
-
 import { cn } from "@/lib/utils";
 import { Check, Filter, Plus, Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { PublishTaskWizard } from "@/components/wizard/PublishTaskWizard";
+import { useNavigate } from "react-router-dom";
 
 interface MainContentProps {
   isDarkTheme: boolean;
@@ -29,11 +28,11 @@ interface ApplicationData {
 }
 
 export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: MainContentProps) => {
+  const navigate = useNavigate();
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<FilterCriteria[]>([]);
   const [filterInput, setFilterInput] = useState<FilterCriteria>({ field: "applicationName", value: "" });
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [showWizard, setShowWizard] = useState(false);
 
   const addFilter = () => {
     if (filterInput.value.trim()) {
@@ -97,13 +96,15 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
       alert("Please select at least one application to create a publish task.");
       return;
     }
-    setShowWizard(true);
+    
+    navigate('/publish-task-wizard', { 
+      state: { 
+        selectedApplications: selectedRows.map(index => filteredData[index]),
+        isDarkTheme 
+      }
+    });
   };
 
-  const getSelectedApplications = (): ApplicationData[] => {
-    return selectedRows.map(index => filteredData[index]);
-  };
-  
   if (activeMenu === "intune" && activeSecondLevel === "Updates Catalog") {
     return (
       <main className={cn(
@@ -571,14 +572,6 @@ export const MainContent = ({ isDarkTheme, activeMenu, activeSecondLevel }: Main
             </div>
           </div>
         </div>
-
-        {showWizard && (
-          <PublishTaskWizard 
-            isDarkTheme={isDarkTheme} 
-            selectedApplications={getSelectedApplications()}
-            onClose={() => setShowWizard(false)}
-          />
-        )}
       </main>
     );
   }
