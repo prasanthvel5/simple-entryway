@@ -2,12 +2,15 @@
 import { useState, useEffect } from "react";
 import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { ArrowLeft, ArrowRight, Check, Plus, Search, Settings, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Plus, Search, Settings, X, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import { CustomizeApplicationDialog, ApplicationCustomizationData } from "@/components/dashboard/CustomizeApplicationDialog";
+import { AddAssignmentGroupDialog, AssignmentGroupData } from "@/components/dashboard/AddAssignmentGroupDialog";
 
 type WizardStep = "selectApplications" | "assignmentSettings" | "installationSettings" | "publishSettings" | "review";
 
@@ -31,6 +34,18 @@ interface Application {
   featured?: boolean;
 }
 
+interface AssignmentGroup {
+  id: string;
+  type: "Required" | "Available";
+  groupName: string;
+  groupMode: string;
+  filterMode: string;
+  filterName: string;
+  appAvailability: string;
+  installationDeadline: string;
+  restartGracePeriod: string;
+}
+
 type DashboardContext = {
   isDarkTheme: boolean;
   activeMenu: string;
@@ -45,9 +60,13 @@ const PublishTaskWizard = () => {
   const [applications, setApplications] = useState<Application[]>([]);
   const [taskName, setTaskName] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [deploymentType, setDeploymentType] = useState<"publishOnly" | "automateAssignment">("publishOnly");
   const [showAddApplicationsDialog, setShowAddApplicationsDialog] = useState(false);
   const [customizeApp, setCustomizeApp] = useState<ApplicationCustomizationData | null>(null);
   const [showCustomizeDialog, setShowCustomizeDialog] = useState(false);
+  const [showAddAssignmentDialog, setShowAddAssignmentDialog] = useState(false);
+  const [currentAssignmentType, setCurrentAssignmentType] = useState<"Required" | "Available">("Required");
+  const [assignmentGroups, setAssignmentGroups] = useState<AssignmentGroup[]>([]);
   
   useEffect(() => {
     if (location.state?.selectedApplications) {
@@ -111,6 +130,36 @@ const PublishTaskWizard = () => {
     setShowCustomizeDialog(true);
   };
 
+  const handleAddAssignmentGroup = (type: "Required" | "Available") => {
+    setCurrentAssignmentType(type);
+    setShowAddAssignmentDialog(true);
+  };
+
+  const handleSaveAssignmentGroup = (groupData: AssignmentGroupData) => {
+    const newGroup: AssignmentGroup = {
+      id: Date.now().toString(),
+      type: currentAssignmentType,
+      groupName: groupData.groupName,
+      groupMode: groupData.groupMode,
+      filterMode: groupData.filterMode,
+      filterName: groupData.filterName,
+      appAvailability: groupData.appAvailability,
+      installationDeadline: groupData.appInstallationDeadline,
+      restartGracePeriod: groupData.restartGracePeriod,
+    };
+    
+    setAssignmentGroups([...assignmentGroups, newGroup]);
+    
+    toast({
+      title: "Assignment Group Added",
+      description: `${groupData.groupName} has been added to ${currentAssignmentType} assignments.`,
+    });
+  };
+
+  const handleDeleteAssignmentGroup = (id: string) => {
+    setAssignmentGroups(assignmentGroups.filter(group => group.id !== id));
+  };
+
   const availableApplications: Application[] = [
     {
       applicationName: "Microsoft Office",
@@ -154,6 +203,10 @@ const PublishTaskWizard = () => {
       setApplications([...applications, app]);
     }
     setShowAddApplicationsDialog(false);
+  };
+
+  const getFilteredAssignmentGroups = (type: "Required" | "Available") => {
+    return assignmentGroups.filter(group => group.type === type);
   };
 
   return (
@@ -351,50 +404,200 @@ const PublishTaskWizard = () => {
               )}>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Assignment Type</label>
-                    <div className="space-y-2">
-                      <div className="flex items-center">
-                        <input type="radio" name="assignmentType" id="required" className="mr-2" defaultChecked />
-                        <label htmlFor="required">Required - Will force install on devices</label>
+                    <p className="text-base font-medium mb-2">Deployment type:</p>
+                    <RadioGroup 
+                      value={deploymentType} 
+                      onValueChange={(v) => setDeploymentType(v as "publishOnly" | "automateAssignment")}
+                      className="flex items-center space-x-6"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="publishOnly" id="publishOnly" />
+                        <Label htmlFor="publishOnly">Publish Only</Label>
                       </div>
-                      <div className="flex items-center">
-                        <input type="radio" name="assignmentType" id="available" className="mr-2" />
-                        <label htmlFor="available">Available - Will make available for user-driven installation</label>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="automateAssignment" id="automateAssignment" />
+                        <Label htmlFor="automateAssignment">Automate Assignment</Label>
                       </div>
-                      <div className="flex items-center">
-                        <input type="radio" name="assignmentType" id="uninstall" className="mr-2" />
-                        <label htmlFor="uninstall">Uninstall - Will remove if installed</label>
-                      </div>
-                    </div>
+                    </RadioGroup>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Assign to</label>
-                    <div className="space-y-2">
-                      <div className="flex items-center">
-                        <input type="checkbox" id="allUsers" className="mr-2" />
-                        <label htmlFor="allUsers">All Users</label>
+                  {deploymentType === "automateAssignment" && (
+                    <div className="mt-6 space-y-8">
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-lg font-medium">Required</h4>
+                          <Button 
+                            size="sm"
+                            variant="outline"
+                            className="flex items-center gap-1 text-blue-500 border-blue-500"
+                            onClick={() => handleAddAssignmentGroup("Required")}
+                          >
+                            <Plus className="h-4 w-4" />
+                            Add Assignment group
+                          </Button>
+                        </div>
+                        
+                        <div className={cn(
+                          "overflow-hidden rounded-lg border", 
+                          isDarkTheme ? "border-gray-700" : "border-gray-200"
+                        )}>
+                          <table className="min-w-full divide-y divide-gray-200">
+                            <thead className={cn(
+                              isDarkTheme ? "bg-gray-700" : "bg-gray-100"
+                            )}>
+                              <tr>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Group Mode
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Group Name
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Filter Mode
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Filter Name
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  App Availability
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Installation deadline
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Restart grace period
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Actions
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className={cn(
+                              "divide-y",
+                              isDarkTheme ? "divide-gray-700 bg-gray-800" : "divide-gray-200 bg-white"
+                            )}>
+                              {getFilteredAssignmentGroups("Required").length > 0 ? (
+                                getFilteredAssignmentGroups("Required").map((group) => (
+                                  <tr key={group.id} className={isDarkTheme ? "hover:bg-gray-750" : "hover:bg-gray-50"}>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.groupMode}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.groupName}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterMode.substring(0, 20)}...</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterName}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.appAvailability}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.installationDeadline}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.restartGracePeriod}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                      <Button 
+                                        variant="ghost" 
+                                        size="xs"
+                                        onClick={() => handleDeleteAssignmentGroup(group.id)}
+                                        className="text-red-500 hover:text-red-700"
+                                      >
+                                        <X className="h-4 w-4" />
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                ))
+                              ) : (
+                                <tr>
+                                  <td colSpan={8} className="px-4 py-4 text-center text-sm">
+                                    No assignment groups added. Click "Add Assignment group" to add a group.
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
-                      <div className="flex items-center">
-                        <input type="checkbox" id="specificGroups" className="mr-2" defaultChecked />
-                        <label htmlFor="specificGroups">Specific Groups</label>
+                      
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-lg font-medium">Available</h4>
+                          <Button 
+                            size="sm"
+                            variant="outline"
+                            className="flex items-center gap-1 text-blue-500 border-blue-500"
+                            onClick={() => handleAddAssignmentGroup("Available")}
+                          >
+                            <Plus className="h-4 w-4" />
+                            Add Assignment group
+                          </Button>
+                        </div>
+                        
+                        <div className={cn(
+                          "overflow-hidden rounded-lg border", 
+                          isDarkTheme ? "border-gray-700" : "border-gray-200"
+                        )}>
+                          <table className="min-w-full divide-y divide-gray-200">
+                            <thead className={cn(
+                              isDarkTheme ? "bg-gray-700" : "bg-gray-100"
+                            )}>
+                              <tr>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Group Mode
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Group Name
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Filter Mode
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Filter Name
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  App Availability
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Installation deadline
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Restart grace period
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Actions
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className={cn(
+                              "divide-y",
+                              isDarkTheme ? "divide-gray-700 bg-gray-800" : "divide-gray-200 bg-white"
+                            )}>
+                              {getFilteredAssignmentGroups("Available").length > 0 ? (
+                                getFilteredAssignmentGroups("Available").map((group) => (
+                                  <tr key={group.id} className={isDarkTheme ? "hover:bg-gray-750" : "hover:bg-gray-50"}>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.groupMode}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.groupName}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterMode.substring(0, 20)}...</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterName}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.appAvailability}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.installationDeadline}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.restartGracePeriod}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                      <Button 
+                                        variant="ghost" 
+                                        size="xs"
+                                        onClick={() => handleDeleteAssignmentGroup(group.id)}
+                                        className="text-red-500 hover:text-red-700"
+                                      >
+                                        <X className="h-4 w-4" />
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                ))
+                              ) : (
+                                <tr>
+                                  <td colSpan={8} className="px-4 py-4 text-center text-sm">
+                                    No assignment groups added. Click "Add Assignment group" to add a group.
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
                     </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Selected Groups</label>
-                    <select className={cn(
-                      "mt-1 block w-full rounded-md border px-3 py-2",
-                      isDarkTheme ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
-                    )} multiple>
-                      <option>Marketing Department</option>
-                      <option>Sales Team</option>
-                      <option>Engineering</option>
-                      <option>Human Resources</option>
-                      <option>Executive Team</option>
-                    </select>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -753,6 +956,13 @@ const PublishTaskWizard = () => {
         open={showCustomizeDialog}
         onOpenChange={setShowCustomizeDialog}
         isDarkTheme={isDarkTheme}
+      />
+
+      <AddAssignmentGroupDialog
+        open={showAddAssignmentDialog}
+        onOpenChange={setShowAddAssignmentDialog}
+        isDarkTheme={isDarkTheme}
+        onSave={handleSaveAssignmentGroup}
       />
     </div>
   );
