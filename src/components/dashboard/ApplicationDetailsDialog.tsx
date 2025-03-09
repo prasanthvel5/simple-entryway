@@ -63,9 +63,12 @@ export const ApplicationDetailsDialog = ({ application, open, onOpenChange, isDa
         variant="bottomSheet"
         className={cn(
           "p-0 overflow-auto border-0 rounded-t-lg rounded-b-none",
-          "h-[25vh] ml-[240px]", // 240px is the width of the second level menu
+          "h-[30vh]", // Increased by 20% from 25vh to 30vh
+          "left-0 right-0", // Ensure it takes the full width
           "transform transition-all duration-300 ease-out",
-          isDarkTheme ? "bg-gray-800 text-white" : "bg-white text-gray-800"
+          isDarkTheme ? "bg-gray-800 text-white" : "bg-white text-gray-800",
+          // Dynamically adjust width based on the second level menu
+          document.querySelector('[data-state="open"]') ? "ml-[240px]" : "ml-[72px]" // 72px is the width of the first level menu when second level is collapsed
         )}
       >
         <DialogHeader className="sr-only">
