@@ -977,7 +977,7 @@ const PublishTaskWizard = () => {
               ? {
                   ...app,
                   description: data.description,
-                  category: data.category[0] || app.category,
+                  category: data.category?.[0] || app.category,
                   vendor: data.publisher,
                   informationUrl: data.informationUrl,
                   privacyUrl: data.privacyUrl,

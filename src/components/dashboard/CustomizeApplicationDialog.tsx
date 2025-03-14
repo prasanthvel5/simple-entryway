@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { X, Upload } from "lucide-react";
@@ -29,6 +30,7 @@ interface CustomizeApplicationDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   isDarkTheme: boolean;
+  onSave?: (data: ApplicationCustomizationData) => void;
 }
 
 export const CustomizeApplicationDialog = ({
@@ -36,6 +38,7 @@ export const CustomizeApplicationDialog = ({
   open,
   onOpenChange,
   isDarkTheme,
+  onSave,
 }: CustomizeApplicationDialogProps) => {
   const [activeTab, setActiveTab] = useState("appInfo");
   const [formData, setFormData] = useState<ApplicationCustomizationData>({
@@ -86,7 +89,9 @@ export const CustomizeApplicationDialog = ({
   };
 
   const handleSave = () => {
-    console.log("Saving changes:", formData);
+    if (onSave && application) {
+      onSave(formData);
+    }
     onOpenChange(false);
   };
 
@@ -702,6 +707,23 @@ export const CustomizeApplicationDialog = ({
               </TabsContent>
             </div>
           </Tabs>
+        </div>
+        
+        <div className="bg-inherit pt-4 px-6 pb-6 border-t mt-auto">
+          <div className="flex justify-end gap-2">
+            <Button
+              variant="outline"
+              onClick={handleResetToDefault}
+            >
+              Reset to Default
+            </Button>
+            <Button 
+              onClick={handleSave}
+              className="bg-blue-500 hover:bg-blue-600 text-white"
+            >
+              Save Changes
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
