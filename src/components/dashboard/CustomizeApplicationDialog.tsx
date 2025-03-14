@@ -1,15 +1,14 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { X, Upload } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { X, Check, Upload } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export interface ApplicationCustomizationData {
   applicationName: string;
@@ -39,33 +38,75 @@ export const CustomizeApplicationDialog = ({
   isDarkTheme,
 }: CustomizeApplicationDialogProps) => {
   const [activeTab, setActiveTab] = useState("appInfo");
-  const [isFeatured, setIsFeatured] = useState(application?.featured || false);
-  
-  // Program Settings state
-  const [allowUninstall, setAllowUninstall] = useState(true);
-  
-  // Post Install Settings state
-  const [disableUpdates, setDisableUpdates] = useState(true);
-  const [removeDesktopIcon, setRemoveDesktopIcon] = useState(true);
-  const [removeStartMenuIcon, setRemoveStartMenuIcon] = useState(true);
-  
-  // Pre & Post Script Settings
-  const [proceedPreScript, setProceedPreScript] = useState(true);
-  const [proceedPostScript, setProceedPostScript] = useState(true);
-  
+  const [formData, setFormData] = useState<ApplicationCustomizationData>({
+    applicationName: "",
+    version: "",
+    description: "",
+    category: [],
+    publisher: "",
+    informationUrl: "",
+    privacyUrl: "",
+    developer: "",
+    owner: "",
+    notes: "",
+    featured: false
+  });
+
+  const [disableAutomaticUpdates, setDisableAutomaticUpdates] = useState("yes");
+  const [removeDesktopShortcut, setRemoveDesktopShortcut] = useState("yes");
+  const [removeStartMenuShortcut, setRemoveStartMenuShortcut] = useState("yes");
+  const [removeStartMenuShortcut2, setRemoveStartMenuShortcut2] = useState("yes");
+
+  useEffect(() => {
+    if (application) {
+      setFormData(application);
+    }
+  }, [application]);
+
+  const handleInputChange = (field: keyof ApplicationCustomizationData, value: string | boolean | string[]) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleRemoveCategory = (indexToRemove: number) => {
+    setFormData(prev => ({
+      ...prev,
+      category: prev.category?.filter((_, index) => index !== indexToRemove) || []
+    }));
+  };
+
+  const handleAddCategory = () => {
+    const newCategory = "New Category";
+    setFormData(prev => ({
+      ...prev,
+      category: [...(prev.category || []), newCategory]
+    }));
+  };
+
+  const handleSave = () => {
+    console.log("Saving changes:", formData);
+    onOpenChange(false);
+  };
+
+  const handleResetToDefault = () => {
+    if (application) {
+      setFormData(application);
+    }
+  };
+
   if (!application) return null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent 
-        className={cn(
-          "p-0 border rounded-lg",
-          "w-full max-w-[90vw] md:max-w-3xl h-[90vh] md:h-[700px]",
-          "overflow-hidden flex flex-col",
-          "mx-auto",
-          isDarkTheme ? "bg-gray-800 text-white" : "bg-white text-gray-800"
-        )}
-      >
+      <DialogContent className={cn(
+        "p-0 border rounded-lg",
+        "w-full max-w-[90vw] md:max-w-3xl h-[90vh] md:h-[700px]",
+        "overflow-hidden flex flex-col",
+        "mx-auto",
+        isDarkTheme ? "bg-gray-800 text-white" : "bg-white text-gray-800"
+      )}>
         <div className="bg-inherit pt-6 px-6 pb-2 border-b">
           <DialogHeader className="mb-0">
             <DialogTitle className="text-xl font-semibold">Customize Application</DialogTitle>
@@ -130,14 +171,16 @@ export const CustomizeApplicationDialog = ({
                     <div>
                       <label className="block text-sm font-medium mb-1">Name</label>
                       <Input 
-                        value={application.applicationName} 
+                        value={formData.applicationName} 
+                        onChange={(e) => handleInputChange("applicationName", e.target.value)}
                         className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-1">Publisher</label>
                       <Input 
-                        value={application.publisher || ""} 
+                        value={formData.publisher || ""} 
+                        onChange={(e) => handleInputChange("publisher", e.target.value)}
                         placeholder="Google"
                         className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
                       />
@@ -147,7 +190,8 @@ export const CustomizeApplicationDialog = ({
                   <div>
                     <label className="block text-sm font-medium mb-1">Description</label>
                     <Textarea 
-                      value={application.description || ""}
+                      value={formData.description || ""}
+                      onChange={(e) => handleInputChange("description", e.target.value)}
                       placeholder="Google Chrome browser is a free web browser used for accessing the internet and running web-based applications."
                       rows={3}
                       className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
@@ -157,13 +201,16 @@ export const CustomizeApplicationDialog = ({
                   <div>
                     <label className="block text-sm font-medium mb-1">Category</label>
                     <div className="flex flex-wrap gap-2">
-                      {(application.category || ["Productivity", "Browser"]).map((cat, index) => (
+                      {formData.category?.map((cat, index) => (
                         <div key={index} className={cn(
                           "px-3 py-1 rounded-full text-sm flex items-center gap-1",
                           isDarkTheme ? "bg-gray-700" : "bg-blue-100 text-blue-800"
                         )}>
                           {cat}
-                          <button className="ml-1 text-gray-500 hover:text-gray-700">
+                          <button 
+                            onClick={() => handleRemoveCategory(index)}
+                            className="ml-1 text-gray-500 hover:text-gray-700"
+                          >
                             <X size={14} />
                           </button>
                         </div>
@@ -171,7 +218,7 @@ export const CustomizeApplicationDialog = ({
                       <button className={cn(
                         "px-3 py-1 rounded-full text-sm border",
                         isDarkTheme ? "border-gray-600" : "border-gray-300"
-                      )}>
+                      )} onClick={handleAddCategory}>
                         + Add
                       </button>
                     </div>
@@ -180,8 +227,8 @@ export const CustomizeApplicationDialog = ({
                   <div>
                     <label className="block text-sm font-medium mb-1">Show this as featured app in company portal</label>
                     <RadioGroup 
-                      defaultValue={isFeatured ? "yes" : "no"} 
-                      onValueChange={(val) => setIsFeatured(val === "yes")}
+                      value={formData.featured ? "yes" : "no"} 
+                      onValueChange={(val) => handleInputChange("featured", val === "yes")}
                       className="flex items-center gap-4"
                     >
                       <div className="flex items-center space-x-2">
@@ -213,14 +260,16 @@ export const CustomizeApplicationDialog = ({
                     <div>
                       <label className="block text-sm font-medium mb-1">Information URL</label>
                       <Input 
-                        value={application.informationUrl || "https://www.google.com/chrome/privacy/"}
+                        value={formData.informationUrl || ""}
+                        onChange={(e) => handleInputChange("informationUrl", e.target.value)}
                         className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-1">Privacy URL</label>
                       <Input 
-                        value={application.privacyUrl || "https://www.google.com/chrome/privacy/"}
+                        value={formData.privacyUrl || ""}
+                        onChange={(e) => handleInputChange("privacyUrl", e.target.value)}
                         className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
                       />
                     </div>
@@ -230,14 +279,16 @@ export const CustomizeApplicationDialog = ({
                     <div>
                       <label className="block text-sm font-medium mb-1">Developer</label>
                       <Input 
-                        value={application.developer || ""}
+                        value={formData.developer || ""}
+                        onChange={(e) => handleInputChange("developer", e.target.value)}
                         className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium mb-1">Owner</label>
                       <Input 
-                        value={application.owner || ""}
+                        value={formData.owner || ""}
+                        onChange={(e) => handleInputChange("owner", e.target.value)}
                         className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
                       />
                     </div>
@@ -246,7 +297,8 @@ export const CustomizeApplicationDialog = ({
                   <div>
                     <label className="block text-sm font-medium mb-1">Notes</label>
                     <Textarea 
-                      value={application.notes || ""}
+                      value={formData.notes || ""}
+                      onChange={(e) => handleInputChange("notes", e.target.value)}
                       rows={2}
                       className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
                     />
@@ -264,112 +316,110 @@ export const CustomizeApplicationDialog = ({
               </TabsContent>
 
               <TabsContent value="programSettings" className="h-[500px] overflow-y-auto p-6">
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-medium mb-4">Program Settings</h3>
-                    <div className="space-y-4 ml-2">
-                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
-                        <label className="block text-sm font-medium md:w-1/3">Installation Program:</label>
-                        <Input 
-                          placeholder="setup.exe"
-                          className={cn(
-                            "w-full md:w-2/3 mt-1 md:mt-0",
-                            isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                          )}
-                        />
+                <div>
+                  <h3 className="text-lg font-medium mb-4">Program Settings</h3>
+                  <div className="space-y-4 ml-2">
+                    <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                      <label className="block text-sm font-medium md:w-1/3">Installation Program:</label>
+                      <Input 
+                        placeholder="setup.exe"
+                        className={cn(
+                          "w-full md:w-2/3 mt-1 md:mt-0",
+                          isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                        )}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                      <label className="block text-sm font-medium md:w-1/3">
+                        Installation Switches:
+                      </label>
+                      <Input 
+                        placeholder="/silent"
+                        className={cn(
+                          "w-full md:w-2/3 mt-1 md:mt-0",
+                          isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                        )}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                      <label className="block text-sm font-medium md:w-1/3">Uninstall Program:</label>
+                      <Input 
+                        placeholder="uninstall.exe"
+                        className={cn(
+                          "w-full md:w-2/3 mt-1 md:mt-0",
+                          isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                        )}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                      <label className="block text-sm font-medium md:w-1/3">
+                        Uninstall Switches:
+                      </label>
+                      <Input 
+                        placeholder="/silent"
+                        className={cn(
+                          "w-full md:w-2/3 mt-1 md:mt-0",
+                          isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                        )}
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                      <label className="block text-sm font-medium md:w-1/3">Detection Method:</label>
+                      <div className="w-full md:w-2/3 mt-1 md:mt-0">
+                        <Select defaultValue="msi">
+                          <SelectTrigger 
+                            className={cn(
+                              "w-full",
+                              isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                            )}
+                          >
+                            <SelectValue placeholder="Select method" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="msi">MSI Product Code</SelectItem>
+                            <SelectItem value="registry">Registry Key</SelectItem>
+                            <SelectItem value="file">File Detection</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
-                      
-                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
-                        <label className="block text-sm font-medium md:w-1/3">
-                          Installation Switches:
-                        </label>
-                        <Input 
-                          placeholder="/silent"
-                          className={cn(
-                            "w-full md:w-2/3 mt-1 md:mt-0",
-                            isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                          )}
-                        />
+                    </div>
+                    
+                    <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                      <label className="block text-sm font-medium md:w-1/3">Return Codes:</label>
+                      <div className={cn(
+                        "flex flex-wrap items-center gap-2 w-full md:w-2/3 mt-1 md:mt-0",
+                        isDarkTheme ? "text-gray-300" : "text-gray-600"
+                      )}>
+                        <span className="text-xs">0: Success</span>
+                        <span className="text-xs">1641: Restart initiated</span>
+                        <span className="text-xs">3010: Restart required</span>
+                        <Button variant="outline" size="xs">Edit Codes</Button>
                       </div>
-                      
-                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
-                        <label className="block text-sm font-medium md:w-1/3">Uninstall Program:</label>
-                        <Input 
-                          placeholder="uninstall.exe"
-                          className={cn(
-                            "w-full md:w-2/3 mt-1 md:mt-0",
-                            isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                          )}
-                        />
-                      </div>
-                      
-                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
-                        <label className="block text-sm font-medium md:w-1/3">
-                          Uninstall Switches:
-                        </label>
-                        <Input 
-                          placeholder="/silent"
-                          className={cn(
-                            "w-full md:w-2/3 mt-1 md:mt-0",
-                            isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                          )}
-                        />
-                      </div>
-                      
-                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
-                        <label className="block text-sm font-medium md:w-1/3">Detection Method:</label>
-                        <div className="w-full md:w-2/3 mt-1 md:mt-0">
-                          <Select defaultValue="msi">
-                            <SelectTrigger 
-                              className={cn(
-                                "w-full",
-                                isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                              )}
-                            >
-                              <SelectValue placeholder="Select method" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="msi">MSI Product Code</SelectItem>
-                              <SelectItem value="registry">Registry Key</SelectItem>
-                              <SelectItem value="file">File Detection</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
-                        <label className="block text-sm font-medium md:w-1/3">Return Codes:</label>
-                        <div className={cn(
-                          "flex flex-wrap items-center gap-2 w-full md:w-2/3 mt-1 md:mt-0",
-                          isDarkTheme ? "text-gray-300" : "text-gray-600"
-                        )}>
-                          <span className="text-xs">0: Success</span>
-                          <span className="text-xs">1641: Restart initiated</span>
-                          <span className="text-xs">3010: Restart required</span>
-                          <Button variant="outline" size="xs">Edit Codes</Button>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
-                        <label className="block text-sm font-medium md:w-1/3">Device restart behavior:</label>
-                        <div className="w-full md:w-2/3 mt-1 md:mt-0">
-                          <Select defaultValue="determine">
-                            <SelectTrigger 
-                              className={cn(
-                                "w-full",
-                                isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                              )}
-                            >
-                              <SelectValue placeholder="Select behavior" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="determine">Determine behavior based on return codes</SelectItem>
-                              <SelectItem value="force">Force restart</SelectItem>
-                              <SelectItem value="suppress">Suppress restart</SelectItem>
-                              <SelectItem value="basedOnExitCode">Based on exit code</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between flex-col md:flex-row md:items-start">
+                      <label className="block text-sm font-medium md:w-1/3">Device restart behavior:</label>
+                      <div className="w-full md:w-2/3 mt-1 md:mt-0">
+                        <Select defaultValue="determine">
+                          <SelectTrigger 
+                            className={cn(
+                              "w-full",
+                              isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                            )}
+                          >
+                            <SelectValue placeholder="Select behavior" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="determine">Determine behavior based on return codes</SelectItem>
+                            <SelectItem value="force">Force restart</SelectItem>
+                            <SelectItem value="suppress">Suppress restart</SelectItem>
+                            <SelectItem value="basedOnExitCode">Based on exit code</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
                   </div>
@@ -378,114 +428,76 @@ export const CustomizeApplicationDialog = ({
 
               <TabsContent value="postInstall" className="h-[500px] overflow-y-auto p-6">
                 <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-medium mb-4">Post-Installation Actions</h3>
-                    <div className="space-y-4 ml-2">
-                      <div className="flex items-center justify-between flex-col md:flex-row md:items-center">
-                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/2">Remove Desktop Shortcuts:</label>
-                        <div className="flex items-center justify-end w-full md:w-1/2">
-                          <div className="flex items-center space-x-2">
-                            <input 
-                              type="checkbox" 
-                              id="removeDesktop" 
-                              checked={removeDesktopIcon} 
-                              onChange={() => setRemoveDesktopIcon(!removeDesktopIcon)}
-                              className={cn(
-                                "rounded border text-blue-500 focus:ring-blue-500",
-                                isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                              )}
-                            />
-                            <label htmlFor="removeDesktop">Enable</label>
-                          </div>
-                        </div>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium">Disable automatic updates</label>
+                    <RadioGroup 
+                      value={disableAutomaticUpdates}
+                      onValueChange={setDisableAutomaticUpdates}
+                      className="flex items-center gap-4"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="yes" id="disableUpdatesYes" />
+                        <Label htmlFor="disableUpdatesYes">Yes</Label>
                       </div>
-                      
-                      <div className="flex items-center justify-between flex-col md:flex-row md:items-center">
-                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/2">Remove Start Menu Shortcuts:</label>
-                        <div className="flex items-center justify-end w-full md:w-1/2">
-                          <div className="flex items-center space-x-2">
-                            <input 
-                              type="checkbox" 
-                              id="removeStartMenu" 
-                              checked={removeStartMenuIcon} 
-                              onChange={() => setRemoveStartMenuIcon(!removeStartMenuIcon)}
-                              className={cn(
-                                "rounded border text-blue-500 focus:ring-blue-500",
-                                isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                              )}
-                            />
-                            <label htmlFor="removeStartMenu">Enable</label>
-                          </div>
-                        </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="no" id="disableUpdatesNo" />
+                        <Label htmlFor="disableUpdatesNo">No</Label>
                       </div>
-                      
-                      <div className="flex items-center justify-between flex-col md:flex-row md:items-center">
-                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/2">Disable Automatic Updates:</label>
-                        <div className="flex items-center justify-end w-full md:w-1/2">
-                          <div className="flex items-center space-x-2">
-                            <input 
-                              type="checkbox" 
-                              id="disableUpdates" 
-                              checked={disableUpdates} 
-                              onChange={() => setDisableUpdates(!disableUpdates)}
-                              className={cn(
-                                "rounded border text-blue-500 focus:ring-blue-500",
-                                isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                              )}
-                            />
-                            <label htmlFor="disableUpdates">Enable</label>
-                          </div>
-                        </div>
-                      </div>
+                    </RadioGroup>
+                  </div>
 
-                      <div className="flex items-center justify-between flex-col md:flex-row md:items-center">
-                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/2">Default File Associations:</label>
-                        <div className="w-full md:w-1/2 flex justify-end">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className={cn(
-                              "w-full md:w-auto",
-                              isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                            )}
-                          >
-                            Configure Associations
-                          </Button>
-                        </div>
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium">Remove desktop shortcut icon</label>
+                    <RadioGroup 
+                      value={removeDesktopShortcut}
+                      onValueChange={setRemoveDesktopShortcut}
+                      className="flex items-center gap-4"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="yes" id="removeDesktopYes" />
+                        <Label htmlFor="removeDesktopYes">Yes</Label>
                       </div>
-                      
-                      <div className="flex items-center justify-between flex-col md:flex-row md:items-center">
-                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/2">Registry Modifications:</label>
-                        <div className="w-full md:w-1/2 flex justify-end">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className={cn(
-                              "w-full md:w-auto",
-                              isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                            )}
-                          >
-                            Configure Registry Keys
-                          </Button>
-                        </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="no" id="removeDesktopNo" />
+                        <Label htmlFor="removeDesktopNo">No</Label>
                       </div>
-                      
-                      <div className="flex items-center justify-between flex-col md:flex-row md:items-center">
-                        <label className="block text-sm font-medium mb-1 md:mb-0 md:w-1/2">Create Custom Shortcuts:</label>
-                        <div className="w-full md:w-1/2 flex justify-end">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className={cn(
-                              "w-full md:w-auto",
-                              isDarkTheme ? "bg-gray-700 border-gray-600" : ""
-                            )}
-                          >
-                            Configure Shortcuts
-                          </Button>
-                        </div>
+                    </RadioGroup>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium">Remove startmenu shortcut icon</label>
+                    <RadioGroup 
+                      value={removeStartMenuShortcut}
+                      onValueChange={setRemoveStartMenuShortcut}
+                      className="flex items-center gap-4"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="yes" id="removeStartMenu1Yes" />
+                        <Label htmlFor="removeStartMenu1Yes">Yes</Label>
                       </div>
-                    </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="no" id="removeStartMenu1No" />
+                        <Label htmlFor="removeStartMenu1No">No</Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium">Remove startmenu shortcut icon</label>
+                    <RadioGroup 
+                      value={removeStartMenuShortcut2}
+                      onValueChange={setRemoveStartMenuShortcut2}
+                      className="flex items-center gap-4"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="yes" id="removeStartMenu2Yes" />
+                        <Label htmlFor="removeStartMenu2Yes">Yes</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="no" id="removeStartMenu2No" />
+                        <Label htmlFor="removeStartMenu2No">No</Label>
+                      </div>
+                    </RadioGroup>
                   </div>
                 </div>
               </TabsContent>
@@ -558,8 +570,7 @@ export const CustomizeApplicationDialog = ({
                         </label>
                         <div className="flex items-center w-full md:w-2/3 md:justify-start">
                           <RadioGroup 
-                            defaultValue={proceedPreScript ? "yes" : "no"} 
-                            onValueChange={(val) => setProceedPreScript(val === "yes")}
+                            defaultValue="yes"
                             className="flex items-center gap-4"
                           >
                             <div className="flex items-center space-x-2">
@@ -656,11 +667,11 @@ export const CustomizeApplicationDialog = ({
                         </label>
                         <div className="flex items-center w-full md:w-2/3 md:justify-start">
                           <RadioGroup 
-                            defaultValue={proceedPostScript ? "yes" : "no"} 
-                            onValueChange={(val) => setProceedPostScript(val === "yes")}
+                            defaultValue="yes"
                             className="flex items-center gap-4"
                           >
                             <div className="flex items-center space-x-2">
+                              
                               <RadioGroupItem 
                                 value="yes" 
                                 id="proceedPostScriptYes" 
@@ -691,38 +702,6 @@ export const CustomizeApplicationDialog = ({
               </TabsContent>
             </div>
           </Tabs>
-        </div>
-
-        <div className="bg-inherit px-6 py-4 border-t mt-auto sticky bottom-0 z-10 shadow-md">
-          <div className="flex justify-center space-x-4">
-            <Button 
-              variant="outline" 
-              onClick={() => onOpenChange(false)}
-              className={cn(
-                "min-w-[100px]",
-                isDarkTheme ? "hover:bg-gray-700" : "hover:bg-gray-100"
-              )}
-            >
-              Cancel
-            </Button>
-            <Button 
-              variant="outline"
-              className={cn(
-                "min-w-[100px]",
-                isDarkTheme ? "hover:bg-gray-700" : "hover:bg-gray-100"
-              )}
-            >
-              Reset to default
-            </Button>
-            <Button 
-              className={cn(
-                "bg-blue-500 hover:bg-blue-600 min-w-[100px]",
-                "text-white font-medium"
-              )}
-            >
-              Save
-            </Button>
-          </div>
         </div>
       </DialogContent>
     </Dialog>

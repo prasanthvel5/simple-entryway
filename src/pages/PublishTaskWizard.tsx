@@ -1,14 +1,26 @@
-
 import { useState, useEffect } from "react";
 import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { ArrowLeft, ArrowRight, Check, Plus, Search, Settings, X, Filter } from "lucide-react";
+import { 
+  ArrowLeft, 
+  ArrowRight, 
+  Check, 
+  Plus, 
+  Search, 
+  Settings, 
+  X, 
+  Upload 
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch"; // Make sure you have a Switch component
 import { CustomizeApplicationDialog, ApplicationCustomizationData } from "@/components/dashboard/CustomizeApplicationDialog";
 import { AddAssignmentGroupDialog, AssignmentGroupData } from "@/components/dashboard/AddAssignmentGroupDialog";
 
@@ -23,7 +35,6 @@ interface Application {
   inventoryStatus: string;
   publishStatus: string;
   publishTask: string;
-  // Additional fields to match ApplicationCustomizationData
   description?: string;
   publisher?: string;
   informationUrl?: string;
@@ -46,6 +57,12 @@ interface AssignmentGroup {
   restartGracePeriod: string;
 }
 
+interface NotificationCustomization {
+  language: string;
+  title: string;
+  message: string;
+}
+
 type DashboardContext = {
   isDarkTheme: boolean;
   activeMenu: string;
@@ -56,6 +73,8 @@ const PublishTaskWizard = () => {
   const { isDarkTheme } = useOutletContext<DashboardContext>();
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Single declaration for each state variable
   const [currentStep, setCurrentStep] = useState<WizardStep>("selectApplications");
   const [applications, setApplications] = useState<Application[]>([]);
   const [taskName, setTaskName] = useState<string>("");
@@ -67,7 +86,58 @@ const PublishTaskWizard = () => {
   const [showAddAssignmentDialog, setShowAddAssignmentDialog] = useState(false);
   const [currentAssignmentType, setCurrentAssignmentType] = useState<"Required" | "Available">("Required");
   const [assignmentGroups, setAssignmentGroups] = useState<AssignmentGroup[]>([]);
+
+  const [autoPublishNewVersions, setAutoPublishNewVersions] = useState<boolean>(false);
+  const [publishScheduleOption, setPublishScheduleOption] = useState<"wheneverReleased" | "schedule">("wheneverReleased");
+  const [frequency, setFrequency] = useState<"hourly" | "daily" | "weekly">("daily");
+  const [startTime, setStartTime] = useState<string>("17:23");
+  const [addNewlyInstalled, setAddNewlyInstalled] = useState<boolean>(false);
+  const [cleanupDays, setCleanupDays] = useState<string>("60");
+
+  // Installation settings state
+  const [installationBehavior, setInstallationBehavior] = useState("skipIfRunning");
+  const [showNotificationSettings, setShowNotificationSettings] = useState(false);
+  const [postponeAttempts, setPostponeAttempts] = useState("5");
+  const [postponeNotificationTime, setPostponeNotificationTime] = useState("10");
+  const [noResponseAction, setNoResponseAction] = useState("forceClose");
+
   
+  // Notification customization state
+  const [organizationLogo, setOrganizationLogo] = useState<File | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState("English");
+  const [notificationCustomizations, setNotificationCustomizations] = useState<Record<string, NotificationCustomization>>({
+    English: {
+      language: "English",
+      title: "Important Update from {organizationName}",
+      message: "An update for {productName} is ready to install.\nPlease save your work and close the application now to proceed."
+    },
+    French: {
+      language: "French",
+      title: "Mise à jour importante de {organizationName}",
+      message: "Une mise à jour pour {productName} est prête à être installée.\nVeuillez enregistrer votre travail et fermer l'application maintenant pour continuer."
+    },
+    German: {
+      language: "German",
+      title: "Wichtiges Update von {organizationName}",
+      message: "Ein Update für {productName} ist zur Installation bereit.\nBitte speichern Sie Ihre Arbeit und schließen Sie die Anwendung jetzt, um fortzufahren."
+    },
+    Spanish: {
+      language: "Spanish",
+      title: "Actualización importante de {organizationName}",
+      message: "Una actualización para {productName} está lista para instalar.\nPor favor, guarde su trabajo y cierre la aplicación ahora para continuar."
+    },
+    Chinese: {
+      language: "Chinese",
+      title: "{organizationName}的重要更新",
+      message: "{productName}的更新已准备就绪。\n请保存您的工作并立即关闭应用程序以继续。"
+    },
+    Arabic: {
+      language: "Arabic",
+      title: "تحديث مهم من {organizationName}",
+      message: "تحديث {productName} جاهز للتثبيت.\nيرجى حفظ عملك وإغلاق التطبيق الآن للمتابعة."
+    }
+  });
+
   useEffect(() => {
     if (location.state?.selectedApplications) {
       setApplications(location.state.selectedApplications);
@@ -111,13 +181,12 @@ const PublishTaskWizard = () => {
   };
 
   const handleCustomizeApplication = (app: Application) => {
-    // Convert the app to ApplicationCustomizationData format
     const customizeAppData: ApplicationCustomizationData = {
       applicationName: app.applicationName,
       version: app.version,
       description: app.description || "",
-      category: app.category ? [app.category] : [], // Convert string to string array
-      publisher: app.vendor, // Map vendor to publisher
+      category: app.category ? [app.category] : [],
+      publisher: app.vendor,
       informationUrl: app.informationUrl || "",
       privacyUrl: app.privacyUrl || "",
       developer: app.developer || "",
@@ -158,6 +227,75 @@ const PublishTaskWizard = () => {
 
   const handleDeleteAssignmentGroup = (id: string) => {
     setAssignmentGroups(assignmentGroups.filter(group => group.id !== id));
+  };
+
+  const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setOrganizationLogo(file);
+    }
+  };
+
+  const handleNotificationCustomization = (language: string, field: keyof NotificationCustomization, value: string) => {
+    setNotificationCustomizations(prev => ({
+      ...prev,
+      [language]: {
+        ...prev[language],
+        [field]: value
+      }
+    }));
+  };
+
+  const getNotificationPreview = (isDark: boolean) => {
+    const customization = notificationCustomizations[selectedLanguage];
+    const previewTitle = customization.title
+      .replace("{organizationName}", "PatchTune")
+      .replace("{productName}", "Google Chrome");
+    const previewMessage = customization.message
+      .replace("{organizationName}", "PatchTune")
+      .replace("{productName}", "Google Chrome");
+
+    return (
+      <div className={cn(
+        "rounded-lg p-4 shadow-lg",
+        isDark 
+          ? "bg-gray-800 text-white border border-gray-700" 
+          : "bg-blue-50 text-gray-900"
+      )}>
+        <div className="flex items-center gap-3 mb-2">
+          {organizationLogo ? (
+            <img 
+              src={URL.createObjectURL(organizationLogo)} 
+              alt="Organization Logo" 
+              className="w-8 h-8 rounded"
+            />
+          ) : (
+            <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center text-white font-bold">
+              P
+            </div>
+          )}
+          <h3 className="font-semibold">{previewTitle}</h3>
+        </div>
+        <p className="text-sm whitespace-pre-line">{previewMessage}</p>
+        <div className="mt-3 text-sm">
+          Installation will be initiated in <span className="font-medium">10:00</span>
+        </div>
+        <div className="mt-3 flex gap-2 justify-end">
+          <Button 
+            variant={isDark ? "default" : "secondary"}
+            size="sm"
+          >
+            Update now
+          </Button>
+          <Button
+            variant={isDark ? "outline" : "secondary"}
+            size="sm"
+          >
+            Postpone
+          </Button>
+        </div>
+      </div>
+    );
   };
 
   const availableApplications: Application[] = [
@@ -610,64 +748,191 @@ const PublishTaskWizard = () => {
                 "p-6 rounded-lg border",
                 isDarkTheme ? "border-gray-700 bg-gray-750" : "border-gray-200 bg-gray-50"
               )}>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Installation Behavior</label>
-                    <div className="space-y-2">
-                      <div className="flex items-center">
-                        <input type="radio" name="installBehavior" id="system" className="mr-2" defaultChecked />
-                        <label htmlFor="system">System context (recommended)</label>
-                      </div>
-                      <div className="flex items-center">
-                        <input type="radio" name="installBehavior" id="user" className="mr-2" />
-                        <label htmlFor="user">User context</label>
-                      </div>
-                    </div>
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <label className="block text-sm font-medium w-48">Installation behavior:</label>
+                    <Select 
+                      value={installationBehavior}
+                      onValueChange={(value) => {
+                        setInstallationBehavior(value);
+                        setShowNotificationSettings(value === "allowUserDecide");
+                      }}
+                    >
+                      <SelectTrigger className={cn(
+                        "w-[300px]",
+                        isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                      )}>
+                        <SelectValue placeholder="Select behavior" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="skipIfRunning">Skip Installation if Application running</SelectItem>
+                        <SelectItem value="closeAndUpdate">Close the application and update if Application running</SelectItem>
+                        <SelectItem value="allowUserDecide">Allow user to decide</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Installation Requirements</label>
-                    <div className="space-y-2">
-                      <div className="flex items-center">
-                        <input type="checkbox" id="deviceRestart" className="mr-2" />
-                        <label htmlFor="deviceRestart">Device restart required</label>
+                  {showNotificationSettings && (
+                    <div className="space-y-4 ml-4">
+                      <div className="flex items-center gap-4">
+                        <label className="block text-sm font-medium w-48">Postpone attempts:</label>
+                        <div className="flex items-center gap-2">
+                          <Input 
+                            type="number"
+                            value={postponeAttempts}
+                            onChange={(e) => setPostponeAttempts(e.target.value)}
+                            className={cn(
+                              "w-20",
+                              isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                            )}
+                          />
+                          <span className="text-sm">Times</span>
+                        </div>
+                        <span className="text-sm text-gray-500 italic">
+                          If user exceeds the {postponeAttempts} postpone attempts then the application will be closed and proceed for update installation
+                        </span>
                       </div>
-                      <div className="flex items-center">
-                        <input type="checkbox" id="diskSpace" className="mr-2" defaultChecked />
-                        <label htmlFor="diskSpace">Minimum disk space (GB):</label>
-                        <input 
-                          type="number" 
-                          className={cn(
-                            "ml-2 w-16 rounded-md border px-2 py-1",
-                            isDarkTheme ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
-                          )}
-                          defaultValue="1"
-                        />
+
+                      <div className="flex items-center gap-4">
+                        <label className="block text-sm font-medium w-48">Show postpone Notification for:</label>
+                        <div className="flex items-center gap-2">
+                          <Input 
+                            type="number"
+                            value={postponeNotificationTime}
+                            onChange={(e) => setPostponeNotificationTime(e.target.value)}
+                            className={cn(
+                              "w-20",
+                              isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                            )}
+                          />
+                          <span className="text-sm">Minutes</span>
+                        </div>
+                        <span className="text-sm text-gray-500 italic">
+                          Notification will appear for {postponeNotificationTime} minutes, If user didn't respond it will be either postpone or install based on below settings
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-4">
+                        <label className="block text-sm font-medium w-48">If user doesn't respond to notification:</label>
+                        <Select 
+                          value={noResponseAction}
+                          onValueChange={setNoResponseAction}
+                        >
+                          <SelectTrigger className={cn(
+                            "w-[300px]",
+                            isDarkTheme ? "bg-gray-700 border-gray-600" : ""
+                          )}>
+                            <SelectValue placeholder="Select action" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="forceClose">Force close the application and proceed install</SelectItem>
+                            <SelectItem value="postpone">Postpone the installation</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
-                  </div>
+                  )}
 
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Installation Timing</label>
-                    <div className="space-y-2">
-                      <div className="flex items-center">
-                        <input type="radio" name="installTiming" id="immediate" className="mr-2" defaultChecked />
-                        <label htmlFor="immediate">Immediate</label>
+                  <div className="mt-8">
+                    <h4 className="text-lg font-medium mb-4">Notification Customization</h4>
+                    <div className="grid grid-cols-2 gap-8">
+                      <div className="space-y-6">
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Organization Logo</label>
+                          <div className="flex items-center gap-4">
+                            {organizationLogo ? (
+                              <img 
+                                src={URL.createObjectURL(organizationLogo)} 
+                                alt="Organization Logo" 
+                                className="w-12 h-12 rounded"
+                              />
+                            ) : (
+                              <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
+                                <Upload className="w-6 h-6 text-gray-400" />
+                              </div>
+                            )}
+                            <div>
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                id="logo-upload"
+                                onChange={handleLogoUpload}
+                              />
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => document.getElementById('logo-upload')?.click()}
+                              >
+                                Upload Logo
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Language</label>
+                          <div className="flex flex-col gap-2">
+                            {Object.keys(notificationCustomizations).map(lang => (
+                              <button
+                                key={lang}
+                                onClick={() => setSelectedLanguage(lang)}
+                                className={cn(
+                                  "flex items-center gap-2 px-3 py-2 rounded-md text-left",
+                                  selectedLanguage === lang
+                                    ? "bg-blue-500 text-white"
+                                    : isDarkTheme
+                                      ? "hover:bg-gray-700"
+                                      : "hover:bg-gray-100"
+                                )}
+                              >
+                                {selectedLanguage === lang && (
+                                  <Check className="w-4 h-4" />
+                                )}
+                                {lang}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Notification Title</label>
+                          <Input
+                            value={notificationCustomizations[selectedLanguage].title}
+                            onChange={(e) => handleNotificationCustomization(selectedLanguage, "title", e.target.value)}
+                            className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
+                          />
+                          <p className="text-xs text-gray-500 mt-1">
+                            Available placeholders: {"{organizationName}"}, {"{productName}"}
+                          </p>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Notification Message</label>
+                          <Textarea
+                            value={notificationCustomizations[selectedLanguage].message}
+                            onChange={(e) => handleNotificationCustomization(selectedLanguage, "message", e.target.value)}
+                            rows={4}
+                            className={isDarkTheme ? "bg-gray-700 border-gray-600" : ""}
+                          />
+                          <p className="text-xs text-gray-500 mt-1">
+                            Available placeholders: {"{organizationName}"}, {"{productName}"}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex items-center">
-                        <input type="radio" name="installTiming" id="deadline" className="mr-2" />
-                        <label htmlFor="deadline">With deadline</label>
-                      </div>
-                      <div className="ml-6">
-                        <label className="block text-sm mb-1">Deadline (days after assignment):</label>
-                        <input 
-                          type="number" 
-                          className={cn(
-                            "w-16 rounded-md border px-2 py-1",
-                            isDarkTheme ? "bg-gray-700 border-gray-600" : "bg-white border-gray-300"
-                          )}
-                          defaultValue="5"
-                        />
+
+                      <div className="space-y-4">
+                        <h5 className="font-medium">Preview</h5>
+                        <div className="space-y-4">
+                          <div>
+                            <h6 className="text-sm font-medium mb-2">Light Theme</h6>
+                            {getNotificationPreview(false)}
+                          </div>
+                          <div>
+                            <h6 className="text-sm font-medium mb-2">Dark Theme</h6>
+                            {getNotificationPreview(true)}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -788,17 +1053,31 @@ const PublishTaskWizard = () => {
                     <h4 className="font-medium mb-2">Installation Settings</h4>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <span className="block text-sm text-gray-500">Installation Context</span>
-                        <span>System context</span>
+                        <span className="block text-sm text-gray-500">Installation Behavior</span>
+                        <span>{installationBehavior === "skipIfRunning" 
+                          ? "Skip Installation if Application running"
+                          : installationBehavior === "closeAndUpdate"
+                            ? "Close the application and update if Application running"
+                            : "Allow user to decide"}</span>
                       </div>
-                      <div>
-                        <span className="block text-sm text-gray-500">Installation Timing</span>
-                        <span>Immediate</span>
-                      </div>
-                      <div>
-                        <span className="block text-sm text-gray-500">Disk Space Required</span>
-                        <span>1 GB</span>
-                      </div>
+                      {showNotificationSettings && (
+                        <>
+                          <div>
+                            <span className="block text-sm text-gray-500">Postpone Attempts</span>
+                            <span>{postponeAttempts} times</span>
+                          </div>
+                          <div>
+                            <span className="block text-sm text-gray-500">Notification Time</span>
+                            <span>{postponeNotificationTime} minutes</span>
+                          </div>
+                          <div>
+                            <span className="block text-sm text-gray-500">No Response Action</span>
+                            <span>{noResponseAction === "forceClose" 
+                              ? "Force close and proceed install"
+                              : "Postpone installation"}</span>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
 
@@ -871,7 +1150,7 @@ const PublishTaskWizard = () => {
           "max-w-2xl p-6",
           isDarkTheme ? "bg-gray-800 text-white" : "bg-white"
         )}>
-          <h2 className="text-xl font-semibold mb-4">Add Applications</h2>
+          <DialogTitle className="text-xl font-semibold mb-4">Add Applications</DialogTitle>
           
           <div className="flex gap-2 mb-4">
             <div className="relative flex-1">
