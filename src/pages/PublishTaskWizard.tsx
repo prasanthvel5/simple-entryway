@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -805,4 +806,220 @@ const PublishTaskWizard = () => {
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.groupMode}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.groupName}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterMode.substring(0, 20)}...</td>
-                                    <td className
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterName}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.appAvailability}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.installationDeadline}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.restartGracePeriod}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                      <Button 
+                                        variant="ghost" 
+                                        size="xs"
+                                        onClick={() => handleDeleteAssignmentGroup(group.id)}
+                                        className="text-red-500 hover:text-red-700"
+                                      >
+                                        <X className="h-4 w-4" />
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                ))
+                              ) : (
+                                <tr>
+                                  <td colSpan={8} className="px-4 py-4 text-center text-sm">
+                                    No assignment groups added. Click "Add Assignment group" to add a group.
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {currentStep === "installationSettings" && (
+            <div>
+              {/* Add installation settings UI here */}
+              <h3 className="text-lg font-medium mb-4">Installation Settings</h3>
+              <div className="space-y-6">
+                {/* Installation behavior settings */}
+              </div>
+            </div>
+          )}
+
+          {currentStep === "publishSettings" && (
+            <div>
+              {/* Add publish settings UI here */}
+              <h3 className="text-lg font-medium mb-4">Publish Settings</h3>
+              <div className="space-y-6">
+                {/* Publish schedule settings */}
+              </div>
+            </div>
+          )}
+
+          {currentStep === "review" && (
+            <div>
+              {/* Add review UI here */}
+              <h3 className="text-lg font-medium mb-4">Review & Save</h3>
+              <div className="space-y-6">
+                {/* Task review summary */}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="flex justify-between pt-4 border-t border-gray-200">
+          <Button
+            variant="outline"
+            onClick={handleCancel}
+            className="flex items-center gap-1"
+          >
+            Cancel
+          </Button>
+          <div className="flex gap-2">
+            {currentStep !== "selectApplications" && (
+              <Button
+                variant="outline"
+                onClick={handleBack}
+                className="flex items-center gap-1"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back
+              </Button>
+            )}
+            {currentStep !== "review" ? (
+              <Button
+                onClick={handleNext}
+                className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600"
+                disabled={
+                  currentStep === "selectApplications" && applications.length === 0 ||
+                  currentStep === "assignmentSettings" && deploymentType === "automateAssignment" && assignmentGroups.length === 0
+                }
+              >
+                Next
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            ) : (
+              <Button
+                onClick={handleCreateTask}
+                className="flex items-center gap-1 bg-green-500 hover:bg-green-600"
+              >
+                Create Task
+                <Check className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Add Applications Dialog */}
+      <Dialog open={showAddApplicationsDialog} onOpenChange={setShowAddApplicationsDialog}>
+        <DialogContent className="sm:max-w-[800px]">
+          <DialogTitle>Add Applications</DialogTitle>
+          <div className="py-4">
+            <div className="mb-4 relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Search applications..."
+                className="pl-9"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <div className="overflow-auto max-h-[400px]">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50 sticky top-0">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Application Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Vendor
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Latest Version
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Release Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredApplications.map((app) => (
+                    <tr key={app.applicationName} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <img src="/src/resources/2chrome.png" alt="" className="w-6 h-6" />
+                          {app.applicationName}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">{app.vendor}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{app.version}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{app.releaseDate}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <Button
+                          onClick={() => handleAddApplication(app)}
+                          disabled={applications.some(a => a.applicationName === app.applicationName)}
+                          size="sm"
+                          className="bg-blue-500 hover:bg-blue-600"
+                        >
+                          Add
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Customize Application Dialog */}
+      {customizeApp && (
+        <CustomizeApplicationDialog
+          open={showCustomizeDialog}
+          onOpenChange={setShowCustomizeDialog}
+          data={customizeApp}
+          onSave={(data) => {
+            // Handle saving customized app data
+            const updatedApps = applications.map(app => 
+              app.applicationName === data.applicationName
+                ? {
+                    ...app,
+                    description: data.description,
+                    category: data.category[0] || app.category,
+                    vendor: data.publisher,
+                    informationUrl: data.informationUrl,
+                    privacyUrl: data.privacyUrl,
+                    developer: data.developer,
+                    owner: data.owner,
+                    notes: data.notes,
+                    featured: data.featured
+                  }
+                : app
+            );
+            setApplications(updatedApps);
+            setShowCustomizeDialog(false);
+          }}
+        />
+      )}
+
+      {/* Add Assignment Group Dialog */}
+      <AddAssignmentGroupDialog
+        open={showAddAssignmentDialog}
+        onOpenChange={setShowAddAssignmentDialog}
+        type={currentAssignmentType}
+        onSave={handleSaveAssignmentGroup}
+      />
+    </div>
+  );
+};
+
+export default PublishTaskWizard;
