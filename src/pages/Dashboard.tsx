@@ -97,18 +97,7 @@ const Dashboard = () => {
             />
           )}
           
-          {/* Use Outlet for nested routes */}
-          {location.pathname.includes('publish-task-wizard') ? (
-            <Outlet context={{ isDarkTheme, activeMenu, activeSecondLevel }} />
-          ) : location.pathname.includes('published-task') ? (
-            <Outlet context={{ isDarkTheme, activeMenu, activeSecondLevel }} />
-          ) : (
-            <MainContent 
-              isDarkTheme={isDarkTheme} 
-              activeMenu={activeMenu}
-              activeSecondLevel={activeSecondLevel}
-            />
-          )}
+          <Outlet context={{ isDarkTheme, activeMenu, activeSecondLevel }} />
         </div>
       </div>
     </div>

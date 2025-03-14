@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 import { Check, ChevronRight } from "lucide-react";
 
 interface PublishTaskWizardProps {
-  isDarkTheme: boolean;
-  activeMenu: string;
-  activeSecondLevel: string;
+  isDarkTheme?: boolean;
+  activeMenu?: string;
+  activeSecondLevel?: string;
 }
 
 interface TaskData {
