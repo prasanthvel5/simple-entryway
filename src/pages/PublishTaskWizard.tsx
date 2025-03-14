@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -715,8 +716,620 @@ const PublishTaskWizard = () => {
                                   <tr key={group.id} className={isDarkTheme ? "hover:bg-gray-750" : "hover:bg-gray-50"}>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.groupMode}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.groupName}</td>
-                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterMode.substring(0, 20)}...</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterMode.substring(0, 20)}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterName}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.appAvailability}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.installationDeadline}</td>
-                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.restartGraceP
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.restartGracePeriod}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                      <Button
+                                        variant="ghost"
+                                        size="xs"
+                                        onClick={() => handleDeleteAssignmentGroup(group.id)}
+                                        className="text-red-500 hover:text-red-700"
+                                      >
+                                        <X className="h-4 w-4" />
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                ))
+                              ) : (
+                                <tr>
+                                  <td colSpan={8} className="px-4 py-3 text-center">
+                                    No assignment groups added.
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-lg font-medium">Available</h4>
+                          <Button 
+                            size="sm"
+                            variant="outline"
+                            className="flex items-center gap-1 text-blue-500 border-blue-500"
+                            onClick={() => handleAddAssignmentGroup("Available")}
+                          >
+                            <Plus className="h-4 w-4" />
+                            Add Assignment group
+                          </Button>
+                        </div>
+                        
+                        <div className={cn(
+                          "overflow-hidden rounded-lg border", 
+                          isDarkTheme ? "border-gray-700" : "border-gray-200"
+                        )}>
+                          <table className="min-w-full divide-y divide-gray-200">
+                            <thead className={cn(
+                              isDarkTheme ? "bg-gray-700" : "bg-gray-100"
+                            )}>
+                              <tr>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Group Mode
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Group Name
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Filter Mode
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Filter Name
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  App Availability
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Installation deadline
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Restart grace period
+                                </th>
+                                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                  Actions
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className={cn(
+                              "divide-y",
+                              isDarkTheme ? "divide-gray-700 bg-gray-800" : "divide-gray-200 bg-white"
+                            )}>
+                              {getFilteredAssignmentGroups("Available").length > 0 ? (
+                                getFilteredAssignmentGroups("Available").map((group) => (
+                                  <tr key={group.id} className={isDarkTheme ? "hover:bg-gray-750" : "hover:bg-gray-50"}>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.groupMode}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.groupName}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterMode.substring(0, 20)}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterName}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.appAvailability}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.installationDeadline}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.restartGracePeriod}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                      <Button
+                                        variant="ghost"
+                                        size="xs"
+                                        onClick={() => handleDeleteAssignmentGroup(group.id)}
+                                        className="text-red-500 hover:text-red-700"
+                                      >
+                                        <X className="h-4 w-4" />
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                ))
+                              ) : (
+                                <tr>
+                                  <td colSpan={8} className="px-4 py-3 text-center">
+                                    No assignment groups added.
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {currentStep === "installationSettings" && (
+            <div>
+              <h3 className="text-lg font-medium mb-4">Installation Settings</h3>
+              <div className={cn(
+                "p-6 rounded-lg border space-y-6",
+                isDarkTheme ? "border-gray-700 bg-gray-750" : "border-gray-200 bg-gray-50"
+              )}>
+                <div>
+                  <h4 className="text-base font-medium mb-3">Installation Behavior</h4>
+                  <RadioGroup 
+                    defaultValue={installationBehavior} 
+                    onValueChange={setInstallationBehavior}
+                    className="space-y-2"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="skipIfRunning" id="skipIfRunning" />
+                      <Label htmlFor="skipIfRunning">Skip installation when application is running</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="notifyUser" id="notifyUser" />
+                      <Label htmlFor="notifyUser">Notify users and allow them to postpone installation</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="forceClose" id="forceClose" />
+                      <Label htmlFor="forceClose">Force close running applications during installation</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+
+                {installationBehavior === "notifyUser" && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-base font-medium">Notification Settings</h4>
+                      <Switch 
+                        checked={showNotificationSettings}
+                        onCheckedChange={setShowNotificationSettings}
+                      />
+                    </div>
+                    
+                    {showNotificationSettings && (
+                      <div className={cn(
+                        "p-4 rounded border",
+                        isDarkTheme ? "border-gray-600 bg-gray-800" : "border-gray-300 bg-gray-50"
+                      )}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <label className={cn(
+                              "block text-sm font-medium mb-1",
+                              isDarkTheme ? "text-gray-300" : "text-gray-700"
+                            )}>
+                              Maximum allowed postpone attempts:
+                            </label>
+                            <Select 
+                              value={postponeAttempts} 
+                              onValueChange={setPostponeAttempts}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="1">1</SelectItem>
+                                <SelectItem value="2">2</SelectItem>
+                                <SelectItem value="3">3</SelectItem>
+                                <SelectItem value="5">5</SelectItem>
+                                <SelectItem value="10">10</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <label className={cn(
+                              "block text-sm font-medium mb-1",
+                              isDarkTheme ? "text-gray-300" : "text-gray-700"
+                            )}>
+                              Maximum postpone notification time (minutes):
+                            </label>
+                            <Select 
+                              value={postponeNotificationTime} 
+                              onValueChange={setPostponeNotificationTime}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="5">5 minutes</SelectItem>
+                                <SelectItem value="10">10 minutes</SelectItem>
+                                <SelectItem value="15">15 minutes</SelectItem>
+                                <SelectItem value="30">30 minutes</SelectItem>
+                                <SelectItem value="60">1 hour</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                        <div>
+                          <label className={cn(
+                            "block text-sm font-medium mb-1",
+                            isDarkTheme ? "text-gray-300" : "text-gray-700"
+                          )}>
+                            No response action:
+                          </label>
+                          <Select 
+                            value={noResponseAction} 
+                            onValueChange={setNoResponseAction}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="skip">Skip installation</SelectItem>
+                              <SelectItem value="retry">Retry later</SelectItem>
+                              <SelectItem value="forceClose">Force close application and install</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {currentStep === "publishSettings" && (
+            <div>
+              <h3 className="text-lg font-medium mb-4">Publish Settings</h3>
+              <div className={cn(
+                "p-6 rounded-lg border space-y-6",
+                isDarkTheme ? "border-gray-700 bg-gray-750" : "border-gray-200 bg-gray-50"
+              )}>
+                <div>
+                  <h4 className="text-base font-medium mb-3">Auto-publish new versions</h4>
+                  <div className="flex items-center space-x-2 mb-4">
+                    <Switch 
+                      checked={autoPublishNewVersions}
+                      onCheckedChange={setAutoPublishNewVersions}
+                      id="auto-publish"
+                    />
+                    <Label htmlFor="auto-publish">Automatically publish new versions of selected applications</Label>
+                  </div>
+                  
+                  {autoPublishNewVersions && (
+                    <div className="ml-8 space-y-4">
+                      <RadioGroup 
+                        value={publishScheduleOption} 
+                        onValueChange={(v) => setPublishScheduleOption(v as "wheneverReleased" | "schedule")}
+                        className="space-y-2"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="wheneverReleased" id="wheneverReleased" />
+                          <Label htmlFor="wheneverReleased">Publish whenever new versions are released</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="schedule" id="schedule" />
+                          <Label htmlFor="schedule">Publish on schedule</Label>
+                        </div>
+                      </RadioGroup>
+                      
+                      {publishScheduleOption === "schedule" && (
+                        <div className="ml-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className={cn(
+                              "block text-sm font-medium mb-1",
+                              isDarkTheme ? "text-gray-300" : "text-gray-700"
+                            )}>
+                              Frequency:
+                            </label>
+                            <Select value={frequency} onValueChange={(v) => setFrequency(v as "hourly" | "daily" | "weekly")}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="hourly">Hourly</SelectItem>
+                                <SelectItem value="daily">Daily</SelectItem>
+                                <SelectItem value="weekly">Weekly</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <label className={cn(
+                              "block text-sm font-medium mb-1",
+                              isDarkTheme ? "text-gray-300" : "text-gray-700"
+                            )}>
+                              Start time:
+                            </label>
+                            <Input
+                              type="time"
+                              value={startTime}
+                              onChange={(e) => setStartTime(e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+                
+                <div>
+                  <h4 className="text-base font-medium mb-3">Application inclusion/exclusion policy</h4>
+                  <div className="flex items-center space-x-2 mb-4">
+                    <Switch 
+                      checked={addNewlyInstalled}
+                      onCheckedChange={setAddNewlyInstalled}
+                      id="add-new"
+                    />
+                    <Label htmlFor="add-new">Automatically add newly installed applications to publish task</Label>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="text-base font-medium mb-3">Cleanup policy</h4>
+                  <div className="flex items-center gap-2">
+                    <label className={cn(
+                      "whitespace-nowrap text-sm font-medium",
+                      isDarkTheme ? "text-gray-300" : "text-gray-700"
+                    )}>
+                      Delete inactive applications after
+                    </label>
+                    <Input
+                      type="number"
+                      className="w-20"
+                      value={cleanupDays}
+                      onChange={(e) => setCleanupDays(e.target.value)}
+                      min="1"
+                    />
+                    <span>days</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {currentStep === "review" && (
+            <div>
+              <h3 className="text-lg font-medium mb-4">Review & Save</h3>
+              <div className={cn(
+                "rounded-lg border",
+                isDarkTheme ? "border-gray-700" : "border-gray-200"
+              )}>
+                <div className={cn(
+                  "p-4 font-medium border-b",
+                  isDarkTheme ? "bg-gray-700 border-gray-600" : "bg-gray-100 border-gray-200"
+                )}>
+                  Summary
+                </div>
+                <div className="p-4 space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm font-medium">Task Name</p>
+                      <p className={cn(
+                        "mt-1",
+                        isDarkTheme ? "text-gray-400" : "text-gray-600"
+                      )}>
+                        {taskName || "My Task 1"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Task Type</p>
+                      <p className={cn(
+                        "mt-1",
+                        isDarkTheme ? "text-gray-400" : "text-gray-600"
+                      )}>
+                        Updates Deployment
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Applications</p>
+                      <p className={cn(
+                        "mt-1",
+                        isDarkTheme ? "text-gray-400" : "text-gray-600"
+                      )}>
+                        {applications.length > 0 
+                          ? applications.map(app => app.applicationName).join(", ")
+                          : "No applications selected"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Deployment Type</p>
+                      <p className={cn(
+                        "mt-1",
+                        isDarkTheme ? "text-gray-400" : "text-gray-600"
+                      )}>
+                        {deploymentType === "publishOnly" ? "Publish Only" : "Automate Assignment"}
+                      </p>
+                    </div>
+                    {deploymentType === "automateAssignment" && (
+                      <div>
+                        <p className="text-sm font-medium">Assignment Groups</p>
+                        <p className={cn(
+                          "mt-1",
+                          isDarkTheme ? "text-gray-400" : "text-gray-600"
+                        )}>
+                          {assignmentGroups.length > 0 
+                            ? assignmentGroups.map(group => `${group.groupName} (${group.type})`).join(", ")
+                            : "No assignment groups added"}
+                        </p>
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-sm font-medium">Installation Behavior</p>
+                      <p className={cn(
+                        "mt-1",
+                        isDarkTheme ? "text-gray-400" : "text-gray-600"
+                      )}>
+                        {installationBehavior === "skipIfRunning" && "Skip installation when application is running"}
+                        {installationBehavior === "notifyUser" && "Notify users and allow them to postpone installation"}
+                        {installationBehavior === "forceClose" && "Force close running applications during installation"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="flex justify-between mt-6">
+          <Button 
+            variant="outline" 
+            className="flex items-center gap-1"
+            onClick={handleCancel}
+          >
+            <X className="h-4 w-4" />
+            Cancel
+          </Button>
+          
+          <div className="flex gap-2">
+            {currentStep !== "selectApplications" && (
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-1"
+                onClick={handleBack}
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back
+              </Button>
+            )}
+            
+            {currentStep !== "review" ? (
+              <Button 
+                className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600"
+                onClick={handleNext}
+                disabled={currentStep === "selectApplications" && applications.length === 0}
+              >
+                Next
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            ) : (
+              <Button 
+                className="flex items-center gap-1 bg-green-500 hover:bg-green-600"
+                onClick={handleCreateTask}
+              >
+                <Check className="h-4 w-4" />
+                Create Task
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Dialogs */}
+      <Dialog open={showAddApplicationsDialog} onOpenChange={setShowAddApplicationsDialog}>
+        <DialogContent className={cn(
+          "max-w-3xl",
+          isDarkTheme ? "bg-gray-800 text-white" : "bg-white"
+        )}>
+          <DialogTitle>Add Applications</DialogTitle>
+          <div className="mb-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search applications..."
+                className="pl-9"
+              />
+            </div>
+          </div>
+          
+          <div className={cn(
+            "overflow-hidden rounded-lg border", 
+            isDarkTheme ? "border-gray-700" : "border-gray-200"
+          )}>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className={cn(
+                isDarkTheme ? "bg-gray-700" : "bg-gray-100"
+              )}>
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Application Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Vendor
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Latest Version
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Category
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className={cn(
+                "divide-y",
+                isDarkTheme ? "divide-gray-700 bg-gray-800" : "divide-gray-200 bg-white"
+              )}>
+                {filteredApplications.length > 0 ? (
+                  filteredApplications.map((app, index) => (
+                    <tr key={index} className={isDarkTheme ? "hover:bg-gray-750" : "hover:bg-gray-50"}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <img src="/src/resources/2chrome.png" alt="" className="w-6 h-6" />
+                          {app.applicationName}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">{app.vendor}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{app.version}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+                          {app.category}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleAddApplication(app)}
+                          className="text-blue-500 hover:text-blue-700"
+                          disabled={applications.some(a => a.applicationName === app.applicationName)}
+                        >
+                          {applications.some(a => a.applicationName === app.applicationName) 
+                            ? "Added" 
+                            : "Add"}
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={5} className="px-6 py-4 text-center">
+                      No applications found matching the search criteria.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {customizeApp && (
+        <CustomizeApplicationDialog
+          open={showCustomizeDialog}
+          onOpenChange={setShowCustomizeDialog}
+          applicationData={customizeApp}
+          onSave={(customizedData) => {
+            // Update application with customized data
+            const updatedApplications = applications.map(app => {
+              if (app.applicationName === customizedData.applicationName) {
+                return {
+                  ...app,
+                  description: customizedData.description,
+                  category: customizedData.category[0] || app.category,
+                  vendor: customizedData.publisher,
+                  informationUrl: customizedData.informationUrl,
+                  privacyUrl: customizedData.privacyUrl,
+                  developer: customizedData.developer,
+                  owner: customizedData.owner,
+                  notes: customizedData.notes,
+                  featured: customizedData.featured
+                };
+              }
+              return app;
+            });
+            
+            setApplications(updatedApplications);
+            setCustomizeApp(null);
+          }}
+          isDarkTheme={isDarkTheme}
+        />
+      )}
+
+      <AddAssignmentGroupDialog
+        open={showAddAssignmentDialog}
+        onOpenChange={setShowAddAssignmentDialog}
+        onSave={handleSaveAssignmentGroup}
+        isDarkTheme={isDarkTheme}
+        assignmentType={currentAssignmentType}
+      />
+    </div>
+  );
+};
+
+export default PublishTaskWizard;
