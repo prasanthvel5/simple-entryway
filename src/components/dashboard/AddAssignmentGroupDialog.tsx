@@ -1,3 +1,4 @@
+
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -12,6 +13,7 @@ interface AddAssignmentGroupDialogProps {
   onOpenChange: (open: boolean) => void;
   isDarkTheme: boolean;
   onSave: (groupData: AssignmentGroupData) => void;
+  assignmentType?: "Required" | "Available";
 }
 
 interface Language {
@@ -64,7 +66,8 @@ export const AddAssignmentGroupDialog = ({
   open,
   onOpenChange,
   isDarkTheme,
-  onSave
+  onSave,
+  assignmentType = "Required"
 }: AddAssignmentGroupDialogProps) => {
   const [groupData, setGroupData] = React.useState<AssignmentGroupData>({
     scopeTags: [],
@@ -121,13 +124,16 @@ export const AddAssignmentGroupDialog = ({
     }
   };
 
+  // Use assignmentType in the UI if needed
+  const dialogTitle = `Add ${assignmentType || 'Required'} Assignment Group`;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className={cn(
         "max-w-2xl max-h-[90vh] overflow-y-auto p-6",
         isDarkTheme ? "bg-gray-800 text-white border-gray-700" : "bg-white border-gray-200"
       )}>
-        <DialogTitle className="text-xl font-semibold text-blue-500 mb-6">Add Assignment Group</DialogTitle>
+        <DialogTitle className="text-xl font-semibold text-blue-500 mb-6">{dialogTitle}</DialogTitle>
         
         <div className="space-y-6 overflow-y-auto pr-2">
           <div className="grid grid-cols-[180px_1fr] items-start gap-4">
