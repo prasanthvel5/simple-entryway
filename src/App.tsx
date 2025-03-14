@@ -8,7 +8,6 @@ import Index from "./pages/Index";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import PublishTaskWizard from "./pages/PublishTaskWizard";
-import PublishedTask from "./pages/PublishedTask";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,7 +23,6 @@ const App = () => (
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="publish-task-wizard" element={<PublishTaskWizard />} />
-            <Route path="published-task" element={<PublishedTask />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
