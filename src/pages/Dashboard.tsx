@@ -27,6 +27,9 @@ const Dashboard = () => {
     if (location.pathname.includes('publish-task-wizard')) {
       setActiveMenu("intune");
       setActiveSecondLevel("Published Task");
+    } else if (location.pathname.includes('published-task')) {
+      setActiveMenu("intune");
+      setActiveSecondLevel("Published Task");
     }
   }, [location.pathname]);
 
@@ -52,10 +55,15 @@ const Dashboard = () => {
   const handleSecondLevelSelect = (item: string) => {
     setActiveSecondLevel(item);
     
-    // When "Published Task" is selected from Intune menu, navigate to the publish-task-wizard
+    // When "Published Task" is selected from Intune menu, navigate to the published-task page
     if (activeMenu === "intune" && item === "Published Task") {
-      if (!location.pathname.includes('publish-task-wizard')) {
-        navigate('/dashboard/publish-task-wizard');
+      if (!location.pathname.includes('published-task')) {
+        navigate('/dashboard/published-task');
+      }
+    } else if (activeMenu === "intune" && item === "Updates Catalog") {
+      // Reset the path when selecting Updates Catalog
+      if (location.pathname !== '/dashboard') {
+        navigate('/dashboard');
       }
     }
   };
@@ -89,8 +97,10 @@ const Dashboard = () => {
             />
           )}
           
-          {/* Always use Outlet for nested routes */}
+          {/* Use Outlet for nested routes */}
           {location.pathname.includes('publish-task-wizard') ? (
+            <Outlet context={{ isDarkTheme, activeMenu, activeSecondLevel }} />
+          ) : location.pathname.includes('published-task') ? (
             <Outlet context={{ isDarkTheme, activeMenu, activeSecondLevel }} />
           ) : (
             <MainContent 
