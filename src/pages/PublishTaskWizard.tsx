@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useOutletContext, useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -100,7 +99,6 @@ const PublishTaskWizard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Single declaration for each state variable
   const [currentStep, setCurrentStep] = useState<WizardStep>("selectApplications");
   const [applications, setApplications] = useState<Application[]>([]);
   const [taskName, setTaskName] = useState<string>("");
@@ -120,15 +118,12 @@ const PublishTaskWizard = () => {
   const [addNewlyInstalled, setAddNewlyInstalled] = useState<boolean>(false);
   const [cleanupDays, setCleanupDays] = useState<string>("60");
 
-  // Installation settings state
   const [installationBehavior, setInstallationBehavior] = useState("skipIfRunning");
   const [showNotificationSettings, setShowNotificationSettings] = useState(false);
   const [postponeAttempts, setPostponeAttempts] = useState("5");
   const [postponeNotificationTime, setPostponeNotificationTime] = useState("10");
   const [noResponseAction, setNoResponseAction] = useState("forceClose");
 
-  
-  // Notification customization state
   const [organizationLogo, setOrganizationLogo] = useState<File | null>(null);
   const [selectedLanguage, setSelectedLanguage] = useState("English");
   const [notificationCustomizations, setNotificationCustomizations] = useState<Record<string, NotificationCustomization>>({
@@ -164,7 +159,6 @@ const PublishTaskWizard = () => {
     }
   });
 
-  // Publish settings state
   const [publishSchedule, setPublishSchedule] = useState<"immediate" | "scheduled">("immediate");
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [showEndUserNotifications, setShowEndUserNotifications] = useState<boolean>(true);
@@ -380,7 +374,6 @@ const PublishTaskWizard = () => {
     return assignmentGroups.filter(group => group.type === type);
   };
 
-  // Add a new handleCreateTask function
   const handleCreateTask = () => {
     const currentDate = new Date();
     const tomorrow = new Date(currentDate);
@@ -419,21 +412,17 @@ const PublishTaskWizard = () => {
       remarks: "All updates has been published successfully"
     };
     
-    // Save to localStorage
     const existingTasks = JSON.parse(localStorage.getItem('publishTasks') || '[]');
     localStorage.setItem('publishTasks', JSON.stringify([...existingTasks, newTask]));
     
-    // Show toast
     toast({
       title: "Task Created Successfully",
       description: `Task "${newTask.taskName}" has been created and published.`,
     });
     
-    // Navigate back to dashboard
     navigate('/dashboard');
   };
-  
-  // Helper function to format time
+
   const formatTime = (date: Date): string => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
@@ -842,7 +831,6 @@ const PublishTaskWizard = () => {
 
           {currentStep === "installationSettings" && (
             <div>
-              {/* Add installation settings UI here */}
               <h3 className="text-lg font-medium mb-4">Installation Settings</h3>
               <div className="space-y-6">
                 {/* Installation behavior settings */}
@@ -852,7 +840,6 @@ const PublishTaskWizard = () => {
 
           {currentStep === "publishSettings" && (
             <div>
-              {/* Add publish settings UI here */}
               <h3 className="text-lg font-medium mb-4">Publish Settings</h3>
               <div className="space-y-6">
                 {/* Publish schedule settings */}
@@ -862,7 +849,6 @@ const PublishTaskWizard = () => {
 
           {currentStep === "review" && (
             <div>
-              {/* Add review UI here */}
               <h3 className="text-lg font-medium mb-4">Review & Save</h3>
               <div className="space-y-6">
                 {/* Task review summary */}
@@ -915,7 +901,6 @@ const PublishTaskWizard = () => {
         </div>
       </div>
 
-      {/* Add Applications Dialog */}
       <Dialog open={showAddApplicationsDialog} onOpenChange={setShowAddApplicationsDialog}>
         <DialogContent className="sm:max-w-[800px]">
           <DialogTitle>Add Applications</DialogTitle>
@@ -981,41 +966,37 @@ const PublishTaskWizard = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Customize Application Dialog */}
-      {customizeApp && (
-        <CustomizeApplicationDialog
-          open={showCustomizeDialog}
-          onOpenChange={setShowCustomizeDialog}
-          data={customizeApp}
-          onSave={(data) => {
-            // Handle saving customized app data
-            const updatedApps = applications.map(app => 
-              app.applicationName === data.applicationName
-                ? {
-                    ...app,
-                    description: data.description,
-                    category: data.category[0] || app.category,
-                    vendor: data.publisher,
-                    informationUrl: data.informationUrl,
-                    privacyUrl: data.privacyUrl,
-                    developer: data.developer,
-                    owner: data.owner,
-                    notes: data.notes,
-                    featured: data.featured
-                  }
-                : app
-            );
-            setApplications(updatedApps);
-            setShowCustomizeDialog(false);
-          }}
-        />
-      )}
+      <CustomizeApplicationDialog
+        open={showCustomizeDialog}
+        onOpenChange={setShowCustomizeDialog}
+        applicationData={customizeApp}
+        isDarkTheme={isDarkTheme}
+        onSave={(data) => {
+          const updatedApps = applications.map(app => 
+            app.applicationName === data.applicationName
+              ? {
+                  ...app,
+                  description: data.description,
+                  category: data.category[0] || app.category,
+                  vendor: data.publisher,
+                  informationUrl: data.informationUrl,
+                  privacyUrl: data.privacyUrl,
+                  developer: data.developer,
+                  owner: data.owner,
+                  notes: data.notes,
+                  featured: data.featured
+                }
+              : app
+          );
+          setApplications(updatedApps);
+          setShowCustomizeDialog(false);
+        }}
+      />
 
-      {/* Add Assignment Group Dialog */}
       <AddAssignmentGroupDialog
         open={showAddAssignmentDialog}
         onOpenChange={setShowAddAssignmentDialog}
-        type={currentAssignmentType}
+        isDarkTheme={isDarkTheme}
         onSave={handleSaveAssignmentGroup}
       />
     </div>
