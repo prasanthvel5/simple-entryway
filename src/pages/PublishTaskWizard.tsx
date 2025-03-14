@@ -969,7 +969,7 @@ const PublishTaskWizard = () => {
       <CustomizeApplicationDialog
         open={showCustomizeDialog}
         onOpenChange={setShowCustomizeDialog}
-        applicationData={customizeApp}
+        application={customizeApp}
         isDarkTheme={isDarkTheme}
         onSave={(data) => {
           const updatedApps = applications.map(app => 
