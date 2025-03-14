@@ -13,6 +13,7 @@ import { FirstLevelMenu } from "@/components/dashboard/FirstLevelMenu";
 import { TopBar } from "@/components/dashboard/TopBar";
 import { SecondLevelMenu } from "@/components/dashboard/SecondLevelMenu";
 import { MainContent } from "@/components/dashboard/MainContent";
+import PublishedTask from "./PublishedTask";
 
 const Dashboard = () => {
   const [activeMenu, setActiveMenu] = useState("home");
@@ -52,13 +53,13 @@ const Dashboard = () => {
   const handleSecondLevelSelect = (item: string) => {
     setActiveSecondLevel(item);
     
-    // When "Published Task" is selected from Intune menu, navigate to the publish-task-wizard
+    // When "Published Task" is selected from Intune menu, navigate to the published task view
     if (activeMenu === "intune" && item === "Published Task") {
-      if (!location.pathname.includes('publish-task-wizard')) {
-        navigate('/dashboard/publish-task-wizard');
-      }
+      navigate('/dashboard');
     }
   };
+
+  const shouldShowPublishedTask = activeMenu === "intune" && activeSecondLevel === "Published Task" && !location.pathname.includes('publish-task-wizard');
 
   return (
     <div className="min-h-screen flex">
@@ -89,8 +90,9 @@ const Dashboard = () => {
             />
           )}
           
-          {/* Always use Outlet for nested routes */}
-          {location.pathname.includes('publish-task-wizard') ? (
+          {shouldShowPublishedTask ? (
+            <PublishedTask isDarkTheme={isDarkTheme} />
+          ) : location.pathname.includes('publish-task-wizard') ? (
             <Outlet context={{ isDarkTheme, activeMenu, activeSecondLevel }} />
           ) : (
             <MainContent 
@@ -106,3 +108,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
