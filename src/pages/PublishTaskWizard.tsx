@@ -716,14 +716,14 @@ const PublishTaskWizard = () => {
                                   <tr key={group.id} className={isDarkTheme ? "hover:bg-gray-750" : "hover:bg-gray-50"}>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.groupMode}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.groupName}</td>
-                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterMode.substring(0, 20)}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterMode.substring(0, 20)}...</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterName}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.appAvailability}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.installationDeadline}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.restartGracePeriod}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">
-                                      <Button
-                                        variant="ghost"
+                                      <Button 
+                                        variant="ghost" 
                                         size="xs"
                                         onClick={() => handleDeleteAssignmentGroup(group.id)}
                                         className="text-red-500 hover:text-red-700"
@@ -735,8 +735,8 @@ const PublishTaskWizard = () => {
                                 ))
                               ) : (
                                 <tr>
-                                  <td colSpan={8} className="px-4 py-3 text-center">
-                                    No assignment groups added.
+                                  <td colSpan={8} className="px-4 py-4 text-center text-sm">
+                                    No assignment groups added. Click "Add Assignment group" to add a group.
                                   </td>
                                 </tr>
                               )}
@@ -803,14 +803,14 @@ const PublishTaskWizard = () => {
                                   <tr key={group.id} className={isDarkTheme ? "hover:bg-gray-750" : "hover:bg-gray-50"}>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.groupMode}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.groupName}</td>
-                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterMode.substring(0, 20)}</td>
+                                    <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterMode.substring(0, 20)}...</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.filterName}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.appAvailability}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.installationDeadline}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">{group.restartGracePeriod}</td>
                                     <td className="px-4 py-3 whitespace-nowrap text-sm">
-                                      <Button
-                                        variant="ghost"
+                                      <Button 
+                                        variant="ghost" 
                                         size="xs"
                                         onClick={() => handleDeleteAssignmentGroup(group.id)}
                                         className="text-red-500 hover:text-red-700"
@@ -822,8 +822,8 @@ const PublishTaskWizard = () => {
                                 ))
                               ) : (
                                 <tr>
-                                  <td colSpan={8} className="px-4 py-3 text-center">
-                                    No assignment groups added.
+                                  <td colSpan={8} className="px-4 py-4 text-center text-sm">
+                                    No assignment groups added. Click "Add Assignment group" to add a group.
                                   </td>
                                 </tr>
                               )}
@@ -842,83 +842,80 @@ const PublishTaskWizard = () => {
             <div>
               <h3 className="text-lg font-medium mb-4">Installation Settings</h3>
               <div className={cn(
-                "p-6 rounded-lg border space-y-6",
+                "p-6 rounded-lg border",
                 isDarkTheme ? "border-gray-700 bg-gray-750" : "border-gray-200 bg-gray-50"
               )}>
-                <div>
-                  <h4 className="text-base font-medium mb-3">Installation Behavior</h4>
-                  <RadioGroup 
-                    defaultValue={installationBehavior} 
-                    onValueChange={setInstallationBehavior}
-                    className="space-y-2"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="skipIfRunning" id="skipIfRunning" />
-                      <Label htmlFor="skipIfRunning">Skip installation when application is running</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="notifyUser" id="notifyUser" />
-                      <Label htmlFor="notifyUser">Notify users and allow them to postpone installation</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="forceClose" id="forceClose" />
-                      <Label htmlFor="forceClose">Force close running applications during installation</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-
-                {installationBehavior === "notifyUser" && (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-base font-medium">Notification Settings</h4>
-                      <Switch 
-                        checked={showNotificationSettings}
-                        onCheckedChange={setShowNotificationSettings}
-                      />
-                    </div>
-                    
-                    {showNotificationSettings && (
-                      <div className={cn(
-                        "p-4 rounded border",
-                        isDarkTheme ? "border-gray-600 bg-gray-800" : "border-gray-300 bg-gray-50"
-                      )}>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-base font-medium mb-3">Installation behavior:</p>
+                    <RadioGroup 
+                      value={installationBehavior} 
+                      onValueChange={setInstallationBehavior}
+                      className="space-y-2"
+                    >
+                      <div className="flex items-start space-x-2">
+                        <RadioGroupItem value="skipIfRunning" id="skipIfRunning" />
+                        <div>
+                          <Label htmlFor="skipIfRunning" className="font-medium">Skip installation if application is running</Label>
+                          <p className="text-sm text-gray-500">The installation will be skipped if the application is currently in use by the end user.</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-2">
+                        <RadioGroupItem value="waitAndNotify" id="waitAndNotify" />
+                        <div>
+                          <Label htmlFor="waitAndNotify" className="font-medium">Wait and notify end user</Label>
+                          <p className="text-sm text-gray-500">Show a notification to the user and allow them to postpone the installation.</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-2">
+                        <RadioGroupItem value="forceClose" id="forceClose" />
+                        <div>
+                          <Label htmlFor="forceClose" className="font-medium">Force close application</Label>
+                          <p className="text-sm text-gray-500">Automatically close the application and proceed with installation (warning: may cause unsaved work to be lost).</p>
+                        </div>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                  
+                  {installationBehavior === "waitAndNotify" && (
+                    <div className="space-y-4 pl-6 border-l-2 border-blue-200">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">Show notification settings</span>
+                        <Switch 
+                          checked={showNotificationSettings} 
+                          onCheckedChange={setShowNotificationSettings} 
+                        />
+                      </div>
+                      
+                      {showNotificationSettings && (
+                        <div className="space-y-4">
                           <div>
-                            <label className={cn(
-                              "block text-sm font-medium mb-1",
-                              isDarkTheme ? "text-gray-300" : "text-gray-700"
-                            )}>
-                              Maximum allowed postpone attempts:
-                            </label>
+                            <Label htmlFor="postponeAttempts" className="text-sm">Maximum postpone attempts</Label>
                             <Select 
                               value={postponeAttempts} 
                               onValueChange={setPostponeAttempts}
                             >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
+                              <SelectTrigger id="postponeAttempts" className="w-full max-w-xs">
+                                <SelectValue placeholder="Select maximum attempts" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="1">1</SelectItem>
-                                <SelectItem value="2">2</SelectItem>
-                                <SelectItem value="3">3</SelectItem>
-                                <SelectItem value="5">5</SelectItem>
-                                <SelectItem value="10">10</SelectItem>
+                                <SelectItem value="1">1 attempt</SelectItem>
+                                <SelectItem value="3">3 attempts</SelectItem>
+                                <SelectItem value="5">5 attempts</SelectItem>
+                                <SelectItem value="10">10 attempts</SelectItem>
+                                <SelectItem value="unlimited">Unlimited</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
+                          
                           <div>
-                            <label className={cn(
-                              "block text-sm font-medium mb-1",
-                              isDarkTheme ? "text-gray-300" : "text-gray-700"
-                            )}>
-                              Maximum postpone notification time (minutes):
-                            </label>
+                            <Label htmlFor="postponeTime" className="text-sm">Postpone notification time (minutes)</Label>
                             <Select 
                               value={postponeNotificationTime} 
                               onValueChange={setPostponeNotificationTime}
                             >
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
+                              <SelectTrigger id="postponeTime" className="w-full max-w-xs">
+                                <SelectValue placeholder="Select time" />
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="5">5 minutes</SelectItem>
@@ -929,32 +926,128 @@ const PublishTaskWizard = () => {
                               </SelectContent>
                             </Select>
                           </div>
+                          
+                          <div>
+                            <Label htmlFor="noResponseAction" className="text-sm">Action when user doesn't respond</Label>
+                            <Select 
+                              value={noResponseAction} 
+                              onValueChange={setNoResponseAction}
+                            >
+                              <SelectTrigger id="noResponseAction" className="w-full max-w-xs">
+                                <SelectValue placeholder="Select action" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="wait">Wait indefinitely</SelectItem>
+                                <SelectItem value="postpone">Automatically postpone</SelectItem>
+                                <SelectItem value="forceClose">Force close application</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
                         </div>
-                        <div>
-                          <label className={cn(
-                            "block text-sm font-medium mb-1",
-                            isDarkTheme ? "text-gray-300" : "text-gray-700"
-                          )}>
-                            No response action:
-                          </label>
+                      )}
+                    </div>
+                  )}
+                  
+                  <div className="pt-4">
+                    <p className="text-base font-medium mb-3">End-user notification customization:</p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <div className="mb-4">
+                          <Label htmlFor="logoUpload" className="block text-sm font-medium mb-1">Organization logo</Label>
+                          <div className="flex items-center gap-2">
+                            <Button 
+                              type="button" 
+                              variant="outline" 
+                              size="sm" 
+                              className="flex items-center gap-1"
+                              onClick={() => document.getElementById('logoUpload')?.click()}
+                            >
+                              <Upload className="h-4 w-4" />
+                              Upload Logo
+                            </Button>
+                            <input
+                              id="logoUpload"
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={handleLogoUpload}
+                            />
+                            {organizationLogo && (
+                              <div className="flex items-center gap-1 text-sm">
+                                <img 
+                                  src={URL.createObjectURL(organizationLogo)} 
+                                  alt="Logo Preview" 
+                                  className="w-6 h-6 rounded"
+                                />
+                                <span className="text-gray-500">{organizationLogo.name}</span>
+                                <Button 
+                                  type="button" 
+                                  variant="ghost" 
+                                  size="xs"
+                                  onClick={() => setOrganizationLogo(null)}
+                                  className="text-red-500 hover:text-red-700 h-auto p-1"
+                                >
+                                  <X className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div className="mb-4">
+                          <Label htmlFor="notificationLanguage" className="block text-sm font-medium mb-1">Language</Label>
                           <Select 
-                            value={noResponseAction} 
-                            onValueChange={setNoResponseAction}
+                            value={selectedLanguage} 
+                            onValueChange={setSelectedLanguage}
                           >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select" />
+                            <SelectTrigger id="notificationLanguage" className="w-full">
+                              <SelectValue placeholder="Select language" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="skip">Skip installation</SelectItem>
-                              <SelectItem value="retry">Retry later</SelectItem>
-                              <SelectItem value="forceClose">Force close application and install</SelectItem>
+                              {Object.keys(notificationCustomizations).map(lang => (
+                                <SelectItem key={lang} value={lang}>{lang}</SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </div>
+                        
+                        <div className="mb-4">
+                          <Label htmlFor="notificationTitle" className="block text-sm font-medium mb-1">Notification title</Label>
+                          <Input
+                            id="notificationTitle"
+                            value={notificationCustomizations[selectedLanguage].title}
+                            onChange={(e) => handleNotificationCustomization(selectedLanguage, "title", e.target.value)}
+                            className="w-full"
+                          />
+                          <p className="text-xs text-gray-500 mt-1">
+                            Use {"{organizationName}"} and {"{productName}"} as placeholders
+                          </p>
+                        </div>
+                        
+                        <div className="mb-4">
+                          <Label htmlFor="notificationMessage" className="block text-sm font-medium mb-1">Notification message</Label>
+                          <Textarea
+                            id="notificationMessage"
+                            value={notificationCustomizations[selectedLanguage].message}
+                            onChange={(e) => handleNotificationCustomization(selectedLanguage, "message", e.target.value)}
+                            className="w-full h-24"
+                          />
+                          <p className="text-xs text-gray-500 mt-1">
+                            Use {"{organizationName}"} and {"{productName}"} as placeholders
+                          </p>
+                        </div>
                       </div>
-                    )}
+                      
+                      <div>
+                        <div className="mb-2">
+                          <Label className="block text-sm font-medium mb-1">Preview</Label>
+                        </div>
+                        {getNotificationPreview(isDarkTheme)}
+                      </div>
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
             </div>
           )}
@@ -963,211 +1056,394 @@ const PublishTaskWizard = () => {
             <div>
               <h3 className="text-lg font-medium mb-4">Publish Settings</h3>
               <div className={cn(
-                "p-6 rounded-lg border space-y-6",
+                "p-6 rounded-lg border",
                 isDarkTheme ? "border-gray-700 bg-gray-750" : "border-gray-200 bg-gray-50"
               )}>
-                <div>
-                  <h4 className="text-base font-medium mb-3">Auto-publish new versions</h4>
-                  <div className="flex items-center space-x-2 mb-4">
-                    <Switch 
-                      checked={autoPublishNewVersions}
-                      onCheckedChange={setAutoPublishNewVersions}
-                      id="auto-publish"
-                    />
-                    <Label htmlFor="auto-publish">Automatically publish new versions of selected applications</Label>
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-base font-medium mb-3">Publish schedule:</p>
+                    <RadioGroup 
+                      value={publishSchedule} 
+                      onValueChange={(v) => setPublishSchedule(v as "immediate" | "scheduled")}
+                      className="space-y-2"
+                    >
+                      <div className="flex items-start space-x-2">
+                        <RadioGroupItem value="immediate" id="immediate" />
+                        <div>
+                          <Label htmlFor="immediate" className="font-medium">Publish immediately</Label>
+                          <p className="text-sm text-gray-500">Deploy the applications right after creating this task.</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-2">
+                        <RadioGroupItem value="scheduled" id="scheduled" />
+                        <div>
+                          <Label htmlFor="scheduled" className="font-medium">Schedule for later</Label>
+                          <p className="text-sm text-gray-500">Set a specific date and time to publish these applications.</p>
+                        </div>
+                      </div>
+                    </RadioGroup>
                   </div>
                   
-                  {autoPublishNewVersions && (
-                    <div className="ml-8 space-y-4">
-                      <RadioGroup 
-                        value={publishScheduleOption} 
-                        onValueChange={(v) => setPublishScheduleOption(v as "wheneverReleased" | "schedule")}
-                        className="space-y-2"
-                      >
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="wheneverReleased" id="wheneverReleased" />
-                          <Label htmlFor="wheneverReleased">Publish whenever new versions are released</Label>
+                  {publishSchedule === "scheduled" && (
+                    <div className="space-y-3 pl-6 border-l-2 border-blue-200">
+                      <div>
+                        <Label htmlFor="scheduleDate" className="block text-sm font-medium mb-1">Schedule date and time</Label>
+                        <Input
+                          id="scheduleDate"
+                          type="datetime-local"
+                          value={selectedDate}
+                          onChange={(e) => setSelectedDate(e.target.value)}
+                          className="w-full max-w-xs"
+                        />
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-base font-medium">Automate publishing for new versions:</p>
+                      <Switch 
+                        checked={autoPublishNewVersions} 
+                        onCheckedChange={setAutoPublishNewVersions} 
+                      />
+                    </div>
+                    
+                    {autoPublishNewVersions && (
+                      <div className="space-y-4 pl-6 border-l-2 border-blue-200">
+                        <div>
+                          <p className="text-sm font-medium mb-2">When to publish new versions:</p>
+                          <RadioGroup 
+                            value={publishScheduleOption} 
+                            onValueChange={(v) => setPublishScheduleOption(v as "wheneverReleased" | "schedule")}
+                            className="space-y-2"
+                          >
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="wheneverReleased" id="wheneverReleased" />
+                              <Label htmlFor="wheneverReleased">Whenever new versions are released</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="schedule" id="schedulePublish" />
+                              <Label htmlFor="schedulePublish">On a schedule</Label>
+                            </div>
+                          </RadioGroup>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="schedule" id="schedule" />
-                          <Label htmlFor="schedule">Publish on schedule</Label>
-                        </div>
-                      </RadioGroup>
-                      
-                      {publishScheduleOption === "schedule" && (
-                        <div className="ml-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <label className={cn(
-                              "block text-sm font-medium mb-1",
-                              isDarkTheme ? "text-gray-300" : "text-gray-700"
-                            )}>
-                              Frequency:
-                            </label>
-                            <Select value={frequency} onValueChange={(v) => setFrequency(v as "hourly" | "daily" | "weekly")}>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="hourly">Hourly</SelectItem>
-                                <SelectItem value="daily">Daily</SelectItem>
-                                <SelectItem value="weekly">Weekly</SelectItem>
-                              </SelectContent>
-                            </Select>
+                        
+                        {publishScheduleOption === "schedule" && (
+                          <div className="space-y-3">
+                            <div>
+                              <Label htmlFor="frequency" className="block text-sm font-medium mb-1">Check frequency</Label>
+                              <Select 
+                                value={frequency} 
+                                onValueChange={(v) => setFrequency(v as "hourly" | "daily" | "weekly")}
+                              >
+                                <SelectTrigger id="frequency" className="w-full max-w-xs">
+                                  <SelectValue placeholder="Select frequency" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="hourly">Hourly</SelectItem>
+                                  <SelectItem value="daily">Daily</SelectItem>
+                                  <SelectItem value="weekly">Weekly</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            
+                            <div>
+                              <Label htmlFor="startTime" className="block text-sm font-medium mb-1">Start time</Label>
+                              <Input
+                                id="startTime"
+                                type="time"
+                                value={startTime}
+                                onChange={(e) => setStartTime(e.target.value)}
+                                className="w-full max-w-xs"
+                              />
+                            </div>
                           </div>
+                        )}
+                        
+                        <div className="space-y-3 pt-2">
+                          <div className="flex items-center justify-between">
+                            <p className="text-sm font-medium">Add newly installed applications to auto-publish task:</p>
+                            <Switch 
+                              checked={addNewlyInstalled} 
+                              onCheckedChange={setAddNewlyInstalled} 
+                            />
+                          </div>
+                          
                           <div>
-                            <label className={cn(
-                              "block text-sm font-medium mb-1",
-                              isDarkTheme ? "text-gray-300" : "text-gray-700"
-                            )}>
-                              Start time:
-                            </label>
+                            <Label htmlFor="cleanupDays" className="block text-sm font-medium mb-1">
+                              Cleanup superseded applications after (days):
+                            </Label>
                             <Input
-                              type="time"
-                              value={startTime}
-                              onChange={(e) => setStartTime(e.target.value)}
+                              id="cleanupDays"
+                              type="number"
+                              min="0"
+                              max="365"
+                              value={cleanupDays}
+                              onChange={(e) => setCleanupDays(e.target.value)}
+                              className="w-28"
                             />
                           </div>
                         </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <p className="text-base font-medium mb-3">End-user experience:</p>
+                    
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">Show notifications to end users</p>
+                          <p className="text-sm text-gray-500">Let users know when applications are being updated</p>
+                        </div>
+                        <Switch 
+                          checked={showEndUserNotifications} 
+                          onCheckedChange={setShowEndUserNotifications} 
+                        />
+                      </div>
+                      
+                      {showEndUserNotifications && (
+                        <div className="space-y-3 pl-6 border-l-2 border-blue-200">
+                          <div className="flex items-center justify-between">
+                            <p className="text-sm font-medium">Use custom message for all applications:</p>
+                            <Switch 
+                              checked={useCustomMessage} 
+                              onCheckedChange={setUseCustomMessage} 
+                            />
+                          </div>
+                          
+                          {useCustomMessage && (
+                            <div>
+                              <Label htmlFor="customMessage" className="block text-sm font-medium mb-1">Custom message:</Label>
+                              <Textarea
+                                id="customMessage"
+                                value={customMessage}
+                                onChange={(e) => setCustomMessage(e.target.value)}
+                                placeholder="Enter a custom message that will be shown to users when applications are updated."
+                                className="w-full h-24"
+                              />
+                            </div>
+                          )}
+                        </div>
                       )}
                     </div>
-                  )}
-                </div>
-                
-                <div>
-                  <h4 className="text-base font-medium mb-3">Application inclusion/exclusion policy</h4>
-                  <div className="flex items-center space-x-2 mb-4">
-                    <Switch 
-                      checked={addNewlyInstalled}
-                      onCheckedChange={setAddNewlyInstalled}
-                      id="add-new"
-                    />
-                    <Label htmlFor="add-new">Automatically add newly installed applications to publish task</Label>
-                  </div>
-                </div>
-                
-                <div>
-                  <h4 className="text-base font-medium mb-3">Cleanup policy</h4>
-                  <div className="flex items-center gap-2">
-                    <label className={cn(
-                      "whitespace-nowrap text-sm font-medium",
-                      isDarkTheme ? "text-gray-300" : "text-gray-700"
-                    )}>
-                      Delete inactive applications after
-                    </label>
-                    <Input
-                      type="number"
-                      className="w-20"
-                      value={cleanupDays}
-                      onChange={(e) => setCleanupDays(e.target.value)}
-                      min="1"
-                    />
-                    <span>days</span>
                   </div>
                 </div>
               </div>
             </div>
           )}
-
+          
           {currentStep === "review" && (
             <div>
               <h3 className="text-lg font-medium mb-4">Review & Save</h3>
               <div className={cn(
-                "rounded-lg border",
-                isDarkTheme ? "border-gray-700" : "border-gray-200"
+                "p-6 rounded-lg border",
+                isDarkTheme ? "border-gray-700 bg-gray-750" : "border-gray-200 bg-gray-50"
               )}>
-                <div className={cn(
-                  "p-4 font-medium border-b",
-                  isDarkTheme ? "bg-gray-700 border-gray-600" : "bg-gray-100 border-gray-200"
-                )}>
-                  Summary
-                </div>
-                <div className="p-4 space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm font-medium">Task Name</p>
-                      <p className={cn(
-                        "mt-1",
-                        isDarkTheme ? "text-gray-400" : "text-gray-600"
-                      )}>
-                        {taskName || "My Task 1"}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">Task Type</p>
-                      <p className={cn(
-                        "mt-1",
-                        isDarkTheme ? "text-gray-400" : "text-gray-600"
-                      )}>
-                        Updates Deployment
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">Applications</p>
-                      <p className={cn(
-                        "mt-1",
-                        isDarkTheme ? "text-gray-400" : "text-gray-600"
-                      )}>
-                        {applications.length > 0 
-                          ? applications.map(app => app.applicationName).join(", ")
-                          : "No applications selected"}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">Deployment Type</p>
-                      <p className={cn(
-                        "mt-1",
-                        isDarkTheme ? "text-gray-400" : "text-gray-600"
-                      )}>
-                        {deploymentType === "publishOnly" ? "Publish Only" : "Automate Assignment"}
-                      </p>
-                    </div>
-                    {deploymentType === "automateAssignment" && (
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-base font-medium mb-2">Task Information</h4>
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-sm font-medium">Assignment Groups</p>
-                        <p className={cn(
-                          "mt-1",
-                          isDarkTheme ? "text-gray-400" : "text-gray-600"
-                        )}>
-                          {assignmentGroups.length > 0 
-                            ? assignmentGroups.map(group => `${group.groupName} (${group.type})`).join(", ")
-                            : "No assignment groups added"}
-                        </p>
+                        <p className="text-sm text-gray-500">Task Name:</p>
+                        <p className="font-medium">{taskName || "Unnamed Task"}</p>
                       </div>
-                    )}
-                    <div>
-                      <p className="text-sm font-medium">Installation Behavior</p>
-                      <p className={cn(
-                        "mt-1",
-                        isDarkTheme ? "text-gray-400" : "text-gray-600"
-                      )}>
-                        {installationBehavior === "skipIfRunning" && "Skip installation when application is running"}
-                        {installationBehavior === "notifyUser" && "Notify users and allow them to postpone installation"}
-                        {installationBehavior === "forceClose" && "Force close running applications during installation"}
-                      </p>
+                      <div>
+                        <p className="text-sm text-gray-500">Task Type:</p>
+                        <p className="font-medium">Updates Deployment</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">Deployment Type:</p>
+                        <p className="font-medium">{deploymentType === "publishOnly" ? "Publish Only" : "Automate Assignment"}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">Publish Schedule:</p>
+                        <p className="font-medium">{publishSchedule === "immediate" ? "Immediate" : `Scheduled: ${selectedDate}`}</p>
+                      </div>
                     </div>
                   </div>
+                  
+                  <div>
+                    <h4 className="text-base font-medium mb-2">Selected Applications ({applications.length})</h4>
+                    <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Application Name</TableHead>
+                            <TableHead>Vendor</TableHead>
+                            <TableHead>Version</TableHead>
+                            <TableHead>Category</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {applications.length > 0 ? (
+                            applications.map((app, index) => (
+                              <TableRow key={index}>
+                                <TableCell className="font-medium">
+                                  <div className="flex items-center gap-2">
+                                    <img src="/src/resources/2chrome.png" alt="" className="w-5 h-5" />
+                                    {app.applicationName}
+                                  </div>
+                                </TableCell>
+                                <TableCell>{app.vendor}</TableCell>
+                                <TableCell>{app.version}</TableCell>
+                                <TableCell>
+                                  <span className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+                                    {app.category}
+                                  </span>
+                                </TableCell>
+                              </TableRow>
+                            ))
+                          ) : (
+                            <TableRow>
+                              <TableCell colSpan={4} className="text-center">
+                                No applications selected.
+                              </TableCell>
+                            </TableRow>
+                          )}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </div>
+                  
+                  {deploymentType === "automateAssignment" && (
+                    <div>
+                      <h4 className="text-base font-medium mb-2">Assignment Groups</h4>
+                      <div className="space-y-4">
+                        <div>
+                          <p className="text-sm font-semibold mb-1">Required ({getFilteredAssignmentGroups("Required").length})</p>
+                          {getFilteredAssignmentGroups("Required").length > 0 ? (
+                            <ul className="list-disc list-inside text-sm">
+                              {getFilteredAssignmentGroups("Required").map(group => (
+                                <li key={group.id}>{group.groupName} ({group.groupMode})</li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-sm text-gray-500">No required assignment groups.</p>
+                          )}
+                        </div>
+                        
+                        <div>
+                          <p className="text-sm font-semibold mb-1">Available ({getFilteredAssignmentGroups("Available").length})</p>
+                          {getFilteredAssignmentGroups("Available").length > 0 ? (
+                            <ul className="list-disc list-inside text-sm">
+                              {getFilteredAssignmentGroups("Available").map(group => (
+                                <li key={group.id}>{group.groupName} ({group.groupMode})</li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-sm text-gray-500">No available assignment groups.</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div>
+                    <h4 className="text-base font-medium mb-2">Installation Settings</h4>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-gray-500">Installation Behavior:</p>
+                        <p className="font-medium">
+                          {installationBehavior === "skipIfRunning" ? "Skip if running" : 
+                           installationBehavior === "waitAndNotify" ? "Wait and notify" :
+                           "Force close application"}
+                        </p>
+                      </div>
+                      
+                      {installationBehavior === "waitAndNotify" && showNotificationSettings && (
+                        <>
+                          <div>
+                            <p className="text-sm text-gray-500">Max Postpone Attempts:</p>
+                            <p className="font-medium">{postponeAttempts}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500">Postpone Time:</p>
+                            <p className="font-medium">{postponeNotificationTime} minutes</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500">No Response Action:</p>
+                            <p className="font-medium">
+                              {noResponseAction === "wait" ? "Wait indefinitely" : 
+                               noResponseAction === "postpone" ? "Automatically postpone" :
+                               "Force close application"}
+                            </p>
+                          </div>
+                        </>
+                      )}
+                      
+                      <div>
+                        <p className="text-sm text-gray-500">Show End-User Notifications:</p>
+                        <p className="font-medium">{showEndUserNotifications ? "Yes" : "No"}</p>
+                      </div>
+                      
+                      {showEndUserNotifications && useCustomMessage && (
+                        <div className="col-span-2">
+                          <p className="text-sm text-gray-500">Custom Message:</p>
+                          <p className="font-medium whitespace-pre-wrap">{customMessage}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {autoPublishNewVersions && (
+                    <div>
+                      <h4 className="text-base font-medium mb-2">Auto-Publish Settings</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm text-gray-500">Publish Schedule:</p>
+                          <p className="font-medium">
+                            {publishScheduleOption === "wheneverReleased" ? "Whenever new versions are released" : "On schedule"}
+                          </p>
+                        </div>
+                        
+                        {publishScheduleOption === "schedule" && (
+                          <>
+                            <div>
+                              <p className="text-sm text-gray-500">Frequency:</p>
+                              <p className="font-medium capitalize">{frequency}</p>
+                            </div>
+                            <div>
+                              <p className="text-sm text-gray-500">Start Time:</p>
+                              <p className="font-medium">{startTime}</p>
+                            </div>
+                          </>
+                        )}
+                        
+                        <div>
+                          <p className="text-sm text-gray-500">Add Newly Installed Apps:</p>
+                          <p className="font-medium">{addNewlyInstalled ? "Yes" : "No"}</p>
+                        </div>
+                        
+                        <div>
+                          <p className="text-sm text-gray-500">Cleanup After:</p>
+                          <p className="font-medium">{cleanupDays} days</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           )}
         </div>
 
-        <div className="flex justify-between mt-6">
+        <div className="flex items-center justify-between">
           <Button 
             variant="outline" 
-            className="flex items-center gap-1"
             onClick={handleCancel}
+            className="flex items-center gap-1"
           >
-            <X className="h-4 w-4" />
             Cancel
           </Button>
           
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             {currentStep !== "selectApplications" && (
               <Button 
                 variant="outline" 
-                className="flex items-center gap-1"
                 onClick={handleBack}
+                className="flex items-center gap-1"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back
@@ -1176,8 +1452,8 @@ const PublishTaskWizard = () => {
             
             {currentStep !== "review" ? (
               <Button 
-                className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600"
                 onClick={handleNext}
+                className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600"
                 disabled={currentStep === "selectApplications" && applications.length === 0}
               >
                 Next
@@ -1185,69 +1461,58 @@ const PublishTaskWizard = () => {
               </Button>
             ) : (
               <Button 
-                className="flex items-center gap-1 bg-green-500 hover:bg-green-600"
                 onClick={handleCreateTask}
+                className="flex items-center gap-1 bg-green-500 hover:bg-green-600"
               >
-                <Check className="h-4 w-4" />
                 Create Task
+                <Check className="h-4 w-4" />
               </Button>
             )}
           </div>
         </div>
       </div>
 
-      {/* Dialogs */}
       <Dialog open={showAddApplicationsDialog} onOpenChange={setShowAddApplicationsDialog}>
-        <DialogContent className={cn(
-          "max-w-3xl",
-          isDarkTheme ? "bg-gray-800 text-white" : "bg-white"
-        )}>
+        <DialogContent className="sm:max-w-[800px]">
           <DialogTitle>Add Applications</DialogTitle>
-          <div className="mb-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search applications..."
-                className="pl-9"
-              />
+          <div className="py-4">
+            <div className="mb-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                <Input
+                  type="text"
+                  placeholder="Search applications..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
             </div>
-          </div>
-          
-          <div className={cn(
-            "overflow-hidden rounded-lg border", 
-            isDarkTheme ? "border-gray-700" : "border-gray-200"
-          )}>
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className={cn(
-                isDarkTheme ? "bg-gray-700" : "bg-gray-100"
-              )}>
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                    Application Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                    Vendor
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                    Latest Version
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                    Category
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className={cn(
-                "divide-y",
-                isDarkTheme ? "divide-gray-700 bg-gray-800" : "divide-gray-200 bg-white"
-              )}>
-                {filteredApplications.length > 0 ? (
-                  filteredApplications.map((app, index) => (
-                    <tr key={index} className={isDarkTheme ? "hover:bg-gray-750" : "hover:bg-gray-50"}>
+            
+            <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50 dark:bg-gray-800">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                      Application Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                      Vendor
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                      Version
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                      Category
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+                  {filteredApplications.map((app, index) => (
+                    <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-800">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
                           <img src="/src/resources/2chrome.png" alt="" className="w-6 h-6" />
@@ -1262,67 +1527,60 @@ const PublishTaskWizard = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <Button
-                          variant="ghost"
-                          size="sm"
+                        <Button 
                           onClick={() => handleAddApplication(app)}
-                          className="text-blue-500 hover:text-blue-700"
-                          disabled={applications.some(a => a.applicationName === app.applicationName)}
+                          size="sm"
+                          className="bg-blue-500 hover:bg-blue-600"
                         >
-                          {applications.some(a => a.applicationName === app.applicationName) 
-                            ? "Added" 
-                            : "Add"}
+                          Add
                         </Button>
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={5} className="px-6 py-4 text-center">
-                      No applications found matching the search criteria.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
-
+      
       {customizeApp && (
-        <CustomizeApplicationDialog
-          open={showCustomizeDialog}
+        <CustomizeApplicationDialog 
+          open={showCustomizeDialog} 
           onOpenChange={setShowCustomizeDialog}
-          applicationData={customizeApp}
-          onSave={(customizedData) => {
-            // Update application with customized data
-            const updatedApplications = applications.map(app => {
-              if (app.applicationName === customizedData.applicationName) {
-                return {
-                  ...app,
-                  description: customizedData.description,
-                  category: customizedData.category[0] || app.category,
-                  vendor: customizedData.publisher,
-                  informationUrl: customizedData.informationUrl,
-                  privacyUrl: customizedData.privacyUrl,
-                  developer: customizedData.developer,
-                  owner: customizedData.owner,
-                  notes: customizedData.notes,
-                  featured: customizedData.featured
-                };
-              }
-              return app;
-            });
-            
-            setApplications(updatedApplications);
-            setCustomizeApp(null);
-          }}
+          application={customizeApp}
           isDarkTheme={isDarkTheme}
+          onSave={(data) => {
+            // Implementation to update the application with customized data
+            setApplications(prev => prev.map(app => 
+              app.applicationName === customizeApp.applicationName
+              ? { 
+                  ...app, 
+                  description: data.description,
+                  category: data.category[0] || app.category,
+                  vendor: data.publisher || app.vendor,
+                  informationUrl: data.informationUrl,
+                  privacyUrl: data.privacyUrl,
+                  developer: data.developer,
+                  owner: data.owner,
+                  notes: data.notes,
+                  featured: data.featured
+                }
+              : app
+            ));
+            setShowCustomizeDialog(false);
+            setCustomizeApp(null);
+            
+            toast({
+              title: "Application updated",
+              description: "The application details have been updated successfully.",
+            });
+          }}
         />
       )}
-
-      <AddAssignmentGroupDialog
-        open={showAddAssignmentDialog}
+      
+      <AddAssignmentGroupDialog 
+        open={showAddAssignmentDialog} 
         onOpenChange={setShowAddAssignmentDialog}
         onSave={handleSaveAssignmentGroup}
         isDarkTheme={isDarkTheme}
