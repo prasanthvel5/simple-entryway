@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Eye, Pen, PowerOff, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -23,10 +23,13 @@ interface PublishTaskData {
 }
 
 interface PublishedTaskProps {
-  isDarkTheme: boolean;
+  isDarkTheme?: boolean;
+  activeMenu?: string;
+  activeSecondLevel?: string;
 }
 
-const PublishedTask = ({ isDarkTheme }: PublishedTaskProps) => {
+const PublishedTask = () => {
+  const { isDarkTheme } = useOutletContext<PublishedTaskProps>();
   const navigate = useNavigate();
   const [tasks, setTasks] = useState<PublishTaskData[]>(() => {
     // Try to load tasks from localStorage
